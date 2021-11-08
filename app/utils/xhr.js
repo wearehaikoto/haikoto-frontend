@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const baseURL = process.env.BACKEND_URL || "http://localhost:8080";
+const baseURL = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:8080";
 
 const config = {
     baseURL,
