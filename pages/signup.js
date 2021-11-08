@@ -47,9 +47,9 @@ function Signup() {
                 type: "success"
             });
 
-            // Redirect to the home page
+            // Redirect to the user page
             setTimeout(() => {
-                Router.push("/");
+                Router.push("/user");
             }, 2000);
         } else {
             setAlertState({
