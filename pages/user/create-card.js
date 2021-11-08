@@ -2,14 +2,16 @@ import React from "react";
 import Link from "next/link";
 import Head from "next/head";
 import Image from "next/image";
+import { useRouter } from "next/router";
 
 import { cardService } from "../../app/services";
 import { AlertComponent } from "../../app/components";
-import { currentUser, withAuth } from "../../app/utils";
+import { currentUser, withAuth, uploadImage } from "../../app/utils";
 import { createCardUploadGreyImage } from "../../app/assets";
 
 function createCard() {
     const user = currentUser().userData;
+    const Router = useRouter();
     const [previewImage, setPreviewImage] = React.useState(null);
 
     const [alertState, setAlertState] = React.useState({
@@ -129,7 +131,7 @@ function createCard() {
                                 type="file"
                                 id="upload-button"
                                 style={{ display: "none" }}
-                                onChange={(e) => {
+                                onChange={async (e) => {
                                     // Set the Preview Image
                                     const file = e.target.files[0];
                                     const reader = new FileReader();
@@ -138,10 +140,12 @@ function createCard() {
                                     };
                                     reader.readAsDataURL(file);
 
+                                    const image = await uploadImage(file);
+
                                     // Set the Form Input State
                                     setFormInput({
                                         ...formInput,
-                                        cardImage: file
+                                        cardImage: image.data.data.url
                                     });
                                 }}
                             />
