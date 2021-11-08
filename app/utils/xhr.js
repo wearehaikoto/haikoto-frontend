@@ -2,7 +2,7 @@ import axios from "axios";
 
 const baseURL = process.env.BACKEND_URL || "http://localhost:8080";
 
-const $http = axios.create({
+const config = {
     baseURL,
     timeout: 30000,
     headers: {
@@ -11,6 +11,20 @@ const $http = axios.create({
     validateStatus: function (status) {
         return status < 500; // Resolve only if the status code is less than 500
     }
-});
+};
+
+// checks whether we are on client / browser or server.
+if (typeof window !== "undefined") {
+    const token = sessionStorage.getItem("auth-token");
+
+    // Check for token
+    if (token) {
+        config.withCredentials = true;
+        config.headers.Authorization = `Bearer ${token}`;
+    }
+}
+
+// Create thw axios instance
+const $http = axios.create(config);
 
 export default $http;
