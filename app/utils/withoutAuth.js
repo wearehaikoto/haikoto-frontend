@@ -15,7 +15,8 @@ const withoutAuth = (WrappedComponent) => {
             }
 
             // If there is access token we redirect to "/user" page.
-            return Router.replace("/user");
+            Router.replace("/user");
+            return null;
         }
 
         // If we are on server, return null
