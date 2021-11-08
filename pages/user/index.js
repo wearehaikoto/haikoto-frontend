@@ -1,9 +1,18 @@
 import React from "react";
 
+import { cardService } from "../../app/services";
 import { currentUser, withAuth } from "../../app/utils";
 
 function Index() {
     const [user, setUser] = React.useState(currentUser().userData);
+
+    async function fetchCards() {
+        const cards = await cardService.readAll();
+    }
+
+    React.useEffect(() => {
+        fetchCards();
+    }, []);
 
     return (
         <>

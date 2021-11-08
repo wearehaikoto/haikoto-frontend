@@ -19,7 +19,7 @@ if (typeof window !== "undefined") {
 
     // Check for token
     if (token) {
-        config.withCredentials = true;
+        // config.withCredentials = true;
         config.headers.Authorization = `Bearer ${token}`;
     }
 }
