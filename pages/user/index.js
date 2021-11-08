@@ -7,7 +7,8 @@ function Index() {
     const [user, setUser] = React.useState(currentUser().userData);
 
     async function fetchCards() {
-        const cards = await cardService.readAll();
+        const Allcards = await cardService.getAll();
+        const Mycards = await cardService.getAllByMe();
     }
 
     React.useEffect(() => {
