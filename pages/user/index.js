@@ -1,4 +1,5 @@
 import React from "react";
+import Head from "next/head";
 
 import { cardService } from "../../app/services";
 import { currentUser, withAuth } from "../../app/utils";
@@ -17,6 +18,10 @@ function Index() {
 
     return (
         <>
+            <Head>
+                <title>{user.codeName.toUpperCase()} - Haikoto</title>
+            </Head>
+
             <div className="flex flex-col items-center justify-center min-h-screen py-2">
                 <main className="flex flex-col items-center justify-center w-full flex-1 px-1 lg:px-20 text-center">
                     <div className="text-4xl md:text-5xl lg:text-6xl font-bold">
