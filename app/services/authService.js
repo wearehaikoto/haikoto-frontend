@@ -5,7 +5,7 @@ class authService {
         try {
             const response = await $http.post("/api/auth/loginOrSignup", { codeName });
             if (response.data.success) {
-                sessionStorage.setItem("auth-token", response.data.data.token);
+                localStorage.setItem("auth-token", response.data.data.token);
                 return {
                     success: true,
                     message: response.data.message

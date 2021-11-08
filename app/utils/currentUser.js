@@ -1,8 +1,8 @@
 import jwtDecode from "jwt-decode";
 
 export default function currentUser() {
-    // Get the token from sessionStorage
-    const authToken = sessionStorage.getItem("auth-token");
+    // Get the token from localStorage
+    const authToken = localStorage.getItem("auth-token");
 
     // If there is no token, return null
     if (!authToken) {

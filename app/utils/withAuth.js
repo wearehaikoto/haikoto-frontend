@@ -7,7 +7,7 @@ const withAuth = (WrappedComponent) => {
             const Router = useRouter();
 
             // Check if access token is in local storage
-            const accessToken = sessionStorage.getItem("auth-token");
+            const accessToken = localStorage.getItem("auth-token");
 
             // If there is no access token we redirect to "/" page.
             if (!accessToken) {

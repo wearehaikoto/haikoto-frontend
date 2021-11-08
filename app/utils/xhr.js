@@ -15,7 +15,7 @@ const config = {
 
 // checks whether we are on client / browser or server.
 if (typeof window !== "undefined") {
-    const token = sessionStorage.getItem("auth-token");
+    const token = localStorage.getItem("auth-token");
 
     // Check for token
     if (token) {
