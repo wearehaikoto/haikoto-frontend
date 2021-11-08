@@ -5,7 +5,7 @@ class authService {
         try {
             const response = await $http.post("/api/auth/login", { codeName });
             if (response.data.success) {
-                localStorage.setItem("auth-token", response.data.data.token);
+                sessionStorage.setItem("auth-token", response.data.data.token);
                 return true;
             } else {
                 return response.data.message;
@@ -19,7 +19,7 @@ class authService {
         try {
             const response = await $http.post("/api/auth/signup", { codeName });
             if (response.data.success) {
-                localStorage.setItem("auth-token", response.data.data.token);
+                sessionStorage.setItem("auth-token", response.data.data.token);
                 return true;
             } else {
                 return response.data.message;

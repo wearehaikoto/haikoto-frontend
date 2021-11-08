@@ -18,7 +18,7 @@ function Signup() {
         type: ""
     });
 
-    const processRegister = async (e) => {
+    const processLoginOrSignup = async (e) => {
         // Clear the alert state
         setAlertState({
             show: false,
@@ -42,8 +42,7 @@ function Signup() {
         if (tryRegister === true) {
             setAlertState({
                 show: true,
-                message:
-                    "You have successfully created an account. Signing in...",
+                message: "Success. Signing in...",
                 type: "success"
             });
 
@@ -63,9 +62,7 @@ function Signup() {
     return (
         <>
             <Head>
-                <title>
-                    Signup | Haikoto - Creating a unique workplace culture
-                </title>
+                <title>Login | Signup - Haikoto</title>
             </Head>
 
             <div className="w-full flex flex-wrap">
@@ -79,12 +76,10 @@ function Signup() {
                         </Link>
                     </div>
                     <div className="flex flex-col justify-center md:justify-start my-auto pt-8 md:pt-0 px-8 md:px-24 lg:px-32">
-                        <p className="text-center text-3xl">
-                            Create an account 🤗
-                        </p>
+                        <p className="text-center text-3xl">Login | Signup</p>
                         <form
                             className="flex flex-col pt-3 md:pt-8"
-                            onSubmit={processRegister}
+                            onSubmit={processLoginOrSignup}
                         >
                             {alertState.show && (
                                 <AlertComponent {...alertState} />
@@ -104,19 +99,9 @@ function Signup() {
                                 type="submit"
                                 className="bg-black text-white font-bold text-lg hover:bg-gray-700 p-2 mt-8"
                             >
-                                Create account
+                                Proceed
                             </button>
                         </form>
-                        <div className="text-center pt-12 pb-12">
-                            <p>
-                                Already have an account?{" "}
-                                <Link href="/login">
-                                    <a className="underline font-semibold">
-                                        Log in here.
-                                    </a>
-                                </Link>
-                            </p>
-                        </div>
                     </div>
                 </div>
 

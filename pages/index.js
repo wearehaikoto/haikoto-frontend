@@ -14,15 +14,9 @@ export default function Home() {
 
                     {/* Login | Signup Buttons */}
                     <div className="flex items-center justify-center w-full">
-                        <Link href="login">
+                        <Link href="/loginOrSignup">
                             <a className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full">
-                                Login
-                            </a>
-                        </Link>
-                        <span className="mx-2"></span>
-                        <Link href="signup">
-                            <a className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full">
-                                Signup
+                                Login | Signup
                             </a>
                         </Link>
                     </div>

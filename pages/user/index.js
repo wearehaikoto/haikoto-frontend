@@ -6,7 +6,7 @@ function Index() {
     const [user, setUser] = React.useState(null);
 
     React.useEffect(() => {
-        setUser(localStorage.getItem("auth-token"));
+        setUser(sessionStorage.getItem("auth-token"));
     }, []);
 
     return (

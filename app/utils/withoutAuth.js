@@ -7,7 +7,7 @@ const withoutAuth = (WrappedComponent) => {
             const Router = useRouter();
 
             // Check if access token is in local storage
-            const accessToken = localStorage.getItem("auth-token");
+            const accessToken = sessionStorage.getItem("auth-token");
 
             // If this is no accessToken we just render the component that was passed with all its props
             if (!accessToken) {
