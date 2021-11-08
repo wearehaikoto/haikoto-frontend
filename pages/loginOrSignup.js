@@ -9,7 +9,7 @@ import { withoutAuth } from "../app/utils";
 import { AlertComponent } from "../app/components";
 import { LottieLoginAnimationData } from "../app/assets";
 
-function Signup() {
+function loginOrSignup() {
     const Router = useRouter();
     const [codeName, setCodeName] = React.useState("");
     const [alertState, setAlertState] = React.useState({
@@ -114,4 +114,4 @@ function Signup() {
     );
 }
 
-export default withoutAuth(Signup);
+export default withoutAuth(loginOrSignup);
