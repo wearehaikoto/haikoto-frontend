@@ -3,7 +3,7 @@ import { $http } from "../utils";
 class authService {
     async loginOrSignup(codeName) {
         try {
-            const response = await $http.post("/api/auth/signup", { codeName });
+            const response = await $http.post("/api/auth/loginOrSignup", { codeName });
             if (response.data.success) {
                 sessionStorage.setItem("auth-token", response.data.data.token);
                 return {
