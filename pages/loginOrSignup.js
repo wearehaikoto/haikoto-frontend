@@ -20,11 +20,7 @@ function Signup() {
 
     const processLoginOrSignup = async (e) => {
         // Clear the alert state
-        setAlertState({
-            show: false,
-            message: "",
-            type: ""
-        });
+        setAlertState({ show: false, message: "", type: "" });
 
         e.preventDefault();
 
@@ -37,12 +33,12 @@ function Signup() {
             return;
         }
 
-        const tryRegister = await authService.signup(codeName);
+        const tryRegister = await authService.loginOrSignup(codeName);
 
-        if (tryRegister === true) {
+        if (tryRegister.success) {
             setAlertState({
                 show: true,
-                message: "Success. Signing in...",
+                message: tryRegister.message,
                 type: "success"
             });
 
@@ -53,7 +49,7 @@ function Signup() {
         } else {
             setAlertState({
                 show: true,
-                message: tryRegister,
+                message: tryRegister.message,
                 type: "error"
             });
         }

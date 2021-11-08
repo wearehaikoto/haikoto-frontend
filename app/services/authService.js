@@ -1,31 +1,28 @@
 import { $http } from "../utils";
 
 class authService {
-    async login(codeName) {
-        try {
-            const response = await $http.post("/api/auth/login", { codeName });
-            if (response.data.success) {
-                sessionStorage.setItem("auth-token", response.data.data.token);
-                return true;
-            } else {
-                return response.data.message;
-            }
-        } catch (error) {
-            return error.response ? error.response.data.message : error.message;
-        }
-    }
-
-    async signup(codeName) {
+    async loginOrSignup(codeName) {
         try {
             const response = await $http.post("/api/auth/signup", { codeName });
             if (response.data.success) {
                 sessionStorage.setItem("auth-token", response.data.data.token);
-                return true;
+                return {
+                    success: true,
+                    message: response.data.message
+                };
             } else {
-                return response.data.message;
+                return {
+                    success: false,
+                    message: response.data.message
+                };
             }
         } catch (error) {
-            return error.response ? error.response.data.message : error.message;
+            return {
+                success: false,
+                message: error.response
+                    ? error.response.data.message
+                    : error.message
+            };
         }
     }
 }
