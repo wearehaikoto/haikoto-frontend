@@ -43,11 +43,17 @@ function Index() {
                             </a>
                         </Link>
                         <div className="mx-2" />
+                        <Link href="/user/about-me">
+                            <a className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full">
+                                About Me
+                            </a>
+                        </Link>
+                        {/* <div className="mx-2" />
                         <Link href="/user/my-card">
                             <a className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full">
                                 My Cards
                             </a>
-                        </Link>
+                        </Link> */}
                     </div>
                 </main>
             </div>
