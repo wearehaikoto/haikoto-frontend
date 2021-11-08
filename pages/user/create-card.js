@@ -85,15 +85,6 @@ function createCard() {
         }
     }
 
-    async function fetchCards() {
-        const Allcards = await cardService.getAll();
-        const Mycards = await cardService.getAllByMe();
-    }
-
-    React.useEffect(() => {
-        fetchCards();
-    }, []);
-
     return (
         <>
             <Head>
