@@ -87,7 +87,7 @@ function createCard() {
     return (
         <>
             <Head>
-                <title>{user.codeName.toUpperCase()} - Haikoto</title>
+                <title>Create Card - Haikoto</title>
             </Head>
 
             <div className="flex flex-col items-center justify-center min-h-screen py-2">

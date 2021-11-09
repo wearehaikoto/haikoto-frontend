@@ -6,7 +6,7 @@ import { cardService } from "../../app/services";
 import { currentUser, withAuth } from "../../app/utils";
 
 function Index() {
-    const [user, setUser] = React.useState(currentUser().userData);
+    const user = currentUser().userData;
 
     async function fetchCards() {
         const Allcards = await cardService.getAll();
@@ -36,28 +36,35 @@ function Index() {
                     <div className="my-5" />
 
                     {/* Login | Signup Buttons */}
-                    <div className="flex items-center justify-center w-full">
+                    <div className="flex flex-col items-center justify-center w-full">
                         <Link href="/user/create-card">
-                            <a className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full">
+                            <a className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-6 my-2 min-w-max w-2/4 rounded-full">
                                 Create Card
                             </a>
                         </Link>
-                        <div className="mx-2" />
+                        {/* <Link href="/user/play-cards">
+                            <a className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-6 my-2 min-w-max w-2/4 rounded-full">
+                                Play Cards
+                            </a>
+                        </Link> */}
+                        {/* <Link href="/user/my-cards">
+                            <a className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-6 my-2 min-w-max w-2/4 rounded-full">
+                                My Cards
+                            </a>
+                        </Link> */}
                         <Link href="/user/about-me">
-                            <a className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full">
+                            <a className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-6 my-2 min-w-max w-2/4 rounded-full">
                                 About Me
                             </a>
                         </Link>
-                        {/* Logout Button */}
-                        <div className="mx-2" />
                         <Link href="/logout">
-                            <a className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full">
+                            <a className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-6 my-2 min-w-max w-2/4 rounded-full">
                                 Logout
                             </a>
                         </Link>
-                        {/* <div className="mx-2" />
+                        {/* 
                         <Link href="/user/my-card">
-                            <a className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full">
+                            <a className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-6 ryounded-full min-w-max w-2/4">
                                 My Cards
                             </a>
                         </Link> */}

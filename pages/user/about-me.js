@@ -10,7 +10,7 @@ function createCard() {
     return (
         <>
             <Head>
-                <title>{user.codeName.toUpperCase()} - Haikoto</title>
+                <title>About {user.codeName} - Haikoto</title>
             </Head>
 
             <div className="items-center justify-center min-h-screen py-2">
