@@ -1,13 +1,12 @@
 import React from "react";
-import Link from "next/link";
 import Head from "next/head";
 import Image from "next/image";
 import { useRouter } from "next/router";
 
 import { cardService } from "../../app/services";
-import { AlertComponent } from "../../app/components";
-import { currentUser, withAuth, uploadImage } from "../../app/utils";
 import { createCardUploadGreyImage } from "../../app/assets";
+import { currentUser, withAuth, uploadImage } from "../../app/utils";
+import { CardCancelButton, AlertComponent } from "../../app/components";
 
 function createCard() {
     const user = currentUser().userData;
@@ -190,26 +189,8 @@ function createCard() {
                             </div>
                         </form>
                     </div>
-                    <Link href="/user">
-                        <a>
-                            <div className="flex justify-around mt-4">
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    className="w-20"
-                                    fill="none"
-                                    viewBox="0 0 24 24"
-                                    stroke="currentColor"
-                                >
-                                    <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth={2}
-                                        d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
-                                    />
-                                </svg>
-                            </div>
-                        </a>
-                    </Link>
+
+                    <CardCancelButton />
                 </div>
             </div>
         </>

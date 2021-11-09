@@ -42,11 +42,11 @@ function Index() {
                                 Create Card
                             </a>
                         </Link>
-                        {/* <Link href="/user/play-cards">
+                        <Link href="/user/play-cards">
                             <a className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-6 my-2 min-w-max w-2/4 rounded-full">
                                 Play Cards
                             </a>
-                        </Link> */}
+                        </Link>
                         {/* <Link href="/user/my-cards">
                             <a className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-6 my-2 min-w-max w-2/4 rounded-full">
                                 My Cards
@@ -62,12 +62,6 @@ function Index() {
                                 Logout
                             </a>
                         </Link>
-                        {/* 
-                        <Link href="/user/my-card">
-                            <a className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-6 ryounded-full min-w-max w-2/4">
-                                My Cards
-                            </a>
-                        </Link> */}
                     </div>
                 </main>
             </div>
