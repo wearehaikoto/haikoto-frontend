@@ -1,12 +1,8 @@
 import React from "react";
 import Link from "next/link";
 import Head from "next/head";
-import Image from "next/image";
-import { useRouter } from "next/router";
 
-import { AlertComponent } from "../../app/components";
-import { currentUser, withAuth, uploadImage } from "../../app/utils";
-import { createCardUploadGreyImage } from "../../app/assets";
+import { currentUser, withAuth } from "../../app/utils";
 
 function createCard() {
     const user = currentUser().userData;
