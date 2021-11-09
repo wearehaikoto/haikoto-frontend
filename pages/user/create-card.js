@@ -11,15 +11,14 @@ import { createCardUploadGreyImage } from "../../app/assets";
 
 function createCard() {
     const user = currentUser().userData;
-    const Router = useRouter();
-    const [previewImage, setPreviewImage] = React.useState(null);
+    const router = useRouter();
 
+    const [previewImage, setPreviewImage] = React.useState(null);
     const [alertState, setAlertState] = React.useState({
         show: false,
         message: "",
         type: ""
     });
-
     const [formInput, setFormInput] = React.useState({
         cardImage: "",
         cardTitle: "",
@@ -74,7 +73,7 @@ function createCard() {
 
             // Redirect to the user page
             setTimeout(() => {
-                Router.push("/user");
+                router.push("/user");
             }, 2000);
         } else {
             setAlertState({
