@@ -10,7 +10,8 @@ import { AlertComponent } from "../app/components";
 import { LottieLoginAnimationData } from "../app/assets";
 
 function loginOrSignup() {
-    const Router = useRouter();
+    const router = useRouter();
+
     const [codeName, setCodeName] = React.useState("");
     const [alertState, setAlertState] = React.useState({
         show: false,
@@ -44,7 +45,8 @@ function loginOrSignup() {
 
             // Redirect to the user page
             setTimeout(() => {
-                Router.push("/user");
+                router.push("/user");
+                router.reload();
             }, 2000);
         } else {
             setAlertState({

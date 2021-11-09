@@ -4,14 +4,14 @@ const withAuth = (WrappedComponent) => {
     return (props) => {
         // checks whether we are on client / browser or server.
         if (typeof window !== "undefined") {
-            const Router = useRouter();
+            const router = useRouter();
 
             // Check if access token is in local storage
             const accessToken = localStorage.getItem("auth-token");
 
             // If there is no access token we redirect to "/" page.
             if (!accessToken) {
-                Router.replace("/");
+                router.replace("/");
                 return null;
             }
 

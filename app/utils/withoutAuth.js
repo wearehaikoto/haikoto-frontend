@@ -4,7 +4,7 @@ const withoutAuth = (WrappedComponent) => {
     return (props) => {
         // checks whether we are on client / browser or server.
         if (typeof window !== "undefined") {
-            const Router = useRouter();
+            const router = useRouter();
 
             // Check if access token is in local storage
             const accessToken = localStorage.getItem("auth-token");
@@ -15,7 +15,7 @@ const withoutAuth = (WrappedComponent) => {
             }
 
             // If there is access token we redirect to "/user" page.
-            Router.replace("/user");
+            router.replace("/user");
             return null;
         }
 
