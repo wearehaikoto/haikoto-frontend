@@ -1,6 +1,7 @@
 import React from "react";
 import Image from "next/image";
 import Head from "next/head";
+import { useSwipeable } from "react-swipeable";
 
 import { currentUser, withAuth } from "../../app/utils";
 import { createCardUploadGreyImage } from "../../app/assets";
@@ -13,13 +14,19 @@ import {
 function playCards() {
     const user = currentUser();
 
+    const reactSwipeableHandler = useSwipeable({
+        onSwipedLeft: (eventData) => console.log("User swiped left!", eventData),
+        onSwipedRight: (eventData) => console.log("User swiped right!", eventData),
+        // trackMouse: true,
+    });
+
     return (
         <>
             <Head>
                 <title>Play Cards - Haikoto</title>
             </Head>
 
-            <div className="flex flex-col items-center justify-center min-h-screen py-2">
+            <div {...reactSwipeableHandler} className="flex flex-col items-center justify-center min-h-screen py-2">
                 <div className="m-8 md:mx-44">
                     <div className="border-black border-2 border-dashed mb-4 p-2">
                         <h1 className="text-center text-xl md:text-3xl">
