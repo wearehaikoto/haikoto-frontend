@@ -3,7 +3,7 @@ export default function Loading({ text, description }) {
         <>
             <div className="flex flex-col items-center justify-center min-h-screen py-2">
                 <main className="flex flex-col items-center justify-center w-full flex-1 px-1 lg:px-20 text-center">
-                    <div class="flex justify-center items-center">
+                    <div className="flex justify-center items-center">
                         <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-blue-600 " />
                     </div>
                     {text && (
