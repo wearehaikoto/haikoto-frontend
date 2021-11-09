@@ -48,6 +48,13 @@ function Index() {
                                 About Me
                             </a>
                         </Link>
+                        {/* Logout Button */}
+                        <div className="mx-2" />
+                        <Link href="/logout">
+                            <a className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full">
+                                Logout
+                            </a>
+                        </Link>
                         {/* <div className="mx-2" />
                         <Link href="/user/my-card">
                             <a className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full">
