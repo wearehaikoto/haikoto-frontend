@@ -68,7 +68,7 @@ function loginOrSignup() {
                 <div className="w-full md:w-1/2 flex flex-col">
                     <div className="flex justify-center md:justify-start pt-12 md:pl-12 md:-mb-24">
                         <Link href="/">
-                            <a className="bg-black text-white font-bold text-xl p-4">
+                            <a className="bg-blue-600 text-white font-bold text-xl p-4">
                                 Haikoto
                             </a>
                         </Link>
@@ -95,7 +95,7 @@ function loginOrSignup() {
                             </div>
                             <button
                                 type="submit"
-                                className="bg-black text-white font-bold text-lg hover:bg-gray-700 p-2 mt-8"
+                                className="bg-blue-600 text-white font-bold text-lg hover:bg-blue-700 p-2 mt-8"
                             >
                                 Proceed
                             </button>

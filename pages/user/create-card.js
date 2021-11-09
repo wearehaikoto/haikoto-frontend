@@ -110,7 +110,7 @@ function createCard() {
                                         height={500}
                                     />
                                     {!previewImage && (
-                                        <div className="absolute w-full py-2.5 bottom-1/3 bg-blue-500 text-white text-xs text-center leading-4">
+                                        <div className="absolute w-full py-2.5 bottom-1/3 bg-blue-600 text-white text-xs text-center leading-4">
                                             Click here upload
                                         </div>
                                     )}
@@ -180,7 +180,7 @@ function createCard() {
                                 {/* Submit Button */}
                                 <div className="flex justify-center mt-8">
                                     <button
-                                        className="bg-black hover:bg-blue-500 text-white font-bold py-2 px-4 rounded"
+                                        className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
                                         type="submit"
                                     >
                                         Publish
