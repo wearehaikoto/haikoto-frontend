@@ -21,7 +21,7 @@ function createCard() {
                         </h1>
                     </div>
 
-                    <div className="border-black border-2 border-dashed mb-10 p-4 py-16 h-full">
+                    {/* <div className="border-black border-2 border-dashed mb-10 p-4 py-16 h-full">
                         <div className="grid grid-cols-6 justify-items-stretch items-end gap-3 h-2/3 md:px-16">
                             <div className="bg-pink-500 h-[70%]" />
                             <div className="bg-purple-500 h-[80%]" />
@@ -46,7 +46,7 @@ function createCard() {
                                 </strong>
                             </h1>
                         </div>
-                    </div>
+                    </div> */}
 
                     <CardCancelButton />
                 </div>
