@@ -48,9 +48,12 @@ function playCards() {
     };
 
     React.useEffect(async () => {
+        // Get Numbers only froom propmt
+        const number_of_cards_to_play = parseInt(prompt("How many cards do you want to play?", 3));
+
         // Create a new Game
         const createGame = await gameService.create({
-            numberOfCards: 2
+            numberOfCards: number_of_cards_to_play
         });
 
         if (createGame.success) {
