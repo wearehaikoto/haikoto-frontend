@@ -1,21 +1,28 @@
 import React from "react";
-import Image from "next/image";
 import Head from "next/head";
+import { useRouter } from "next/router";
 import { useSwipeable } from "react-swipeable";
 
 import { SingleCard } from "../../app/components";
-import { cardService } from "../../app/services";
+import { gameService } from "../../app/services";
 import { currentUser, withAuth } from "../../app/utils";
 import { CardCancelButton, LoadingComponent } from "../../app/components";
 
 function playCards() {
     const user = currentUser();
+    const router = useRouter();
 
+    const [loadingState, setLoadingState] = React.useState({
+        show: true,
+        text: "Loading...",
+        description: ""
+    });
+    const [gameId, setGameId] = React.useState(null);
     const [cards, setCards] = React.useState([]);
     const [answers, setAnswers] = React.useState([]);
     const [currentCard, setCurrentCard] = React.useState(1);
 
-    const handleAnswerClick = (cardId, answer) => {
+    const handleAnswerClick = async (cardId, answer) => {
         // Push user Answer and save to answer state
         answers.push({ card: currentCard, _id: cardId, answer });
         setAnswers(answers);
@@ -30,15 +37,36 @@ function playCards() {
             return;
         }
 
-        // Game End
-        // Set Cards to empty
-        setCards([]);
-        console.log("GameOver Answers -", answers);
+        // Update Loading State
+        setLoadingState({ show: true, text: "Generating result..." });
+
+        // Get the result of the game
+        const result = await gameService.endGame(gameId, answers);
+
+        console.log("GameOver", "gameId", gameId, "Answers", answers);
     };
 
     React.useEffect(async () => {
-        // Get the cards for the user
-        setCards((await cardService.getAllByMe()).data);
+        // Create a new Game
+        const createGame = await gameService.create({
+            numberOfCards: 2
+        });
+
+        if (createGame.success) {
+            setGameId(createGame.data._id);
+            setCards(createGame.data.cards);
+            setLoadingState({ show: false, text: "" });
+        } else {
+            setLoadingState({
+                show: true,
+                text: `Error: ${createGame.message}.`,
+                description: "Redirecting..."
+            });
+
+            setTimeout(() => {
+                router.push("/user");
+            }, 2000);
+        }
     }, []);
 
     const reactSwipeableHandler = useSwipeable({
@@ -60,7 +88,7 @@ function playCards() {
                 {...reactSwipeableHandler}
                 className="flex flex-col items-center justify-center min-h-screen py-2"
             >
-                {cards.length > 0 ? (
+                {!loadingState.show ? (
                     <div className="m-8 md:mx-44">
                         <div className="border-black border-2 border-dashed mb-4 p-2">
                             <h1 className="text-center text-xl md:text-3xl">
@@ -79,7 +107,7 @@ function playCards() {
                         <CardCancelButton />
                     </div>
                 ) : (
-                    <LoadingComponent />
+                    <LoadingComponent {...loadingState} />
                 )}
             </div>
         </>
