@@ -25,7 +25,7 @@ function playCards() {
     const handleAnswerClick = async (cardId, answer) => {
         // Push user Answer and save to answer state
         // answers.push({ card: currentCard, _id: cardId, answer });
-        answers.push({ answer });
+        answers.push(answer);
         setAnswers(answers);
 
         // Scroll to top so they can see
