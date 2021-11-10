@@ -29,22 +29,30 @@ function SingleCard({
                     <p className="text-center md:text-4xl">{cardCategory}</p>
                 </div>
 
-                <div className="flex justify-around mb-4">
-                    <CardNoButton
-                        onClickHandler={() => handleAnswerClick(cardId, false)}
-                    />
-                    <CardYesButton
-                        onClickHandler={(e) => handleAnswerClick(cardId, true)}
-                    />
-                </div>
+                {handleAnswerClick && (
+                    <div className="flex justify-around mb-4">
+                        <CardNoButton
+                            onClickHandler={() =>
+                                handleAnswerClick(cardId, false)
+                            }
+                        />
+                        <CardYesButton
+                            onClickHandler={(e) =>
+                                handleAnswerClick(cardId, true)
+                            }
+                        />
+                    </div>
+                )}
             </div>
 
-            <div className="border-black border-2 border-dashed p-3 mb-10">
-                <div className="flex justify-around text-3xl">
-                    <h1>NO</h1>
-                    <h1>YES</h1>
+            {handleAnswerClick && (
+                <div className="border-black border-2 border-dashed p-3 mb-10">
+                    <div className="flex justify-around text-3xl">
+                        <h1>NO</h1>
+                        <h1>YES</h1>
+                    </div>
                 </div>
-            </div>
+            )}
         </div>
     );
 }

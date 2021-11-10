@@ -44,12 +44,25 @@ function playCards() {
         // Get the result of the game
         const result = await gameService.endGame(gameId, { answers });
 
-        console.log("GameOver", "gameId", gameId, "Answers", answers);
+        if (result.success) {
+            // Update Loading State
+            setLoadingState({
+                show: true,
+                text: result.message,
+                description: "Redirecting..."
+            });
+
+            setTimeout(() => {
+                router.push(`/play/${gameId}`);
+            }, 2000);
+        }
     };
 
     React.useEffect(async () => {
         // Get Numbers only froom propmt
-        const number_of_cards_to_play = parseInt(prompt("How many cards do you want to play?", 3));
+        const number_of_cards_to_play = parseInt(
+            prompt("How many cards do you want to play?", 3)
+        );
 
         // Create a new Game
         const createGame = await gameService.create({
@@ -88,11 +101,11 @@ function playCards() {
                 <title>Play Cards - Haikoto</title>
             </Head>
 
-            <div
-                {...reactSwipeableHandler}
-                className="flex flex-col items-center justify-center min-h-screen py-2"
-            >
-                {!loadingState.show ? (
+            {!loadingState.show ? (
+                <div
+                    {...reactSwipeableHandler}
+                    className="flex flex-col items-center justify-center min-h-screen py-2"
+                >
                     <div className="m-8 md:mx-44">
                         <div className="border-black border-2 border-dashed mb-4 p-2">
                             <h1 className="text-center text-xl md:text-3xl">
@@ -110,10 +123,10 @@ function playCards() {
 
                         <CardCancelButton />
                     </div>
-                ) : (
-                    <LoadingComponent {...loadingState} />
-                )}
-            </div>
+                </div>
+            ) : (
+                <LoadingComponent {...loadingState} />
+            )}
         </>
     );
 }

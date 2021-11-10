@@ -53,6 +53,32 @@ class gameService {
         }
     }
 
+    async getGame(gameId) {
+        try {
+            const response = await $http.get(`/api/game/${gameId}`);
+
+            if (response.data.success) {
+                return {
+                    success: true,
+                    message: response.data.message,
+                    data: response.data.data
+                };
+            } else {
+                return {
+                    success: false,
+                    message: response.data.message
+                };
+            }
+        } catch (error) {
+            return {
+                success: false,
+                message: error.response
+                    ? error.response.data.message
+                    : error.message
+            };
+        }
+    }
+
     async getAllByMe() {
         try {
             const response = await $http.get("/api/game/me");
