@@ -3,44 +3,51 @@ import Image from "next/image";
 import Head from "next/head";
 import { useSwipeable } from "react-swipeable";
 
-import { LoadingImagePlacepholder } from "../../app/assets";
+import { SingleCard } from "../../app/components";
 import { cardService } from "../../app/services";
 import { currentUser, withAuth } from "../../app/utils";
-import {
-    CardYesButton,
-    CardNoButton,
-    CardCancelButton,
-    LoadingComponent
-} from "../../app/components";
+import { CardCancelButton, LoadingComponent } from "../../app/components";
 
 function playCards() {
     const user = currentUser();
 
-    const [gameData, setGameData] = React.useState({
-        cards: [],
-        currentCard: 0
-    });
+    const [cards, setCards] = React.useState([]);
+    const [answers, setAnswers] = React.useState([]);
+    const [currentCard, setCurrentCard] = React.useState(1);
 
-    async function fetchCards() {
-        const Mycards = await cardService.getAll();
-        setGameData({
-            ...gameData,
-            cards: Mycards.data
-        });
-    }
+    const handleAnswerClick = (cardId, answer) => {
+        // Push user Answer and save to answer state
+        answers.push({ card: currentCard, _id: cardId, answer });
+        setAnswers(answers);
 
-    React.useEffect(() => {
-        fetchCards();
+        // Scroll to top so they can see
+        window.scrollTo(0, 0);
+
+        // Check if current Card is equal to number of Cards
+        if (cards.length > currentCard) {
+            // Update the current Card Number +1 and continue game
+            setCurrentCard(currentCard + 1);
+            return;
+        }
+
+        // Game End
+        // Set Cards to empty
+        setCards([]);
+        console.log("GameOver Answers -", answers);
+    };
+
+    React.useEffect(async () => {
+        // Get the cards for the user
+        setCards((await cardService.getAllByMe()).data);
     }, []);
 
     const reactSwipeableHandler = useSwipeable({
-        onSwipedLeft: (eventData) => {
-            console.log("User swiped left!", eventData);
+        onSwipedLeft: () => {
+            handleAnswerClick(cards[currentCard - 1]._id, false);
         },
-        onSwipedRight: (eventData) => {
-            console.log("User swiped right!", eventData);
+        onSwipedRight: () => {
+            handleAnswerClick(cards[currentCard - 1]._id, true);
         }
-        // trackMouse: true,
     });
 
     return (
@@ -53,7 +60,7 @@ function playCards() {
                 {...reactSwipeableHandler}
                 className="flex flex-col items-center justify-center min-h-screen py-2"
             >
-                {gameData.cards.length > 0 ? (
+                {cards.length > 0 ? (
                     <div className="m-8 md:mx-44">
                         <div className="border-black border-2 border-dashed mb-4 p-2">
                             <h1 className="text-center text-xl md:text-3xl">
@@ -61,57 +68,18 @@ function playCards() {
                             </h1>
                         </div>
 
-                        {gameData.cards.map((card, index) => {
-                            return (
-                                <div key={card._id} className="">
-                                    <div className="border-black border-2 border-dashed mt-2 mb-10 p-4 md:py-16">
-                                        <div className="flex justify-center">
-                                            <Image
-                                                src={card.cardImage}
-                                                width={500}
-                                                height={500}
-                                                placeholder="blur"
-                                                blurDataURL={LoadingImagePlacepholder}
-                                            />
-                                        </div>
-
-                                        <div className="mt-4 mb-8">
-                                            <h1 className="font-bold text-2xl md:text-5xl text-center">
-                                                {/* {card.cardTitle} */}
-                                            </h1>
-                                            <p className="text-center md:text-4xl">
-                                                {/* {card.cardCategory} */}
-                                            </p>
-                                        </div>
-
-                                        <div className="flex justify-around mb-4">
-                                            <CardNoButton
-                                                onClickHandler={(e) =>
-                                                    console.log(e)
-                                                }
-                                            />
-                                            <CardYesButton
-                                                onClickHandler={(e) =>
-                                                    console.log(e)
-                                                }
-                                            />
-                                        </div>
-                                    </div>
-
-                                    <div className="border-black border-2 border-dashed p-3 mb-10">
-                                        <div className="flex justify-around text-3xl">
-                                            <h1>NO</h1>
-                                            <h1>YES</h1>
-                                        </div>
-                                    </div>
-                                </div>
-                            );
-                        })}
+                        <SingleCard
+                            cardId={cards[currentCard - 1]._id}
+                            cardImage={cards[currentCard - 1].cardImage}
+                            cardTitle={cards[currentCard - 1].cardTitle}
+                            cardCategory={cards[currentCard - 1].cardCategory}
+                            handleAnswerClick={handleAnswerClick}
+                        />
 
                         <CardCancelButton />
                     </div>
                 ) : (
-                    <LoadingComponent text="Loading your cards..." />
+                    <LoadingComponent />
                 )}
             </div>
         </>
