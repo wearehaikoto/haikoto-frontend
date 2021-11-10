@@ -24,7 +24,8 @@ function playCards() {
 
     const handleAnswerClick = async (cardId, answer) => {
         // Push user Answer and save to answer state
-        answers.push({ card: currentCard, _id: cardId, answer });
+        // answers.push({ card: currentCard, _id: cardId, answer });
+        answers.push({ answer });
         setAnswers(answers);
 
         // Scroll to top so they can see
@@ -41,7 +42,7 @@ function playCards() {
         setLoadingState({ show: true, text: "Generating result..." });
 
         // Get the result of the game
-        const result = await gameService.endGame(gameId, answers);
+        const result = await gameService.endGame(gameId, { answers });
 
         console.log("GameOver", "gameId", gameId, "Answers", answers);
     };
