@@ -105,9 +105,9 @@ class gameService {
         }
     }
 
-    async endGame(gameId, data) {
+    async addAnswer(gameId, data) {
         try {
-            const response = await $http.post(`/api/game/${gameId}/end`, data);
+            const response = await $http.post(`/api/game/${gameId}/addAnswer`, data);
 
             if (response.data.success) {
                 return {

@@ -31,26 +31,19 @@ function playCards() {
         // Scroll to top so they can see
         window.scrollTo(0, 0);
 
-        // Check if current Card is equal to number of Cards
-        if (cards.length > currentCard) {
-            // Update the current Card Number +1 and continue game
-            setCurrentCard(currentCard + 1);
-            return;
-        }
-
-        // Update Loading State
-        setLoadingState({ show: true, text: "Generating result..." });
-
         // Get the result of the game
-        const result = await gameService.endGame(gameId, { answers });
+        const result = await gameService.addAnswer(gameId, { answer });
 
         if (result.success) {
+            // Check if current Card is equal to number of Cards
+            if (cards.length > currentCard) {
+                // Update the current Card Number +1 and continue game
+                setCurrentCard(currentCard + 1);
+                return;
+            }
+
             // Update Loading State
-            setLoadingState({
-                show: true,
-                text: result.message,
-                description: "Redirecting..."
-            });
+            setLoadingState({ show: true, text: "Generating result..." });
 
             setTimeout(() => {
                 router.push(`/play/${gameId}`);
