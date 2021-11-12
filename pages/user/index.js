@@ -42,9 +42,9 @@ function Index() {
                                 Create Card
                             </a>
                         </Link>
-                        <Link href={`/card/mine`}>
+                        <Link href={`/card/all`}>
                             <a className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 my-2 min-w-max w-2/4 rounded-full">
-                                My Cards
+                                Cards
                             </a>
                         </Link>
                         <Link href="/play">
