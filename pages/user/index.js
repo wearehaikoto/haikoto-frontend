@@ -2,20 +2,10 @@ import React from "react";
 import Head from "next/head";
 import Link from "next/link";
 
-import { cardService } from "../../app/services";
 import { currentUser, withAuth } from "../../app/utils";
 
 function Index() {
     const user = currentUser().userData;
-
-    async function fetchCards() {
-        const Allcards = await cardService.getAll();
-        const Mycards = await cardService.getAllByMe();
-    }
-
-    React.useEffect(() => {
-        fetchCards();
-    }, []);
 
     return (
         <>
