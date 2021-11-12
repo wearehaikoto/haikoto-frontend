@@ -48,13 +48,13 @@ function createCard() {
             {!loadingState.show ? (
                 <div className="items-center justify-center min-h-screen py-2">
                     <div className="m-10 md:mx-44 h-screen">
-                        <div className="mb-4 p-2">
+                        <div className="mb-4">
                             <h1 className="text-center text-xl md:text-3xl">
                                 About Me
                             </h1>
                         </div>
 
-                        {/* <div className="mb-10 p-4 py-16 h-full">
+                        {/* <div className="mb-10 py-16 h-full">
                             <div className="grid grid-cols-6 justify-items-stretch items-end gap-3 h-2/3 md:px-16">
                                 <div className="bg-pink-500 h-[70%]" />
                                 <div className="bg-purple-500 h-[80%]" />
@@ -85,7 +85,7 @@ function createCard() {
                             return (
                                 <div
                                     key={game._id}
-                                    className="mb-10 p-4 py-16"
+                                    className="mb-10 py-16"
                                 >
                                     {/* Game Id */}
                                     <div className="p-4 overflow-x-auto">

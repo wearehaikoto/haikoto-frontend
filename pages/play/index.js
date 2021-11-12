@@ -102,7 +102,7 @@ function playCards() {
                 >
                     <div className="m-8 md:mx-44">
                         {/*  <div className="border-black border-2 border-dashed mb-10 p-4"> */}
-                        {/* <div className="mb-4 p-2">
+                        {/* <div className="mb-4">
                             <h1 className="text-center text-xl md:text-3xl">
                                 Play Cards
                             </h1>
