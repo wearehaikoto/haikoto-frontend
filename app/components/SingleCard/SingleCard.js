@@ -11,7 +11,8 @@ function SingleCard({
 }) {
     return (
         <div className="">
-            <div className="border-black border-2 border-dashed mt-2 mb-10 p-4 md:py-16">
+            {/* <div className="border-black border-2 border-dashed mt-2 mb-10 p-4 md:py-16"> */}
+            <div className="mt-2 mb-10 p-4 md:py-16">
                 <div className="flex justify-center">
                     <Image
                         src={cardImage}
@@ -44,15 +45,6 @@ function SingleCard({
                     </div>
                 )}
             </div>
-
-            {handleAnswerClick && (
-                <div className="border-black border-2 border-dashed p-3 mb-10">
-                    <div className="flex justify-around text-3xl">
-                        <h1>NO</h1>
-                        <h1>YES</h1>
-                    </div>
-                </div>
-            )}
         </div>
     );
 }
