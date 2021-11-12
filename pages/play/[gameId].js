@@ -49,7 +49,7 @@ function getGame() {
 
             {!loadingState.show ? (
                 <div className="items-center justify-center min-h-screen py-2">
-                    <div className="m-10 md:mx-44 h-screen">
+                    <div className="m-10 md:mx-44">
                         <div className="mb-4">
                             <h1 className="text-center text-xl md:text-3xl">
                                 Game Result - {game._id}
