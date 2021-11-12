@@ -130,12 +130,22 @@ function createCard() {
                                     reader.readAsDataURL(file);
 
                                     const image = await uploadImage(file);
-
-                                    // Set the Form Input State
-                                    setFormInput({
-                                        ...formInput,
-                                        cardImage: image.data.data.url
-                                    });
+                                    if (image.success) {
+                                        // Set the Form Input State
+                                        setFormInput({
+                                            ...formInput,
+                                            cardImage: image.url
+                                        });
+                                    } else {
+                                        window.scrollTo(0, 0);
+                                        setAlertState({
+                                            show: true,
+                                            message:
+                                                "Image Upload Failed. Please try again.",
+                                            type: "error"
+                                        });
+                                        setPreviewImage(null);
+                                    }
                                 }}
                             />
 
