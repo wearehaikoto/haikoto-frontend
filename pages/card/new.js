@@ -13,6 +13,7 @@ function createCard() {
     const router = useRouter();
 
     const [previewImage, setPreviewImage] = React.useState(null);
+    const [categories, setCategories] = React.useState([]);
     const [alertState, setAlertState] = React.useState({
         show: false,
         message: "",
@@ -82,6 +83,12 @@ function createCard() {
             });
         }
     }
+
+    React.useEffect(async () => {
+        // Get pre existing card categories from DB
+        const cardCategories = await cardService.getAllCategories();
+        if (cardCategories.success) setCategories(cardCategories.data);
+    }, []);
 
     return (
         <>
@@ -181,11 +188,12 @@ function createCard() {
                                     }}
                                 />
                                 <datalist id="categories">
-                                    <option value="Food" />
-                                    <option value="Travel" />
-                                    <option value="Fashion" />
-                                    <option value="Technology" />
-                                    <option value="Art" />
+                                    {categories.map((category) => (
+                                        <option
+                                            key={category}
+                                            value={category}
+                                        />
+                                    ))}
                                 </datalist>
                                 {/* Submit Button */}
                                 <div className="flex justify-center mt-8">
