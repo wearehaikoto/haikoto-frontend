@@ -16,9 +16,10 @@ function VoteCard({ voteCards, setVoteCards }) {
 
     // Call the API to vote for the card
     const updateEloRating = cardService.updateEloRating(data);
-    
+
     // Update the votecards array to continue game
-    setVoteCards([loser]);
+    // setVoteCards([loser]);
+    setVoteCards([]);
   }
 
   return (
