@@ -101,12 +101,6 @@ function playCards() {
           className="flex flex-col items-center justify-center min-h-screen py-2"
         >
           <div className="m-8 md:mx-44">
-            {/*  <div className="border-black border-2 border-dashed mb-10 p-4"> */}
-            {/* <div className="mb-4">
-                <h1 className="text-center text-xl md:text-3xl">
-                    Play Cards
-                </h1>
-            </div> */}
 
             <SingleCard
               card={cards[currentCard - 1]}

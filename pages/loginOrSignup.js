@@ -86,6 +86,7 @@ function loginOrSignup() {
                                 <label className="text-lg">Code Name</label>
                                 <input
                                     type="text"
+                                    name="codeName"
                                     className="shadow appearance-none border rounded w-full py-3 px-3 text-gray-700 mt-1 leading-tight focus:outline-none focus:shadow-outline"
                                     value={codeName}
                                     onChange={(e) =>
