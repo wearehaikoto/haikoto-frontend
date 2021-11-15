@@ -130,6 +130,31 @@ class cardService {
         }
     }
 
+    async updateEloRating(data) {
+        try {
+            const response = await $http.put("/api/card/elo_rating_update", data);
+
+            if (response.data.success) {
+                return {
+                    success: true,
+                    message: response.data.message
+                };
+            } else {
+                return {
+                    success: false,
+                    message: response.data.message
+                };
+            }
+        } catch (error) {
+            return {
+                success: false,
+                message: error.response
+                    ? error.response.data.message
+                    : error.message
+            };
+        }
+    }
+
     async deleteCard(cardId) {
         try {
             const response = await $http.delete(`/api/card/${cardId}`);

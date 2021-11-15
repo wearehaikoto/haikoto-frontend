@@ -3,7 +3,7 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import { useSwipeable } from "react-swipeable";
 
-import { SingleCard } from "../../app/components";
+import { SingleCard, VoteCard } from "../../app/components";
 import { gameService } from "../../app/services";
 import { currentUser, withAuth } from "../../app/utils";
 import { CardCancelButton, LoadingComponent } from "../../app/components";
@@ -19,6 +19,7 @@ function playCards() {
   });
   const [gameId, setGameId] = React.useState(null);
   const [cards, setCards] = React.useState([]);
+  const [voteCards, setVoteCards] = React.useState([]);
   const [answers, setAnswers] = React.useState([]);
   const [currentCard, setCurrentCard] = React.useState(1);
 
@@ -35,6 +36,14 @@ function playCards() {
     const result = await gameService.addAnswer(gameId, { answer });
 
     if (result.success) {
+
+      // If answer is true add to voteCards bucket
+      if (answer) {
+        const card = cards.find(card => card._id === cardId);
+        voteCards.push(card);
+        setVoteCards(voteCards);
+      }
+
       // Check if current Card is equal to number of Cards
       if (cards.length > currentCard) {
         // Update the current Card Number +1 and continue game
@@ -82,9 +91,11 @@ function playCards() {
 
   const reactSwipeableHandler = useSwipeable({
     onSwipedLeft: () => {
+      if (voteCards.length === 2) return;
       handleAnswerClick(cards[currentCard - 1]._id, false);
     },
     onSwipedRight: () => {
+      if (voteCards.length === 2) return;
       handleAnswerClick(cards[currentCard - 1]._id, true);
     }
   });
@@ -102,10 +113,14 @@ function playCards() {
         >
           <div className="m-8 md:mx-44">
 
-            <SingleCard
-              card={cards[currentCard - 1]}
-              handleAnswerClick={handleAnswerClick}
-            />
+            {voteCards.length == 2 ? (
+              <VoteCard voteCards={voteCards} setVoteCards={setVoteCards} />
+            ) : (
+              <SingleCard
+                card={cards[currentCard - 1]}
+                handleAnswerClick={handleAnswerClick}
+              />
+            )}
 
             <CardCancelButton />
           </div>

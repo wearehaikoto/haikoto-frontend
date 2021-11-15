@@ -7,4 +7,5 @@ export { default as CardNoButton } from "./Buttons/CardNoButton";
 export { default as CardYesButton } from "./Buttons/CardYesButton";
 export { default as CardCancelButton } from "./Buttons/CardCancelButton";
 
+export { default as VoteCard } from "./VoteCard/VoteCard";
 export { default as SingleCard } from "./SingleCard/SingleCard";
