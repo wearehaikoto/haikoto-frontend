@@ -100,6 +100,8 @@ function playCards() {
     }
   });
 
+  console.log(voteCards);
+
   return (
     <>
       <Head>

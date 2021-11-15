@@ -18,7 +18,7 @@ function VoteCard({ voteCards, setVoteCards }) {
     const updateEloRating = cardService.updateEloRating(data);
     
     // Update the votecards array to continue game
-    setVoteCards([]);
+    setVoteCards([loser]);
   }
 
   return (
