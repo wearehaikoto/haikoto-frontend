@@ -62,7 +62,7 @@ function getGame() {
                                     <thead className="bg-blue-600">
                                         <tr>
                                             <th className="px-4 py-2 text-xs text-white text-left">
-                                                Card ID
+                                                RankID
                                             </th>
                                             <th className="px-4 py-2 text-xs text-white text-left">
                                                 Title
@@ -74,21 +74,37 @@ function getGame() {
                                         </tr>
                                     </thead>
                                     <tbody className="text-sm">
-                                        {game.cards.map((card, index) => {
+                                        {game.yesCards.map((card, index) => {
                                             return (
                                                 <tr key={card._id}>
                                                     <td className="border px-4 py-2 text-blue-600 border-blue-500 font-medium">
-                                                        {card._id}
+                                                        {/* {card._id} */}
+                                                        {index + 1}
                                                     </td>
                                                     <td className="border px-4 py-2 text-blue-600 border-blue-500 font-medium">
                                                         {card.cardTitle}
                                                     </td>
                                                     <td className="border px-4 py-2 border-blue-500 font-medium">
-                                                        {game.answers[index] ? (
-                                                            <span className="text-green-500"> True </span>
-                                                        ) : (
-                                                            <span className="text-red-500"> False </span>
-                                                        )}
+                                                        <span className="text-green-500"> True </span>
+                                                    </td>
+                                                    <td className="border px-4 py-2 text-yellow-600 border-blue-500 font-medium">
+                                                        <Link href={`/card/${card._id}`}><a>View Card</a></Link>
+                                                    </td>
+                                                </tr>
+                                            );
+                                        })}
+                                        {game.noCards.map((card, index) => {
+                                            return (
+                                                <tr key={card._id}>
+                                                    <td className="border px-4 py-2 text-blue-600 border-blue-500 font-medium">
+                                                        {/* {card._id} */}
+                                                        {index + 1}
+                                                    </td>
+                                                    <td className="border px-4 py-2 text-blue-600 border-blue-500 font-medium">
+                                                        {card.cardTitle}
+                                                    </td>
+                                                    <td className="border px-4 py-2 border-blue-500 font-medium">
+                                                        <span className="text-red-500"> False </span>
                                                     </td>
                                                     <td className="border px-4 py-2 text-yellow-600 border-blue-500 font-medium">
                                                         <Link href={`/card/${card._id}`}><a>View Card</a></Link>

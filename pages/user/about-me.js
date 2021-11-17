@@ -37,8 +37,6 @@ function createCard() {
     }
   }, []);
 
-  console.log(allGamesByMe);
-
   return (
     <>
       <Head>
@@ -52,33 +50,8 @@ function createCard() {
               <h1 className="text-center text-xl md:text-3xl">About Me</h1>
             </div>
 
-            {/* <div className="mb-10 py-16 h-full">
-              <div className="grid grid-cols-6 justify-items-stretch items-end gap-3 h-2/3 md:px-16">
-                <div className="bg-pink-500 h-[70%]" />
-                <div className="bg-purple-500 h-[80%]" />
-                <div className="bg-green-500 h-[50%]" />
-                <div className="bg-yellow-500 h-[100%]" />
-                <div className="bg-blue-500 h-[30%]" />
-                <div className="bg-indigo-500 h-[60%]" />
-              </div>
-
-              <div className="text-center mt-5 tracking-wider">
-                <h1 className="text-lg">
-                  <strong className="text-3xl">humble,</strong> smart,
-                </h1>
-                <h1 className="text-lg">
-                  happy, <strong className="text-3xl">confident,</strong>
-                </h1>
-                <h1 className="text-lg">
-                  <strong className="text-3xl">problem solver</strong>
-                </h1>
-              </div>
-            </div> */}
-
             {allGamesByMe.map((game) => {
               // Check if game was completed
-              if (game.answers.length === 0) return;
-
               return (
                 <div key={game._id} className="mb-10 py-16">
                   <div className="p-4 overflow-x-auto">
@@ -87,7 +60,7 @@ function createCard() {
                       <thead className="bg-blue-600">
                         <tr>
                           <th className="px-4 py-2 text-xs text-white text-left">
-                            Card ID
+                            RankID
                           </th>
                           <th className="px-4 py-2 text-xs text-white text-left">
                             Title
@@ -99,29 +72,40 @@ function createCard() {
                         </tr>
                       </thead>
                       <tbody className="text-sm">
-                        {game.cards.map((card, index) => {
-                          // Check if game was completed and if card was answered
-                          if (game.answers[index] === undefined) return;
-
+                        {game.yesCards.map((card, index) => {
                           return (
                             <tr key={card._id}>
                               <td className="border px-4 py-2 text-blue-600 border-blue-500 font-medium">
-                                {card._id}
+                                {/* {card._id} */}
+                                {index + 1}
                               </td>
                               <td className="border px-4 py-2 text-blue-600 border-blue-500 font-medium">
                                 {card.cardTitle}
                               </td>
                               <td className="border px-4 py-2 border-blue-500 font-medium">
-                                {game.answers[index] ? (
-                                  <span className="text-green-500"> True </span>
-                                ) : (
-                                  <span className="text-red-500"> False </span>
-                                )}
+                                <span className="text-green-500"> True </span>
                               </td>
                               <td className="border px-4 py-2 text-yellow-600 border-blue-500 font-medium">
-                                <Link href={`/card/${card._id}`}>
-                                  <a>View Card</a>
-                                </Link>
+                                <Link href={`/card/${card._id}`}><a>View Card</a></Link>
+                              </td>
+                            </tr>
+                          );
+                        })}
+                        {game.noCards.map((card, index) => {
+                          return (
+                            <tr key={card._id}>
+                              <td className="border px-4 py-2 text-blue-600 border-blue-500 font-medium">
+                                {/* {card._id} */}
+                                {index + 1}
+                              </td>
+                              <td className="border px-4 py-2 text-blue-600 border-blue-500 font-medium">
+                                {card.cardTitle}
+                              </td>
+                              <td className="border px-4 py-2 border-blue-500 font-medium">
+                                <span className="text-red-500"> False </span>
+                              </td>
+                              <td className="border px-4 py-2 text-yellow-600 border-blue-500 font-medium">
+                                <Link href={`/card/${card._id}`}><a>View Card</a></Link>
                               </td>
                             </tr>
                           );
