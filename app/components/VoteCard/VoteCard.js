@@ -43,7 +43,7 @@ function VoteCard({ gameId, yesCards, setYesCards, setVoteMode }) {
 
   React.useEffect(async () => {
     setNewYesCard(yesCards[0]);
-  });
+  }, []);
 
   return (
     <>
