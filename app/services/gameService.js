@@ -105,9 +105,61 @@ class gameService {
         }
     }
 
-    async addAnswer(gameId, data) {
+    async addNoCard(gameId, data) {
         try {
-            const response = await $http.post(`/api/game/${gameId}/addAnswer`, data);
+            const response = await $http.post(`/api/game/${gameId}/addNoCard`, data);
+
+            if (response.data.success) {
+                return {
+                    success: true,
+                    message: response.data.message,
+                    data: response.data.data
+                };
+            } else {
+                return {
+                    success: false,
+                    message: response.data.message
+                };
+            }
+        } catch (error) {
+            return {
+                success: false,
+                message: error.response
+                    ? error.response.data.message
+                    : error.message
+            };
+        }
+    }
+    
+    async addYesCard(gameId, data) {
+        try {
+            const response = await $http.post(`/api/game/${gameId}/addYesCard`, data);
+
+            if (response.data.success) {
+                return {
+                    success: true,
+                    message: response.data.message,
+                    data: response.data.data
+                };
+            } else {
+                return {
+                    success: false,
+                    message: response.data.message
+                };
+            }
+        } catch (error) {
+            return {
+                success: false,
+                message: error.response
+                    ? error.response.data.message
+                    : error.message
+            };
+        }
+    }
+
+    async updateYesCards(gameId, data) {
+        try {
+            const response = await $http.post(`/api/game/${gameId}/updateYesCards`, data);
 
             if (response.data.success) {
                 return {

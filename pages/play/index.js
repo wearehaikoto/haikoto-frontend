@@ -3,9 +3,9 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import { useSwipeable } from "react-swipeable";
 
-import { SingleCard, VoteCard } from "../../app/components";
 import { gameService } from "../../app/services";
 import { currentUser, withAuth } from "../../app/utils";
+import { SingleCard, VoteCard } from "../../app/components";
 import { CardCancelButton, LoadingComponent } from "../../app/components";
 
 function playCards() {
@@ -18,46 +18,56 @@ function playCards() {
     description: ""
   });
   const [gameId, setGameId] = React.useState(null);
-  const [cards, setCards] = React.useState([]);
-  const [voteCards, setVoteCards] = React.useState([]);
-  const [answers, setAnswers] = React.useState([]);
+  const [allCards, setAllCards] = React.useState([]);
+  const [yesCards, setYesCards] = React.useState([]);
+  const [noCards, setNoCards] = React.useState([]);
+  const [voteMode, setVoteMode] = React.useState(false);
   const [currentCard, setCurrentCard] = React.useState(1);
 
   const handleAnswerClick = async (cardId, answer) => {
-    // Push user Answer and save to answer state
-    // answers.push({ card: currentCard, _id: cardId, answer });
-    answers.push(answer);
-    setAnswers(answers);
-
-    // Scroll to top so they can see
+    // Scroll to top (good UX)
     window.scrollTo(0, 0);
 
-    // Get the result of the game
-    const result = await gameService.addAnswer(gameId, { answer });
+    // Get the Card Data
+    const card = allCards.find((card) => card._id === cardId);
 
-    if (result.success) {
+    // If answer is true add to yesCards bucket
+    if (answer) {
 
-      // If answer is true add to voteCards bucket
-      if (answer) {
-        const card = cards.find(card => card._id === cardId);
-        voteCards.push(card);
-        setVoteCards(voteCards);
-      }
+      yesCards.unshift(card);
+      setYesCards(yesCards);
 
-      // Check if current Card is equal to number of Cards
-      if (cards.length > currentCard) {
-        // Update the current Card Number +1 and continue game
-        setCurrentCard(currentCard + 1);
-        return;
-      }
+      // Add yes Card to the Game 
+      await gameService.addYesCard(gameId, { cardId });
+    } else {
 
-      // Update Loading State
-      setLoadingState({ show: true, text: "Generating result..." });
+      noCards.unshift(card);
+      setNoCards(noCards);
 
-      setTimeout(() => {
-        router.push(`/play/${gameId}`);
-      }, 2000);
+      // Add No Card to the Game 
+      await gameService.addNoCard(gameId, { cardId });
     }
+
+    // If the answer is true and number of cards in yesCards bucket is greater than 2
+    if (answer && yesCards.length >= 2) {
+      // Enter Vote mode to rank yesCards
+      setVoteMode(true);
+    }
+
+    // Check if current Card is equal to number of Cards
+    if (allCards.length > currentCard) {
+      // Update the current Card Number +1 and continue game
+      setCurrentCard(currentCard + 1);
+      return;
+    }
+
+    // Update Loading State
+    setLoadingState({ show: true, text: "Generating result..." });
+
+    // Take a while before redirecting to result
+    setTimeout(() => {
+      router.push(`/play/${gameId}`);
+    }, 1500)
   };
 
   React.useEffect(async () => {
@@ -74,7 +84,7 @@ function playCards() {
 
     if (createGame.success) {
       setGameId(createGame.data._id);
-      setCards(createGame.data.cards);
+      setAllCards(createGame.data.cards);
       setLoadingState({ show: false, text: "" });
     } else {
       setLoadingState({
@@ -91,12 +101,12 @@ function playCards() {
 
   const reactSwipeableHandler = useSwipeable({
     onSwipedLeft: () => {
-      if (voteCards.length === 2) return;
-      handleAnswerClick(cards[currentCard - 1]._id, false);
+      if (voteMode) return;
+      handleAnswerClick(allCards[currentCard - 1]._id, false);
     },
     onSwipedRight: () => {
-      if (voteCards.length === 2) return;
-      handleAnswerClick(cards[currentCard - 1]._id, true);
+      if (voteMode) return;
+      handleAnswerClick(allCards[currentCard - 1]._id, true);
     }
   });
 
@@ -112,12 +122,16 @@ function playCards() {
           className="flex flex-col items-center justify-center min-h-screen py-2"
         >
           <div className="m-8 md:mx-44">
-
-            {voteCards.length == 2 ? (
-              <VoteCard voteCards={voteCards} setVoteCards={setVoteCards} />
+            {voteMode ? (
+              <VoteCard
+                gameId={gameId}
+                yesCards={yesCards}
+                setYesCards={setYesCards}
+                setVoteMode={setVoteMode}
+              />
             ) : (
               <SingleCard
-                card={cards[currentCard - 1]}
+                card={allCards[currentCard - 1]}
                 handleAnswerClick={handleAnswerClick}
               />
             )}

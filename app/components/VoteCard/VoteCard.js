@@ -1,48 +1,89 @@
+import React from "react";
 import Image from "next/image";
+
+import { gameService } from "../../services";
+import { ArrayMethods } from "../../utils";
 import { LoadingImagePlacepholder } from "../../assets";
 
-import { cardService } from "../../services";
+function VoteCard({ gameId, yesCards, setYesCards, setVoteMode }) {
 
-function VoteCard({ voteCards, setVoteCards }) {
+  const [currentVote, setCurrentVote] = React.useState(1);
+  const [newYesCard, setNewYesCard] = React.useState(null);
+  const [breakVoteLoop, setBreakVoteLoop] = React.useState(false);
 
-  async function handleCardClick(position) {
+  const handleCardClick = async (cardId) => {
+    // Scroll to top (good UX)
+    window.scrollTo(0, 0);
 
-    let winner, loser;
-    if (position === 0) winner = voteCards[0]; loser = voteCards[1];
-    if (position === 1) winner = voteCards[1]; loser = voteCards[0];
+    // Check if picked ID is not newYesCard, Swap positions
+    if (cardId === yesCards[currentVote]._id) {
+      setYesCards(ArrayMethods.swapArrayValues(yesCards, 0, currentVote));
+    }
 
-    // Build the payload with the winner and loser card ids
-    const data = { winner: winner._id, loser: loser._id }
+    // Check if picked ID is newYesCard
+    if (cardId === newYesCard._id) {
+      setBreakVoteLoop(true);
+    }
 
-    // Call the API to vote for the card
-    const updateEloRating = cardService.updateEloRating(data);
+    // Update Yes Cards in the Backend
+    await gameService.updateYesCards(gameId, { cardIds: yesCards.map(card => card._id) });
 
-    // Update the votecards array to continue game
-    // setVoteCards([loser]);
-    setVoteCards([]);
-  }
+    // If breakVoteLoop is true, set voteMode to false
+    if (breakVoteLoop) setVoteMode(false);
+
+    // Check if current Vote Card is equal to number of Cards
+    if (yesCards.length > (currentVote + 1)) {
+      // Update the current Vote Card Number + 1 and continue vote
+      setCurrentVote(currentVote + 1);
+      return;
+    }
+
+    setVoteMode(false);
+  };
+
+  React.useEffect(async () => {
+    setNewYesCard(yesCards[0]);
+  });
 
   return (
     <>
       <div className="mt-2 p-4 md:py-16">
-        {voteCards.map((card, index) => {
-          return (
-            <div key={card._id} onClick={() => handleCardClick(index)} >
-              <div className="flex justify-center">
-                <Image
-                  src={card.cardImage}
-                  width={300}
-                  height={300}
-                  placeholder="blur"
-                  blurDataURL={LoadingImagePlacepholder}
-                />
-              </div>
-              <div className="mt-4 mb-8">
-                <h1 className="font-bold text-2xl md:text-4xl text-center m-4 md:m-10">{card.cardTitle}</h1>
-              </div>
+
+        {newYesCard && (
+          <div onClick={() => handleCardClick(newYesCard._id)} >
+            <div className="flex justify-center">
+              <Image
+                src={newYesCard.cardImage}
+                width={300}
+                height={300}
+                placeholder="blur"
+                blurDataURL={LoadingImagePlacepholder}
+              />
             </div>
-          );
-        })}
+            <div className="mt-4 mb-8">
+              <h1 className="font-bold text-2xl md:text-4xl text-center m-4 md:m-10">
+                {newYesCard.cardTitle}
+              </h1>
+            </div>
+          </div>
+        )}
+
+        <div onClick={() => handleCardClick(yesCards[currentVote]._id)} >
+          <div className="flex justify-center">
+            <Image
+              src={yesCards[currentVote].cardImage}
+              width={300}
+              height={300}
+              placeholder="blur"
+              blurDataURL={LoadingImagePlacepholder}
+            />
+          </div>
+          <div className="mt-4 mb-8">
+            <h1 className="font-bold text-2xl md:text-4xl text-center m-4 md:m-10">
+              {yesCards[currentVote].cardTitle}
+            </h1>
+          </div>
+        </div>
       </div>
     </>
   );
