@@ -63,7 +63,7 @@ function createCard() {
               <h1 className="text-center text-xl md:text-3xl">All Cards</h1>
             </div>
 
-            <div className="mb-10 py-16">
+            <div className="mb-10">
               <div className="p-4 overflow-x-auto">
                 <table className="table-auto w-full">
                   <thead className="bg-blue-600">
