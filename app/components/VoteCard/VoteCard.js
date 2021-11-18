@@ -61,39 +61,37 @@ function VoteCard({ gameId, yesCards, setYesCards, setVoteMode }) {
 
   return (
     <>
-      <div onClick={() => handleCardClick(newYesCard._id)} >
-        <div className="flex justify-center">
-          <Image
-            src={newYesCard.cardImage}
-            width={300}
-            height={300}
-            placeholder="blur"
-            blurDataURL={LoadingImagePlacepholder}
-          />
-        </div>
-        <div className="mt-4">
-          <h1 className="font-bold text-2xl md:text-4xl text-center m-4 md:m-10">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 lg:gap-8 m-5">
+        <div onClick={() => handleCardClick(newYesCard._id)} >
+          <div className="flex justify-center">
+            <Image
+              src={newYesCard.cardImage}
+              width={300}
+              height={300}
+              placeholder="blur"
+              blurDataURL={LoadingImagePlacepholder}
+            />
+          </div>
+          <h1 className="font-bold text-2xl md:text-4xl text-center m-4 md:m-3">
             {newYesCard.cardTitle}
           </h1>
         </div>
-      </div>
-
-      <div onClick={() => handleCardClick(yesCards[currentVote]._id)} >
-        <div className="flex justify-center">
-          <Image
-            src={yesCards[currentVote].cardImage}
-            width={300}
-            height={300}
-            placeholder="blur"
-            blurDataURL={LoadingImagePlacepholder}
-          />
-        </div>
-        <div className="mt-4">
-          <h1 className="font-bold text-2xl md:text-4xl text-center m-4 md:m-10">
+        <div onClick={() => handleCardClick(yesCards[currentVote]._id)} >
+          <div className="flex justify-center">
+            <Image
+              src={yesCards[currentVote].cardImage}
+              width={300}
+              height={300}
+              placeholder="blur"
+              blurDataURL={LoadingImagePlacepholder}
+            />
+          </div>
+          <h1 className="font-bold text-2xl md:text-4xl text-center m-4 md:m-3">
             {yesCards[currentVote].cardTitle}
           </h1>
         </div>
       </div>
+
     </>
   );
 }
