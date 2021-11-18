@@ -61,40 +61,37 @@ function VoteCard({ gameId, yesCards, setYesCards, setVoteMode }) {
 
   return (
     <>
-      <div className="mt-2 p-4 md:py-16">
-
-        <div onClick={() => handleCardClick(newYesCard._id)} >
-          <div className="flex justify-center">
-            <Image
-              src={newYesCard.cardImage}
-              width={300}
-              height={300}
-              placeholder="blur"
-              blurDataURL={LoadingImagePlacepholder}
-            />
-          </div>
-          <div className="mt-4 mb-8">
-            <h1 className="font-bold text-2xl md:text-4xl text-center m-4 md:m-10">
-              {newYesCard.cardTitle}
-            </h1>
-          </div>
+      <div onClick={() => handleCardClick(newYesCard._id)} >
+        <div className="flex justify-center">
+          <Image
+            src={newYesCard.cardImage}
+            width={300}
+            height={300}
+            placeholder="blur"
+            blurDataURL={LoadingImagePlacepholder}
+          />
         </div>
+        <div className="mt-4">
+          <h1 className="font-bold text-2xl md:text-4xl text-center m-4 md:m-10">
+            {newYesCard.cardTitle}
+          </h1>
+        </div>
+      </div>
 
-        <div onClick={() => handleCardClick(yesCards[currentVote]._id)} >
-          <div className="flex justify-center">
-            <Image
-              src={yesCards[currentVote].cardImage}
-              width={300}
-              height={300}
-              placeholder="blur"
-              blurDataURL={LoadingImagePlacepholder}
-            />
-          </div>
-          <div className="mt-4 mb-8">
-            <h1 className="font-bold text-2xl md:text-4xl text-center m-4 md:m-10">
-              {yesCards[currentVote].cardTitle}
-            </h1>
-          </div>
+      <div onClick={() => handleCardClick(yesCards[currentVote]._id)} >
+        <div className="flex justify-center">
+          <Image
+            src={yesCards[currentVote].cardImage}
+            width={300}
+            height={300}
+            placeholder="blur"
+            blurDataURL={LoadingImagePlacepholder}
+          />
+        </div>
+        <div className="mt-4">
+          <h1 className="font-bold text-2xl md:text-4xl text-center m-4 md:m-10">
+            {yesCards[currentVote].cardTitle}
+          </h1>
         </div>
       </div>
     </>

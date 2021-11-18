@@ -136,25 +136,27 @@ function playCards() {
           {...reactSwipeableHandler}
           className="flex flex-col items-center justify-center min-h-screen py-2"
         >
-          <div className="m-8 md:mx-44">
-            {voteMode ? (
+          {voteMode ? (
+            <div className="mt-2">
               <VoteCard
                 gameId={gameId}
                 yesCards={yesCards}
                 setYesCards={setYesCards}
                 setVoteMode={setVoteMode}
               />
-            ) : (
-              lastCardVote ? finishGame() : (
+            </div>
+          ) : (
+            lastCardVote ? finishGame() : (
+              <div className="m-8 md:mx-44">
                 <SingleCard
                   card={allCards[currentCard - 1]}
                   handleAnswerClick={handleAnswerClick}
                 />
-              )
-            )}
+              </div>
+            )
+          )}
 
-            <CardCancelButton />
-          </div>
+          <CardCancelButton />
         </div>
       ) : (
         <LoadingComponent {...loadingState} />
