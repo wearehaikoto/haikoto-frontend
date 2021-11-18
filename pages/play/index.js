@@ -147,7 +147,7 @@ function playCards() {
             </div>
           ) : (
             lastCardVote ? finishGame() : (
-              <div className="m-8 md:mx-44">
+              <div className="md:mx-44">
                 <SingleCard
                   card={allCards[currentCard - 1]}
                   handleAnswerClick={handleAnswerClick}

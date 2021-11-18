@@ -5,12 +5,12 @@ import { CardYesButton, CardNoButton } from "../../components";
 function SingleCard({ card, handleAnswerClick }) {
   return (
     <>
-      <div className="mt-2 mb-10 p-4 md:py-16">
-        <div className="flex justify-center">
+      <div className="mt-2 mb-5 p-4">
+        <div className="h-60 w-60 lg:h-80 lg:w-80 relative mx-auto">
           <Image
             src={card.cardImage}
-            width={500}
-            height={500}
+            layout="fill"
+            objectFit="cover"
             placeholder="blur"
             blurDataURL={LoadingImagePlacepholder}
           />

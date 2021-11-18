@@ -3,7 +3,7 @@ export default function CardYesButton({ onClickHandler }) {
         <button onClick={(e) => (onClickHandler ? onClickHandler(e) : null)}>
             <svg
                 xmlns="http://www.w3.org/2000/svg"
-                className="h-20 md:h-32 w-20 md:w-32 text-green-500"
+                className="h-20 w-20 text-green-500"
                 viewBox="0 0 20 20"
                 fill="currentColor"
             >
