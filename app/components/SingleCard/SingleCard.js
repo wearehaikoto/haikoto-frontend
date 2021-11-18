@@ -24,7 +24,7 @@ function SingleCard({ card, handleAnswerClick }) {
         </div>
 
         {handleAnswerClick && (
-          <div className="flex justify-around mb-4">
+          <div className="flex justify-center mb-4">
             <CardNoButton
               onClickHandler={() => handleAnswerClick(card._id, false)}
             />
