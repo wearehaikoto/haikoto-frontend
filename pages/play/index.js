@@ -134,7 +134,7 @@ function playCards() {
       {!loadingState.show ? (
         <div
           {...reactSwipeableHandler}
-          className="flex flex-col items-center justify-center min-h-screen py-2"
+          className="flex flex-col items-center justify-center min-h-screen"
         >
           {voteMode ? (
             <div className="mt-2">

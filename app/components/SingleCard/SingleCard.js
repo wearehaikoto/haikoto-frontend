@@ -6,7 +6,7 @@ function SingleCard({ card, handleAnswerClick }) {
   return (
     <>
       <div className="mt-2 mb-5 p-4">
-        <div className="h-60 w-60 lg:h-80 lg:w-80 relative mx-auto">
+        <div className="h-52 w-52 lg:h-80 lg:w-80 relative mx-auto">
           <Image
             src={card.cardImage}
             layout="fill"
@@ -17,10 +17,10 @@ function SingleCard({ card, handleAnswerClick }) {
         </div>
 
         <div className="mt-4 mb-8">
-          <h1 className="font-bold text-2xl md:text-5xl text-center">
+          <h1 className="font-bold text-2xl md:text-3xl lg:text-5xl text-center">
             {card.cardTitle}
           </h1>
-          <p className="text-center md:text-4xl">{card.cardCategory}</p>
+          <p className="text-center md:text-2xl lg:text-4xl">{card.cardCategory}</p>
         </div>
 
         {handleAnswerClick && (

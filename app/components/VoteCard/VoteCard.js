@@ -61,7 +61,7 @@ function VoteCard({ gameId, yesCards, setYesCards, setVoteMode }) {
 
   return (
     <>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 lg:gap-8 m-5">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 lg:gap-8 m-5">
         <div className="cursor-pointer" onClick={() => handleCardClick(newYesCard._id)} >
           <div className="flex justify-center">
             <Image
