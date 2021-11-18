@@ -48,7 +48,7 @@ function getGame() {
             </Head>
 
             {!loadingState.show ? (
-                <div className="items-center justify-center min-h-screen py-2">
+                <div className="items-center justify-center min-h-screen">
                     <div className="m-10 md:mx-44">
                         <div className="mb-4">
                             <h1 className="text-center text-xl md:text-3xl">
@@ -56,7 +56,7 @@ function getGame() {
                             </h1>
                         </div>
 
-                        <div className="mb-10 py-16">
+                        <div className="mb-10">
                             <div className="p-4 overflow-x-auto">
                                 <table className="table-auto w-full">
                                     <thead className="bg-blue-600">
