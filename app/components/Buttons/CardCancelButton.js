@@ -5,7 +5,7 @@ export default function CardCancelButton({ redirect_url }) {
         <Link href={redirect_url ? redirect_url : "/user"}>
             <a>
                 <div className="flex justify-around">
-                    <div class="fixed top-2 right-2 md:right-10 h-16 w-16">
+                    <div className="fixed top-2 right-2 md:right-10 h-16 w-16">
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
                             className="w-10"

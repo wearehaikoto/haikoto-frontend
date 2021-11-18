@@ -63,11 +63,11 @@ function VoteCard({ gameId, yesCards, setYesCards, setVoteMode }) {
     <>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 lg:gap-8 m-5">
         <div className="cursor-pointer" onClick={() => handleCardClick(newYesCard._id)} >
-          <div className="flex justify-center">
+          <div className="h-52 w-52 lg:h-80 lg:w-80 relative mx-auto">
             <Image
               src={newYesCard.cardImage}
-              width={300}
-              height={300}
+              layout="fill"
+              objectFit="cover"
               placeholder="blur"
               blurDataURL={LoadingImagePlacepholder}
             />
@@ -77,11 +77,11 @@ function VoteCard({ gameId, yesCards, setYesCards, setVoteMode }) {
           </h1>
         </div>
         <div className="cursor-pointer" onClick={() => handleCardClick(yesCards[currentVote]._id)} >
-          <div className="flex justify-center">
+          <div className="h-52 w-52 lg:h-80 lg:w-80 relative mx-auto">
             <Image
               src={yesCards[currentVote].cardImage}
-              width={300}
-              height={300}
+              layout="fill"
+              objectFit="cover"
               placeholder="blur"
               blurDataURL={LoadingImagePlacepholder}
             />
