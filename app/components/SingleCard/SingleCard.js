@@ -5,7 +5,6 @@ import { CardYesButton, CardNoButton } from "../../components";
 function SingleCard({ card, handleAnswerClick }) {
   return (
     <>
-      {/* <div className="border-black border-2 border-dashed mt-2 mb-10 p-4 md:py-16"> */}
       <div className="mt-2 mb-10 p-4 md:py-16">
         <div className="flex justify-center">
           <Image
