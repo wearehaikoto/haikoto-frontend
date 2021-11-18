@@ -137,22 +137,18 @@ function playCards() {
           className="flex flex-col items-center justify-center min-h-screen"
         >
           {voteMode ? (
-            <div className="mt-2">
-              <VoteCard
-                gameId={gameId}
-                yesCards={yesCards}
-                setYesCards={setYesCards}
-                setVoteMode={setVoteMode}
-              />
-            </div>
+            <VoteCard
+              gameId={gameId}
+              yesCards={yesCards}
+              setYesCards={setYesCards}
+              setVoteMode={setVoteMode}
+            />
           ) : (
             lastCardVote ? finishGame() : (
-              <div className="md:mx-44">
-                <SingleCard
-                  card={allCards[currentCard - 1]}
-                  handleAnswerClick={handleAnswerClick}
-                />
-              </div>
+              <SingleCard
+                card={allCards[currentCard - 1]}
+                handleAnswerClick={handleAnswerClick}
+              />
             )
           )}
 
