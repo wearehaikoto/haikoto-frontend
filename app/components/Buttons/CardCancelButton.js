@@ -7,7 +7,7 @@ export default function CardCancelButton({ redirect_url }) {
                 <div className="flex justify-around mt-4">
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
-                        className="w-20"
+                        className="w-10 lg:w-20"
                         fill="none"
                         viewBox="0 0 43 43"
                         stroke="currentColor"
