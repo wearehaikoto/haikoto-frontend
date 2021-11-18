@@ -2,7 +2,7 @@ import React from "react";
 import Image from "next/image";
 
 import { gameService } from "../../services";
-import { ArrayMethods } from "../../utils";
+import { ArrayMethods, EloRatingAlgorithm } from "../../utils";
 import { LoadingImagePlacepholder } from "../../assets";
 
 function VoteCard({ gameId, yesCards, setYesCards, setVoteMode }) {
@@ -23,20 +23,28 @@ function VoteCard({ gameId, yesCards, setYesCards, setVoteMode }) {
 
     // Check if picked ID is not newYesCard, Swap positions
     if (cardId === yesCardsRef.current[currentVote]._id) {
+      // Calculate new eloRatings of winner card and loser card and add it to the yesCardsRef.current
+      yesCardsRef.current[currentVote].eloRating = EloRatingAlgorithm.getNewRating(yesCardsRef.current[currentVote].eloRating, yesCardsRef.current[newYesCardIndexInRef].eloRating, 1);
+      yesCardsRef.current[newYesCardIndexInRef].eloRating = EloRatingAlgorithm.getNewRating(yesCardsRef.current[newYesCardIndexInRef].eloRating, yesCardsRef.current[currentVote].eloRating, 0);
+
       yesCardsRef.current = ArrayMethods.swapArrayValues(yesCardsRef.current, newYesCardIndexInRef, currentVote);
       setNewYesCard(yesCardsRef.current[currentVote]);
     }
 
     // Check if picked ID is newYesCard
     if (cardId === newYesCard._id) {
+      // Calculate new eloRatings of winner card and loser card and add it to the yesCardsRef.current 
+      yesCardsRef.current[newYesCardIndexInRef].eloRating = EloRatingAlgorithm.getNewRating(yesCardsRef.current[newYesCardIndexInRef].eloRating, yesCardsRef.current[currentVote].eloRating, 1);
+      yesCardsRef.current[currentVote].eloRating = EloRatingAlgorithm.getNewRating(yesCardsRef.current[currentVote].eloRating, yesCardsRef.current[newYesCardIndexInRef].eloRating, 0);
+
       breakVoteLoop = true;
     }
 
     // Update Yes Cards in the Backend
-    await gameService.updateYesCards(gameId, { cardIds: yesCardsRef.current.map(card => card._id) });
+    await gameService.updateYesCards(gameId, { cardIds: yesCardsRef.current.map(card => card._id), eloScores: yesCardsRef.current.map(card => card.eloRating) });
 
     // Update Yes Cards in Parent Component
-    setYesCards(yesCardsRef.current); 
+    setYesCards(yesCardsRef.current);
 
     // If breakVoteLoop is true, set voteMode to false
     if (breakVoteLoop) setVoteMode(false);
