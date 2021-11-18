@@ -7,4 +7,4 @@ export { default as withoutAuth } from "./withoutAuth";
 export { default as currentUser } from "./currentUser";
 export { default as uploadImage } from "./uploadImage";
 
-export { default as ArrayMethods } from "./ArrayMethods";
+export { default as ArrayMethods } from "./arrayMethod";
