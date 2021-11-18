@@ -96,15 +96,15 @@ function createCard() {
                 <title>Create Card - Haikoto</title>
             </Head>
 
-            <div className="flex flex-col items-center justify-center min-h-screen py-2">
-                <div className="m-8 md:mx-44">
-                    <div className="mb-4">
+            <div className="flex flex-col items-center justify-center min-h-screen">
+                <div className="m-7 md:mx-44">
+                    <div className="mb-2">
                         <h1 className="text-center text-xl md:text-3xl">
                             Create a Card
                         </h1>
                     </div>
                     {alertState.show && <AlertComponent {...alertState} />}
-                    <div className="mt-2 mb-10 p-4 md:py-16">
+                    <div className="mt-2 p-4 md:py-16">
                         <form onSubmit={processCreateCard}>
                             <label htmlFor="upload-button">
                                 <div className="flex justify-center relative">
