@@ -23,6 +23,7 @@ function playCards() {
   const [noCards, setNoCards] = React.useState([]);
   const [voteMode, setVoteMode] = React.useState(false);
   const [currentCard, setCurrentCard] = React.useState(1);
+  const [lastCardVote, setLastCardVote] = React.useState(false);
 
   const handleAnswerClick = async (cardId, answer) => {
     // Scroll to top (good UX)
@@ -61,6 +62,20 @@ function playCards() {
       return;
     }
 
+    // Last Card Vote
+    if (allCards.length === currentCard && answer) {
+      // If the current Card is equal to number of Cards and answer is true
+      // Enter Vote mode to rank yesCards
+      setVoteMode(true);
+      setLastCardVote(true);
+      return;
+    }
+
+    // Call finish Game Function
+    finishGame();
+  };
+
+  const finishGame = async () => {
     // Update Loading State
     setLoadingState({ show: true, text: "Generating result..." });
 
@@ -130,10 +145,12 @@ function playCards() {
                 setVoteMode={setVoteMode}
               />
             ) : (
-              <SingleCard
-                card={allCards[currentCard - 1]}
-                handleAnswerClick={handleAnswerClick}
-              />
+              lastCardVote ? finishGame() : (
+                <SingleCard
+                  card={allCards[currentCard - 1]}
+                  handleAnswerClick={handleAnswerClick}
+                />
+              )
             )}
 
             <CardCancelButton />
