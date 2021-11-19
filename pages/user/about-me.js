@@ -40,7 +40,7 @@ function createCard() {
   return (
     <>
       <Head>
-        <title>About {user.codeName} - Haikoto</title>
+        <title>About @{user.codeName} - Haikoto</title>
       </Head>
 
       {!loadingState.show ? (

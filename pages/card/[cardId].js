@@ -48,7 +48,7 @@ function getCard() {
   return (
     <>
       <Head>
-        <title>Card - Haikoto</title>
+        <title>Single Card - Haikoto</title>
       </Head>
 
       {!loadingState.show ? (
