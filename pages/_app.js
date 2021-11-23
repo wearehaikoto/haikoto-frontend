@@ -9,7 +9,7 @@ function MyApp({ Component, pageProps }) {
     const [isLoading, setIsLoading] = React.useState(false);
 
     React.useEffect(() => {
-        //Binding router events.
+        //Binding router events
         Router.events.on("routeChangeStart", () => setIsLoading(true));
         Router.events.on("routeChangeComplete", () => setIsLoading(false));
         Router.events.on("routeChangeError", () => setIsLoading(false));
