@@ -6,7 +6,12 @@ module.exports = {
     ],
     darkMode: false, // or 'media' or 'class'
     theme: {
-        extend: {}
+        extend: {
+            screens: {
+                'portrait': {'raw': '(orientation: portrait)'},
+                'landscape': {'raw': '(orientation: landscape)'}
+            }
+        }
     },
     variants: {
         extend: {}
