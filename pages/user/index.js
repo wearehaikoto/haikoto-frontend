@@ -23,7 +23,7 @@ function Index() {
                         You are logged in!
                     </p>
 
-                    <div className="my-5" />
+                    <div className="my-5 landscape:my-0 landscape:lg:my-5" />
 
                     {/* Login | Signup Buttons */}
                     <div className="flex flex-col items-center justify-center w-full">
