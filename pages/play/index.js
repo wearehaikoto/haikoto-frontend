@@ -123,7 +123,7 @@ function playCards() {
   });
   useKeyPressEvent("ArrowLeft", () => {
     if (voteMode) return;
-    handleAnswerClick(allCards[currentCard - 1]._id, true);
+    handleAnswerClick(allCards[currentCard - 1]._id, false);
   });
 
   // Swipe Event Handlers
