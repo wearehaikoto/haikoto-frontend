@@ -1,6 +1,7 @@
 import React from "react";
 import Head from "next/head";
 import { useRouter } from "next/router";
+import { useKeyPressEvent } from "react-use";
 import { useSwipeable } from "react-swipeable";
 
 import { gameService } from "../../app/services";
@@ -114,6 +115,18 @@ function playCards() {
     }
   }, []);
 
+
+  // Key Press Event Handlers
+  useKeyPressEvent("ArrowRight", () => {
+    if (voteMode) return;
+    handleAnswerClick(allCards[currentCard - 1]._id, true);
+  });
+  useKeyPressEvent("ArrowLeft", () => {
+    if (voteMode) return;
+    handleAnswerClick(allCards[currentCard - 1]._id, true);
+  });
+
+  // Swipe Event Handlers
   const reactSwipeableHandler = useSwipeable({
     onSwipedLeft: () => {
       if (voteMode) return;
