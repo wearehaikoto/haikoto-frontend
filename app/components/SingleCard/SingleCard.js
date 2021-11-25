@@ -18,7 +18,7 @@ function SingleCard({ card, handleAnswerClick }) {
                 </div>
 
                 <div className="mt-4 mb-8">
-                    <h1 className="font-bold max-w-xs text-[5vh] text-center">
+                    <h1 className="font-bold md:max-w-xs text-[5vh] mx-auto text-center">
                         {card.cardTitle}
                     </h1>
                     <p className="text-center text-[4vh]">
@@ -66,7 +66,7 @@ function SingleCard({ card, handleAnswerClick }) {
                         </div>
 
                         <div className="mt-4 w-full">
-                            <h1 className="font-bold max-w-xs text-[5vh] text-center">
+                            <h1 className="font-bold md:max-w-xs text-[5vh] mx-auto text-center">
                                 {card.cardTitle}
                             </h1>
                             <p className="text-center text-[4vh]">
