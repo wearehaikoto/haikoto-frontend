@@ -72,7 +72,7 @@ function VoteCard({ gameId, yesCards, setYesCards, setVoteMode }) {
               blurDataURL={LoadingImagePlacepholder}
             />
           </div>
-          <h1 className="font-bold text-2xl md:text-4xl text-center m-4 md:m-3">
+          <h1 className="font-bold max-w-xs text-[4vh] mx-auto text-center mt-3">
             {newYesCard.cardTitle}
           </h1>
         </div>
@@ -86,7 +86,7 @@ function VoteCard({ gameId, yesCards, setYesCards, setVoteMode }) {
               blurDataURL={LoadingImagePlacepholder}
             />
           </div>
-          <h1 className="font-bold text-2xl md:text-4xl text-center m-4 md:m-3">
+          <h1 className="font-bold max-w-xs text-[4vh] mx-auto text-center mt-3">
             {yesCards[currentVote].cardTitle}
           </h1>
         </div>
