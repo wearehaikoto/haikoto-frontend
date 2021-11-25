@@ -30,6 +30,9 @@ function playCards() {
     // Scroll to top (good UX)
     window.scrollTo(0, 0);
 
+    // Show loading screen for api callss to process
+    setLoadingState({ show: true });
+
     // Get the Card Data
     const card = allCards.find((card) => card._id === cardId);
 
@@ -49,6 +52,9 @@ function playCards() {
       // Add No Card to the Game 
       await gameService.addNoCard(gameId, { cardId });
     }
+
+    // Close the loading screen, api calls would be done now
+    setLoadingState({ show: false });
 
     // If the answer is true and number of cards in yesCards bucket is greater than 2
     if (answer && yesCards.length >= 2) {
