@@ -1,5 +1,6 @@
 import React from "react";
 import Image from "next/image";
+import { useKeyPressEvent } from "react-use";
 
 import { gameService } from "../../services";
 import { ArrayMethods, EloRatingAlgorithm } from "../../utils";
@@ -58,6 +59,14 @@ function VoteCard({ gameId, yesCards, setYesCards, setVoteMode }) {
 
     setVoteMode(false);
   };
+
+  // Key Press Event Handlers
+  useKeyPressEvent("ArrowRight", () => {
+    handleCardClick(yesCards[currentVote]._id);
+  });
+  useKeyPressEvent("ArrowLeft", () => {
+    handleCardClick(newYesCard._id);
+  });
 
   return (
     <>
