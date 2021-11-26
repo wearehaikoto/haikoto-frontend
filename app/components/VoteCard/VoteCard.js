@@ -5,17 +5,23 @@ import { useKeyPressEvent } from "react-use";
 import { gameService } from "../../services";
 import { ArrayMethods, EloRatingAlgorithm } from "../../utils";
 import { LoadingImagePlacepholder } from "../../assets";
+import { LoadingComponent } from "../../components";
+
 
 function VoteCard({ gameId, yesCards, setYesCards, setVoteMode }) {
 
   const yesCardsRef = React.useRef(yesCards);
 
+  const [loadingState, setLoadingState] = React.useState({ show: false });
   const [currentVote, setCurrentVote] = React.useState(1);
   const [newYesCard, setNewYesCard] = React.useState(yesCards[0]);
 
   const handleCardClick = async (cardId) => {
     // Scroll to top (good UX)
     window.scrollTo(0, 0);
+
+    // Show loading screen for api callss to process
+    setLoadingState({ show: true });
 
     let breakVoteLoop = false;
 
@@ -47,6 +53,9 @@ function VoteCard({ gameId, yesCards, setYesCards, setVoteMode }) {
     // Update Yes Cards in Parent Component
     setYesCards(yesCardsRef.current);
 
+    // Close the loading screen, api calls would be done now
+    setLoadingState({ show: false });
+
     // If breakVoteLoop is true, set voteMode to false
     if (breakVoteLoop) setVoteMode(false);
 
@@ -64,43 +73,47 @@ function VoteCard({ gameId, yesCards, setYesCards, setVoteMode }) {
   useKeyPressEvent("ArrowRight", () => {
     handleCardClick(yesCards[currentVote]._id);
   });
+
   useKeyPressEvent("ArrowLeft", () => {
     handleCardClick(newYesCard._id);
   });
 
   return (
     <>
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 lg:gap-8">
-        <div className="cursor-pointer" onClick={() => handleCardClick(newYesCard._id)} >
-          <div className="h-52 w-52 md:h-[30vw] md:w-[30vw] relative mx-auto">
-            <Image
-              src={newYesCard.cardImage}
-              layout="fill"
-              objectFit="cover"
-              placeholder="blur"
-              blurDataURL={LoadingImagePlacepholder}
-            />
+      {!loadingState.show ? (
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 lg:gap-8">
+          <div className="cursor-pointer" onClick={() => handleCardClick(newYesCard._id)} >
+            <div className="h-52 w-52 md:h-[30vw] md:w-[30vw] relative mx-auto">
+              <Image
+                src={newYesCard.cardImage}
+                layout="fill"
+                objectFit="cover"
+                placeholder="blur"
+                blurDataURL={LoadingImagePlacepholder}
+              />
+            </div>
+            <h1 className="font-bold max-w-xs text-[4vh] mx-auto text-center mt-3">
+              {newYesCard.cardTitle}
+            </h1>
           </div>
-          <h1 className="font-bold max-w-xs text-[4vh] mx-auto text-center mt-3">
-            {newYesCard.cardTitle}
-          </h1>
-        </div>
-        <div className="cursor-pointer" onClick={() => handleCardClick(yesCards[currentVote]._id)} >
-          <div className="h-52 w-52 md:h-[30vw] md:w-[30vw] relative mx-auto">
-            <Image
-              src={yesCards[currentVote].cardImage}
-              layout="fill"
-              objectFit="cover"
-              placeholder="blur"
-              blurDataURL={LoadingImagePlacepholder}
-            />
+          <div className="cursor-pointer" onClick={() => handleCardClick(yesCards[currentVote]._id)} >
+            <div className="h-52 w-52 md:h-[30vw] md:w-[30vw] relative mx-auto">
+              <Image
+                src={yesCards[currentVote].cardImage}
+                layout="fill"
+                objectFit="cover"
+                placeholder="blur"
+                blurDataURL={LoadingImagePlacepholder}
+              />
+            </div>
+            <h1 className="font-bold max-w-xs text-[4vh] mx-auto text-center mt-3">
+              {yesCards[currentVote].cardTitle}
+            </h1>
           </div>
-          <h1 className="font-bold max-w-xs text-[4vh] mx-auto text-center mt-3">
-            {yesCards[currentVote].cardTitle}
-          </h1>
         </div>
-      </div>
-
+      ) : (
+        <LoadingComponent {...loadingState} />
+      )}
     </>
   );
 }

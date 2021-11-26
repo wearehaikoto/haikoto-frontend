@@ -124,11 +124,11 @@ function playCards() {
 
   // Key Press Event Handlers
   useKeyPressEvent("ArrowRight", () => {
-    if (voteMode) return;
+    if (voteMode || loadingState.show) return;
     handleAnswerClick(allCards[currentCard - 1]._id, true);
   });
   useKeyPressEvent("ArrowLeft", () => {
-    if (voteMode) return;
+    if (voteMode || loadingState.show) return;
     handleAnswerClick(allCards[currentCard - 1]._id, false);
   });
 
