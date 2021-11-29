@@ -5,7 +5,7 @@ import { useKeyPressEvent } from "react-use";
 import { useSwipeable } from "react-swipeable";
 
 import { gameService } from "../../app/services";
-import { currentUser, withAuth } from "../../app/utils";
+import { useMergeState, currentUser, withAuth } from "../../app/utils";
 import { SingleCard, VoteCard } from "../../app/components";
 import { CardCancelButton, LoadingComponent } from "../../app/components";
 
@@ -13,25 +13,36 @@ function playCards() {
   const user = currentUser();
   const router = useRouter();
 
-  const [loadingState, setLoadingState] = React.useState({
-    show: true,
-    text: "Loading...",
-    description: ""
+  const [playState, setPlayState] = useMergeState({
+    // UI State
+    loading_show: true,
+    loading_text: "Loading...",
+    loading_description: "",
+
+    // Game
+    gameId: null,
+
+    // Cards
+    allCards: [],
+    yesCards: [],
+    noCards: [],
+
+    // Vote
+    voteMode: false,
+
+    // Gameplay
+    currentCard: 1,
+    lastCardVote: false,
   });
-  const [gameId, setGameId] = React.useState(null);
-  const [allCards, setAllCards] = React.useState([]);
-  const [yesCards, setYesCards] = React.useState([]);
-  const [noCards, setNoCards] = React.useState([]);
-  const [voteMode, setVoteMode] = React.useState(false);
-  const [currentCard, setCurrentCard] = React.useState(1);
-  const [lastCardVote, setLastCardVote] = React.useState(false);
+
+  const { loading_show, loading_text, loading_description, gameId, allCards, yesCards, noCards, voteMode, currentCard, lastCardVote } = playState;
 
   const handleAnswerClick = async (cardId, answer) => {
     // Scroll to top (good UX)
     window.scrollTo(0, 0);
 
     // Show loading screen for api callss to process
-    setLoadingState({ show: true });
+    setPlayState({ loading_show: true });
 
     // Get the Card Data
     const card = allCards.find((card) => card._id === cardId);
@@ -40,32 +51,34 @@ function playCards() {
     if (answer) {
 
       yesCards.unshift(card);
-      setYesCards(yesCards);
-
       // Add yes Card to the Game 
       await gameService.addYesCard(gameId, { cardId });
     } else {
 
       noCards.unshift(card);
-      setNoCards(noCards);
-
       // Add No Card to the Game 
       await gameService.addNoCard(gameId, { cardId });
     }
 
-    // Close the loading screen, api calls would be done now
-    setLoadingState({ show: false });
+    setPlayState({
+      // Close the loading screen, api calls would be done now
+      loading_show: false,
+
+      // Cards
+      yesCards,
+      noCards,
+    });
 
     // If the answer is true and number of cards in yesCards bucket is greater than 2
     if (answer && yesCards.length >= 2) {
       // Enter Vote mode to rank yesCards
-      setVoteMode(true);
+      setPlayState({ voteMode: true });
     }
 
     // Check if current Card is equal to number of Cards
     if (allCards.length > currentCard) {
       // Update the current Card Number +1 and continue game
-      setCurrentCard(currentCard + 1);
+      setPlayState({ currentCard: currentCard + 1 });
       return;
     }
 
@@ -73,8 +86,7 @@ function playCards() {
     if (allCards.length === currentCard && answer) {
       // If the current Card is equal to number of Cards and answer is true
       // Enter Vote mode to rank yesCards
-      setVoteMode(true);
-      setLastCardVote(true);
+      setPlayState({ voteMode: true, lastCardVote: true });
       return;
     }
 
@@ -84,7 +96,7 @@ function playCards() {
 
   const finishGame = async () => {
     // Update Loading State
-    setLoadingState({ show: true, text: "Generating result..." });
+    setPlayState({ loading_show: true, loading_text: "Generating result..." });
 
     // Take a while before redirecting to result
     setTimeout(() => {
@@ -93,26 +105,25 @@ function playCards() {
   };
 
   React.useEffect(async () => {
-    // Get Numbers only from propmt
-    // const number_of_cards_to_play = parseInt(
-    //     prompt("How many cards do you want to play?", 3)
-    // );
-    const number_of_cards_to_play = 5;
-
     // Create a new Game
     const createGame = await gameService.create({
-      numberOfCards: number_of_cards_to_play
+      numberOfCards: 5
     });
 
     if (createGame.success) {
-      setGameId(createGame.data._id);
-      setAllCards(createGame.data.cards);
-      setLoadingState({ show: false, text: "" });
+      setPlayState({
+        gameId: createGame.data._id,
+        allCards: createGame.data.cards,
+        loading_show: false,
+      });
+      // setGameId(createGame.data._id);
+      // setAllCards(createGame.data.cards);
+      // setLoadingState({ loading_show: false, loading_text: "" });
     } else {
-      setLoadingState({
-        show: true,
-        text: `Error: ${createGame.message}.`,
-        description: "Redirecting..."
+      setPlayState({
+        loading_show: true,
+        loading_text: `Error: ${createGame.message}.`,
+        loading_description: "Redirecting..."
       });
 
       setTimeout(() => {
@@ -121,14 +132,13 @@ function playCards() {
     }
   }, []);
 
-
   // Key Press Event Handlers
   useKeyPressEvent("ArrowRight", () => {
-    if (voteMode || loadingState.show) return;
+    if (voteMode || loading_show) return;
     handleAnswerClick(allCards[currentCard - 1]._id, true);
   });
   useKeyPressEvent("ArrowLeft", () => {
-    if (voteMode || loadingState.show) return;
+    if (voteMode || loading_show) return;
     handleAnswerClick(allCards[currentCard - 1]._id, false);
   });
 
@@ -150,7 +160,7 @@ function playCards() {
         <title>Play Cards - Haikoto</title>
       </Head>
 
-      {!loadingState.show ? (
+      {!loading_show ? (
         <div
           {...reactSwipeableHandler}
           className="flex flex-col items-center mt-[10vh]"
@@ -159,8 +169,7 @@ function playCards() {
             <VoteCard
               gameId={gameId}
               yesCards={yesCards}
-              setYesCards={setYesCards}
-              setVoteMode={setVoteMode}
+              setPlayState={setPlayState}
             />
           ) : (
             lastCardVote ? finishGame() : (
@@ -174,7 +183,7 @@ function playCards() {
           <CardCancelButton />
         </div>
       ) : (
-        <LoadingComponent {...loadingState} />
+        <LoadingComponent text={loading_text} description={loading_description} />
       )}
     </>
   );

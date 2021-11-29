@@ -6,6 +6,8 @@ export { default as withoutAuth } from "./withoutAuth";
 
 export { default as currentUser } from "./currentUser";
 export { default as uploadImage } from "./uploadImage";
+export { default as useMergeState } from "./useMergeState";
 
 export { default as ArrayMethods } from "./arrayMethods";
 export { default as EloRatingAlgorithm } from "./eloRatingAlgorithm"
+
