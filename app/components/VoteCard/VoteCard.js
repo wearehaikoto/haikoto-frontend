@@ -54,17 +54,24 @@ function VoteCard({ gameId, yesCards, setPlayState }) {
             // Insert newYesCard before the index of voteRandomIndex
             newlyGeneratedYesCards = ArrayMethods.insertItem(
                 yesCards.slice(1),
-                voteRandomIndexCardInYesCards - 1,
+                voteRandomIndexCardInYesCards,
                 newYesCard
             );
         } else {
             // Insert newYesCard after the index of voteRandomIndex
             newlyGeneratedYesCards = ArrayMethods.insertItem(
                 yesCards.slice(1),
-                voteRandomIndexCardInYesCards,
+                voteRandomIndexCardInYesCards + 1,
                 newYesCard
             );
         }
+
+        // console.log(
+        //     "voteRandomIndexCardInYesCards",
+        //     voteRandomIndexCardInYesCards
+        // );
+        // console.log("yesCards", yesCards.splice(1));
+        // console.log("newlyGeneratedYesCards", newlyGeneratedYesCards);
 
         await gameService.updateYesCards(gameId, {
             cardIds: newlyGeneratedYesCards.map((card) => card._id),
