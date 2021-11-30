@@ -52,9 +52,9 @@ class cardService {
         }
     }
 
-    async getAllCategories() {
+    async getAllHashtags() {
         try {
-            const response = await $http.get("/api/card/categories");
+            const response = await $http.get("/api/card/hashtags");
 
             if (response.data.success) {
                 return {

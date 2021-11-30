@@ -22,7 +22,14 @@ function SingleCard({ card, handleAnswerClick }) {
                         {card.cardTitle}
                     </h1>
                     <p className="text-center text-[4vh]">
-                        {card.cardCategory}
+                        {card.cardHashtags.map((hashtag) => (
+                            <span
+                                key={hashtag}
+                                className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2"
+                            >
+                                #{hashtag}
+                            </span>
+                        ))}
                     </p>
                 </div>
 
@@ -54,7 +61,11 @@ function SingleCard({ card, handleAnswerClick }) {
                             />
                         </div>
                     )}
-                    <div className={(handleAnswerClick) ? "col-span-2" : "col-span-full"}>
+                    <div
+                        className={
+                            handleAnswerClick ? "col-span-2" : "col-span-full"
+                        }
+                    >
                         <div className="h-52 w-52 lg:h-80 lg:w-80 relative mx-auto">
                             <Image
                                 src={card.cardImage}
@@ -70,7 +81,14 @@ function SingleCard({ card, handleAnswerClick }) {
                                 {card.cardTitle}
                             </h1>
                             <p className="text-center text-[4vh]">
-                                {card.cardCategory}
+                                {card.cardHashtags.map((hashtag) => (
+                                    <span
+                                        key={hashtag}
+                                        className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2"
+                                    >
+                                        #{hashtag}
+                                    </span>
+                                ))}
                             </p>
                         </div>
                     </div>
