@@ -49,15 +49,16 @@ function manageUser() {
     }
 
     async function handleUpgradeUser(userId) {
-        if (confirm("Are you sure you want to make user admin?")) {
-            const deleteUser = await userService.deleteUser(userId);
+        alert("still in progress 🙈");
+        // if (confirm("Are you sure you want to make user admin?")) {
+        //     // const deleteUser = await userService.deleteUser(userId);
 
-            if (deleteUser.success) {
-                setUsers(users.filter((c) => c._id !== userId));
-            } else {
-                alert(deleteUser.message);
-            }
-        }
+        //     // if (deleteUser.success) {
+        //     //     setUsers(users.filter((c) => c._id !== userId));
+        //     // } else {
+        //     //     alert(deleteUser.message);
+        //     // }
+        // }
     }
 
     return (
@@ -87,6 +88,7 @@ function manageUser() {
                                             <th className="px-4 py-2 text-xs text-white text-left">
                                                 CodeName
                                             </th>
+                                            <th className="px-4 py-2 text-xs text-white text-left" />
                                             <th className="px-4 py-2 text-xs text-white text-left" />
                                         </tr>
                                     </thead>
