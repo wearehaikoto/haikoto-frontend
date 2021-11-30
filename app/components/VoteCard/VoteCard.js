@@ -66,13 +66,6 @@ function VoteCard({ gameId, yesCards, setPlayState }) {
             );
         }
 
-        console.log(
-            "voteRandomIndexCardInYesCards",
-            voteRandomIndexCardInYesCards
-        );
-        console.log("yesCards", yesCards.splice(1));
-        console.log("newlyGeneratedYesCards", newlyGeneratedYesCards);
-
         await gameService.updateYesCards(gameId, {
             cardIds: newlyGeneratedYesCards.map((card) => card._id),
             eloScores: newlyGeneratedYesCards.map((card) => card.eloRating)
