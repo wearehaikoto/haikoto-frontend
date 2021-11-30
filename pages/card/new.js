@@ -2,6 +2,7 @@ import React from "react";
 import Head from "next/head";
 import Image from "next/image";
 import { useRouter } from "next/router";
+import CreatableSelect from "react-select/creatable";
 
 import { cardService } from "../../app/services";
 import { createCardUploadGreyImage } from "../../app/assets";
@@ -13,7 +14,7 @@ function createCard() {
     const router = useRouter();
 
     const [previewImage, setPreviewImage] = React.useState(null);
-    const [categories, setCategories] = React.useState([]);
+    const [hashtags, setHashtags] = React.useState([]);
     const [alertState, setAlertState] = React.useState({
         show: false,
         message: "",
@@ -22,7 +23,7 @@ function createCard() {
     const [formInput, setFormInput] = React.useState({
         cardImage: "",
         cardTitle: "",
-        cardCategory: ""
+        cardHashtags: ""
     });
 
     async function processCreateCard(e) {
@@ -33,7 +34,7 @@ function createCard() {
         setAlertState({ show: false, message: "", type: "" });
 
         // Extract formData from formInput state
-        const { cardImage, cardTitle, cardCategory } = formInput;
+        const { cardImage, cardTitle, cardHashtags } = formInput;
 
         if (!cardImage) {
             setAlertState({
@@ -51,10 +52,10 @@ function createCard() {
             });
             return;
         }
-        if (!cardCategory) {
+        if (!cardHashtags) {
             setAlertState({
                 show: true,
-                message: "Please enter a category",
+                message: "Please enter hashtags",
                 type: "error"
             });
             return;
@@ -84,10 +85,12 @@ function createCard() {
         }
     }
 
+    console.log("formInput", formInput);
+
     React.useEffect(async () => {
-        // Get pre existing card categories from DB
-        const cardCategories = await cardService.getAllCategories();
-        if (cardCategories.success) setCategories(cardCategories.data);
+        // Get pre existing card hashtags from DB
+        const cardHashtags = await cardService.getAllHashtags();
+        if (cardHashtags.success) setHashtags(cardHashtags.data);
     }, []);
 
     return (
@@ -174,27 +177,24 @@ function createCard() {
                                     }}
                                 />
                                 <h1 className="font-bold text-xl md:text-3xl text-center mt-4 md:mt-10">
-                                    Category
+                                    Hashtags
                                 </h1>
-                                <input
-                                    className="border-black border-2 my-2 w-full p-2"
-                                    type="text"
-                                    list="categories"
+                                <CreatableSelect
+                                    className="border-black border-2 my-2 w-full"
+                                    isMulti
                                     onChange={(e) => {
                                         setFormInput({
                                             ...formInput,
-                                            cardCategory: e.target.value
+                                            cardHashtags: e.map((e) => e.value.toLowerCase().trim())
                                         });
                                     }}
+                                    options={hashtags.map((hashtag) => {
+                                        return {
+                                            value: hashtag,
+                                            label: hashtag
+                                        };
+                                    })}
                                 />
-                                <datalist id="categories">
-                                    {categories.map((category) => (
-                                        <option
-                                            key={category}
-                                            value={category}
-                                        />
-                                    ))}
-                                </datalist>
                                 {/* Submit Button */}
                                 <div className="flex justify-center mt-8">
                                     <button

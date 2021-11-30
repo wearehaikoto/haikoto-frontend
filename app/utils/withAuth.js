@@ -1,4 +1,5 @@
 import React from "react";
+import jwtDecode from "jwt-decode";
 import { useRouter } from "next/router";
 
 const withAuth = (WrappedComponent) => {
@@ -17,7 +18,14 @@ const withAuth = (WrappedComponent) => {
 
             // If there is no access token we redirect to "/" page.
             if (!accessToken) {
-                router.replace("/");
+                router.replace("/loginOrSignup");
+            }
+
+            // If there's an access token we decode it and check if it's a valid JWT.
+            const decodedToken = jwtDecode(accessToken);
+            if (!decodedToken.role) {
+                localStorage.clear();
+                router.reload();
             }
         }, []);
 

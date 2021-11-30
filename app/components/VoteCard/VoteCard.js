@@ -1,99 +1,158 @@
 import React from "react";
 import Image from "next/image";
+import { useKeyPressEvent } from "react-use";
 
 import { gameService } from "../../services";
-import { ArrayMethods, EloRatingAlgorithm } from "../../utils";
+import { useMergeState, ArrayMethods, EloRatingAlgorithm } from "../../utils";
 import { LoadingImagePlacepholder } from "../../assets";
 
-function VoteCard({ gameId, yesCards, setYesCards, setVoteMode }) {
+function VoteCard({ gameId, yesCards, setPlayState }) {
+    const [voteCardState, setVoteCardState] = useMergeState({
+        tempYesCards: yesCards.slice(1),
+        newYesCard: yesCards[0],
+        voteRandomIndex: ArrayMethods.getRandomIndex(yesCards.slice(1))
+    });
 
-  const yesCardsRef = React.useRef(yesCards);
+    const { tempYesCards, newYesCard, voteRandomIndex } = voteCardState;
 
-  const [currentVote, setCurrentVote] = React.useState(1);
-  const [newYesCard, setNewYesCard] = React.useState(yesCards[0]);
+    const handleCardClick = async (cardId) => {
+        // End Game Logic Check first
+        if (tempYesCards.length <= 1) {
+            terminateVote(cardId);
+            return;
+        }
 
-  const handleCardClick = async (cardId) => {
-    // Scroll to top (good UX)
-    window.scrollTo(0, 0);
+        // If picked cardID is newYesCard, set tempYesCards to upper half of voteRandomIndex in yesCards
+        let functionTempYesCards;
+        if (cardId === newYesCard._id) {
+            functionTempYesCards = tempYesCards.slice(0, voteRandomIndex);
+        } else {
+            functionTempYesCards = tempYesCards.slice(voteRandomIndex + 1);
+        }
 
-    let breakVoteLoop = false;
+        // Set the new Card in appropriate order, if no card is available in lower/higher of tempYesCards
+        if (functionTempYesCards.length <= 1) {
+            terminateVote(cardId);
+            return;
+        }
 
-    // Get Index of newyescard from yesCardsRef.current
-    const newYesCardIndexInRef = yesCardsRef.current.findIndex(card => card._id === newYesCard._id);
+        setVoteCardState({
+            tempYesCards: functionTempYesCards,
+            voteRandomIndex: ArrayMethods.getRandomIndex(functionTempYesCards)
+        });
+    };
 
-    // Check if picked ID is not newYesCard, Swap positions
-    if (cardId === yesCardsRef.current[currentVote]._id) {
-      // Calculate new eloRatings of winner card and loser card and add it to the yesCardsRef.current
-      yesCardsRef.current[currentVote].eloRating = EloRatingAlgorithm.getNewRating(yesCardsRef.current[currentVote].eloRating, yesCardsRef.current[newYesCardIndexInRef].eloRating, 1);
-      yesCardsRef.current[newYesCardIndexInRef].eloRating = EloRatingAlgorithm.getNewRating(yesCardsRef.current[newYesCardIndexInRef].eloRating, yesCardsRef.current[currentVote].eloRating, 0);
+    const terminateVote = async (cardId) => {
+        // const newYesCardIndexInYesCards = yesCards.findIndex(card => card._id === newYesCard._id);
+        const voteRandomIndexCardInYesCards = yesCards.findIndex(
+            (card) => card._id === yesCards[voteRandomIndex]._id
+        );
 
-      yesCardsRef.current = ArrayMethods.swapArrayValues(yesCardsRef.current, newYesCardIndexInRef, currentVote);
-      setNewYesCard(yesCardsRef.current[currentVote]);
-    }
+        let newlyGeneratedYesCards;
 
-    // Check if picked ID is newYesCard
-    if (cardId === newYesCard._id) {
-      // Calculate new eloRatings of winner card and loser card and add it to the yesCardsRef.current 
-      yesCardsRef.current[newYesCardIndexInRef].eloRating = EloRatingAlgorithm.getNewRating(yesCardsRef.current[newYesCardIndexInRef].eloRating, yesCardsRef.current[currentVote].eloRating, 1);
-      yesCardsRef.current[currentVote].eloRating = EloRatingAlgorithm.getNewRating(yesCardsRef.current[currentVote].eloRating, yesCardsRef.current[newYesCardIndexInRef].eloRating, 0);
+        if (cardId === newYesCard._id) {
+            // Insert newYesCard before the index of voteRandomIndex
+            newlyGeneratedYesCards = ArrayMethods.insertItem(
+                yesCards.slice(1),
+                voteRandomIndexCardInYesCards,
+                newYesCard
+            );
+        } else {
+            // Insert newYesCard after the index of voteRandomIndex
+            newlyGeneratedYesCards = ArrayMethods.insertItem(
+                yesCards.slice(1),
+                voteRandomIndexCardInYesCards + 1,
+                newYesCard
+            );
+        }
 
-      breakVoteLoop = true;
-    }
+        // console.log(
+        //     "voteRandomIndexCardInYesCards",
+        //     voteRandomIndexCardInYesCards
+        // );
+        // console.log("yesCards", yesCards.splice(1));
+        // console.log("newlyGeneratedYesCards", newlyGeneratedYesCards);
 
-    // Update Yes Cards in the Backend
-    await gameService.updateYesCards(gameId, { cardIds: yesCardsRef.current.map(card => card._id), eloScores: yesCardsRef.current.map(card => card.eloRating) });
+        await gameService.updateYesCards(gameId, {
+            cardIds: newlyGeneratedYesCards.map((card) => card._id),
+            eloScores: newlyGeneratedYesCards.map((card) => card.eloRating)
+        });
 
-    // Update Yes Cards in Parent Component
-    setYesCards(yesCardsRef.current);
+        setPlayState({ yesCards: newlyGeneratedYesCards, voteMode: false });
+    };
 
-    // If breakVoteLoop is true, set voteMode to false
-    if (breakVoteLoop) setVoteMode(false);
+    useKeyPressEvent("ArrowRight", () => {
+        handleCardClick(tempYesCards[voteRandomIndex]._id);
+    });
 
-    // Check if current Vote Card is equal to number of Cards
-    if (yesCardsRef.current.length > (currentVote + 1)) {
-      // Update the current Vote Card Number + 1 and continue vote
-      setCurrentVote(currentVote + 1);
-      return;
-    }
+    useKeyPressEvent("ArrowLeft", () => {
+        handleCardClick(newYesCard._id);
+    });
 
-    setVoteMode(false);
-  };
-
-  return (
-    <>
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 lg:gap-8">
-        <div className="cursor-pointer" onClick={() => handleCardClick(newYesCard._id)} >
-          <div className="h-52 w-52 md:h-[30vw] md:w-[30vw] relative mx-auto">
-            <Image
-              src={newYesCard.cardImage}
-              layout="fill"
-              objectFit="cover"
-              placeholder="blur"
-              blurDataURL={LoadingImagePlacepholder}
-            />
-          </div>
-          <h1 className="font-bold text-2xl md:text-4xl text-center m-4 md:m-3">
-            {newYesCard.cardTitle}
-          </h1>
-        </div>
-        <div className="cursor-pointer" onClick={() => handleCardClick(yesCards[currentVote]._id)} >
-          <div className="h-52 w-52 md:h-[30vw] md:w-[30vw] relative mx-auto">
-            <Image
-              src={yesCards[currentVote].cardImage}
-              layout="fill"
-              objectFit="cover"
-              placeholder="blur"
-              blurDataURL={LoadingImagePlacepholder}
-            />
-          </div>
-          <h1 className="font-bold text-2xl md:text-4xl text-center m-4 md:m-3">
-            {yesCards[currentVote].cardTitle}
-          </h1>
-        </div>
-      </div>
-
-    </>
-  );
+    return (
+        <>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 lg:gap-8">
+                <div
+                    className="cursor-pointer"
+                    onClick={() => handleCardClick(newYesCard._id)}
+                >
+                    <div className="h-52 w-52 md:h-[30vw] md:w-[30vw] relative mx-auto">
+                        <Image
+                            src={newYesCard.cardImage}
+                            layout="fill"
+                            objectFit="cover"
+                            placeholder="blur"
+                            blurDataURL={LoadingImagePlacepholder}
+                        />
+                    </div>
+                    <h1 className="font-bold max-w-xs text-[4vh] mx-auto text-center mt-3">
+                        {newYesCard.cardTitle}
+                    </h1>
+                    <p className="text-center text-[4vh]">
+                        {newYesCard.cardHashtags.map((hashtag) => (
+                            <span
+                                key={hashtag}
+                                className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 my-2"
+                            >
+                                #{hashtag}
+                            </span>
+                        ))}
+                    </p>
+                </div>
+                <div
+                    className="cursor-pointer"
+                    onClick={() =>
+                        handleCardClick(tempYesCards[voteRandomIndex]._id)
+                    }
+                >
+                    <div className="h-52 w-52 md:h-[30vw] md:w-[30vw] relative mx-auto">
+                        <Image
+                            src={tempYesCards[voteRandomIndex].cardImage}
+                            layout="fill"
+                            objectFit="cover"
+                            placeholder="blur"
+                            blurDataURL={LoadingImagePlacepholder}
+                        />
+                    </div>
+                    <h1 className="font-bold max-w-xs text-[4vh] mx-auto text-center mt-3">
+                        {tempYesCards[voteRandomIndex].cardTitle}
+                        <p className="text-center text-[4vh]">
+                            {tempYesCards[voteRandomIndex].cardHashtags.map(
+                                (hashtag) => (
+                                    <span
+                                        key={hashtag}
+                                        className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 my-2"
+                                    >
+                                        #{hashtag}
+                                    </span>
+                                )
+                            )}
+                        </p>
+                    </h1>
+                </div>
+            </div>
+        </>
+    );
 }
 
 export default VoteCard;

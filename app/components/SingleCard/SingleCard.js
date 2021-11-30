@@ -18,11 +18,18 @@ function SingleCard({ card, handleAnswerClick }) {
                 </div>
 
                 <div className="mt-4 mb-8">
-                    <h1 className="font-bold text-2xl md:text-3xl lg:text-5xl text-center">
+                    <h1 className="font-bold md:max-w-xs text-[5vh] mx-auto text-center">
                         {card.cardTitle}
                     </h1>
-                    <p className="text-center md:text-2xl lg:text-4xl">
-                        {card.cardCategory}
+                    <p className="text-center text-[4vh]">
+                        {card.cardHashtags.map((hashtag) => (
+                            <span
+                                key={hashtag}
+                                className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2"
+                            >
+                                #{hashtag}
+                            </span>
+                        ))}
                     </p>
                 </div>
 
@@ -54,7 +61,11 @@ function SingleCard({ card, handleAnswerClick }) {
                             />
                         </div>
                     )}
-                    <div className={(handleAnswerClick) ? "col-span-2" : "col-span-full"}>
+                    <div
+                        className={
+                            handleAnswerClick ? "col-span-2" : "col-span-full"
+                        }
+                    >
                         <div className="h-52 w-52 lg:h-80 lg:w-80 relative mx-auto">
                             <Image
                                 src={card.cardImage}
@@ -66,11 +77,18 @@ function SingleCard({ card, handleAnswerClick }) {
                         </div>
 
                         <div className="mt-4 w-full">
-                            <h1 className="font-bold text-2xl md:text-3xl lg:text-5xl text-center">
+                            <h1 className="font-bold md:max-w-xs text-[5vh] mx-auto text-center">
                                 {card.cardTitle}
                             </h1>
-                            <p className="text-center md:text-2xl lg:text-4xl">
-                                {card.cardCategory}
+                            <p className="text-center text-[4vh]">
+                                {card.cardHashtags.map((hashtag) => (
+                                    <span
+                                        key={hashtag}
+                                        className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2"
+                                    >
+                                        #{hashtag}
+                                    </span>
+                                ))}
                             </p>
                         </div>
                     </div>

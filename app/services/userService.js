@@ -1,34 +1,9 @@
 import { $http } from "../utils";
 
-class cardService {
-    async create(data) {
-        try {
-            const response = await $http.post("/api/card/create", data);
-
-            if (response.data.success) {
-                return {
-                    success: true,
-                    message: response.data.message
-                };
-            } else {
-                return {
-                    success: false,
-                    message: response.data.message
-                };
-            }
-        } catch (error) {
-            return {
-                success: false,
-                message: error.response
-                    ? error.response.data.message
-                    : error.message
-            };
-        }
-    }
-
+class userService {
     async getAll() {
         try {
-            const response = await $http.get("/api/card");
+            const response = await $http.get("/api/user");
 
             if (response.data.success) {
                 return {
@@ -52,9 +27,9 @@ class cardService {
         }
     }
 
-    async getAllHashtags() {
+    async getUser(userId) {
         try {
-            const response = await $http.get("/api/card/hashtags");
+            const response = await $http.get(`/api/user/${userId}`);
 
             if (response.data.success) {
                 return {
@@ -78,9 +53,9 @@ class cardService {
         }
     }
 
-    async getCard(cardId) {
+    async updateRole(userId, data) {
         try {
-            const response = await $http.get(`/api/card/${cardId}`);
+            const response = await $http.patch(`/api/user/${userId}/updateRole`, data);
 
             if (response.data.success) {
                 return {
@@ -104,60 +79,9 @@ class cardService {
         }
     }
 
-    async getAllByMe() {
+    async deleteUser(userId) {
         try {
-            const response = await $http.get("/api/card/me");
-
-            if (response.data.success) {
-                return {
-                    success: true,
-                    message: response.data.message,
-                    data: response.data.data
-                };
-            } else {
-                return {
-                    success: false,
-                    message: response.data.message
-                };
-            }
-        } catch (error) {
-            return {
-                success: false,
-                message: error.response
-                    ? error.response.data.message
-                    : error.message
-            };
-        }
-    }
-
-    async updateEloRating(data) {
-        try {
-            const response = await $http.put("/api/card/elo_rating_update", data);
-
-            if (response.data.success) {
-                return {
-                    success: true,
-                    message: response.data.message
-                };
-            } else {
-                return {
-                    success: false,
-                    message: response.data.message
-                };
-            }
-        } catch (error) {
-            return {
-                success: false,
-                message: error.response
-                    ? error.response.data.message
-                    : error.message
-            };
-        }
-    }
-
-    async deleteCard(cardId) {
-        try {
-            const response = await $http.delete(`/api/card/${cardId}`);
+            const response = await $http.delete(`/api/user/${userId}`);
 
             if (response.data.success) {
                 return {
@@ -182,4 +106,4 @@ class cardService {
     }
 }
 
-export default new cardService();
+export default new userService();

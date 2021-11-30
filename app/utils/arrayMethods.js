@@ -5,8 +5,20 @@ Array.prototype.swapItems = function (a, b) {
     return this;
 }
 
+// Ref: https://stackoverflow.com/questions/586182/how-to-insert-an-item-into-an-array-at-a-specific-index-javascript
+Array.prototype.insert = function (index, item) {
+    this.splice(index, 0, item);
+    return this;
+};
+
 module.exports = {
     swapArrayValues: function (array, indexA, indexB) {
         return array.swapItems(indexA, indexB);
+    },
+    getRandomIndex: function (array) {
+        return Math.floor(Math.random() * array.length);
+    },
+    insertItem: function (array, index, value) {
+        return array.insert(index, value);
     }
 }
