@@ -51,8 +51,8 @@ function playCards() {
     if (answer) {
 
       yesCards.unshift(card);
-      // Add yes Card to the Game 
-      await gameService.addYesCard(gameId, { cardId });
+      // Add yes Card to the Game - Commented  (Do not rank the cards yet)
+      // await gameService.addYesCard(gameId, { cardId });
     } else {
 
       noCards.unshift(card);
