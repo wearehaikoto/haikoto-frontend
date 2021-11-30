@@ -31,7 +31,7 @@ function VoteCard({ gameId, yesCards, setPlayState }) {
         }
 
         // Set the new Card in appropriate order, if no card is available in lower/higher of tempYesCards
-        if (functionTempYesCards.length <= 1) {
+        if (functionTempYesCards.length <= 0) {
             terminateVote(cardId);
             return;
         }
@@ -66,12 +66,12 @@ function VoteCard({ gameId, yesCards, setPlayState }) {
             );
         }
 
-        // console.log(
-        //     "voteRandomIndexCardInYesCards",
-        //     voteRandomIndexCardInYesCards
-        // );
-        // console.log("yesCards", yesCards.splice(1));
-        // console.log("newlyGeneratedYesCards", newlyGeneratedYesCards);
+        console.log(
+            "voteRandomIndexCardInYesCards",
+            voteRandomIndexCardInYesCards
+        );
+        console.log("yesCards", yesCards.splice(1));
+        console.log("newlyGeneratedYesCards", newlyGeneratedYesCards);
 
         await gameService.updateYesCards(gameId, {
             cardIds: newlyGeneratedYesCards.map((card) => card._id),
