@@ -53,6 +53,32 @@ class userService {
         }
     }
 
+    async updateRole(userId, data) {
+        try {
+            const response = await $http.patch(`/api/user/${userId}/updateRole`, data);
+
+            if (response.data.success) {
+                return {
+                    success: true,
+                    message: response.data.message,
+                    data: response.data.data
+                };
+            } else {
+                return {
+                    success: false,
+                    message: response.data.message
+                };
+            }
+        } catch (error) {
+            return {
+                success: false,
+                message: error.response
+                    ? error.response.data.message
+                    : error.message
+            };
+        }
+    }
+
     async deleteUser(userId) {
         try {
             const response = await $http.delete(`/api/user/${userId}`);

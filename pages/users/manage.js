@@ -49,16 +49,24 @@ function manageUser() {
     }
 
     async function handleUpgradeUser(userId) {
-        alert("still in progress 🙈");
-        // if (confirm("Are you sure you want to make user admin?")) {
-        //     // const deleteUser = await userService.deleteUser(userId);
+        if (confirm("Are you sure you want to make user admin?")) {
+            const updateUserRole = await userService.updateRole(userId, {
+                role: "admin"
+            });
 
-        //     // if (deleteUser.success) {
-        //     //     setUsers(users.filter((c) => c._id !== userId));
-        //     // } else {
-        //     //     alert(deleteUser.message);
-        //     // }
-        // }
+            if (updateUserRole.success) {
+                // update the userId's role in the users array
+                const updatedUsers = users.map((user) => {
+                    if (user._id === userId) {
+                        user.role = "admin";
+                    }
+                    return user;
+                });
+                setUsers(updatedUsers);
+            } else {
+                alert(deleteUser.message);
+            }
+        }
     }
 
     return (
@@ -83,7 +91,7 @@ function manageUser() {
                                     <thead className="bg-blue-600">
                                         <tr>
                                             <th className="px-4 py-2 text-xs text-white text-left">
-                                                User ID
+                                                User ID - Role
                                             </th>
                                             <th className="px-4 py-2 text-xs text-white text-left">
                                                 CodeName
@@ -97,7 +105,7 @@ function manageUser() {
                                             return (
                                                 <tr key={user._id}>
                                                     <td className="border px-4 py-2 text-blue-600 border-blue-500 font-medium">
-                                                        {user._id}
+                                                        {user._id} - {user.role}
                                                     </td>
                                                     <td className="border px-4 py-2 text-blue-600 border-blue-500 font-medium">
                                                         {user.codeName}
@@ -111,7 +119,7 @@ function manageUser() {
                                                             }
                                                         >
                                                             <a className="text-yellow-600">
-                                                                Upgrade
+                                                                Promote
                                                             </a>
                                                         </button>
                                                     </td>
