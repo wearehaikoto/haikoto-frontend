@@ -16,12 +16,6 @@ function VoteCard({ gameId, yesCards, setPlayState }) {
     const { tempYesCards, newYesCard, voteRandomIndex } = voteCardState;
 
     const handleCardClick = async (cardId) => {
-        // End Game Logic Check first
-        if (tempYesCards.length <= 1) {
-            terminateVote(cardId);
-            return;
-        }
-
         // If picked cardID is newYesCard, set tempYesCards to upper half of voteRandomIndex in yesCards
         let functionTempYesCards;
         if (cardId === newYesCard._id) {
@@ -29,6 +23,9 @@ function VoteCard({ gameId, yesCards, setPlayState }) {
         } else {
             functionTempYesCards = tempYesCards.slice(voteRandomIndex + 1);
         }
+
+        // console.log("tempYesCards", tempYesCards);
+        // console.log("functionTempYesCards", functionTempYesCards);
 
         // Set the new Card in appropriate order, if no card is available in lower/higher of tempYesCards
         if (functionTempYesCards.length <= 0) {
@@ -65,6 +62,13 @@ function VoteCard({ gameId, yesCards, setPlayState }) {
                 newYesCard
             );
         }
+
+        // console.log(
+        //     "voteRandomIndexCardInYesCards",
+        //     voteRandomIndexCardInYesCards
+        // );
+        // console.log("yesCards", yesCards.splice(1));
+        // console.log("newlyGeneratedYesCards", newlyGeneratedYesCards);
 
         await gameService.updateYesCards(gameId, {
             cardIds: newlyGeneratedYesCards.map((card) => card._id),
