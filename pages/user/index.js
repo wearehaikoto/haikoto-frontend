@@ -27,16 +27,6 @@ function Index() {
 
                     {/* Login | Signup Buttons */}
                     <div className="flex flex-col items-center justify-center w-full">
-                        <Link href="/card/new">
-                            <a className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 my-2 min-w-max w-2/4 rounded-full">
-                                Create Card
-                            </a>
-                        </Link>
-                        <Link href={`/card/all`}>
-                            <a className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 my-2 min-w-max w-2/4 rounded-full">
-                                Cards
-                            </a>
-                        </Link>
                         <Link href="/play">
                             <a className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 my-2 min-w-max w-2/4 rounded-full">
                                 Play Cards
@@ -52,6 +42,25 @@ function Index() {
                                 Logout
                             </a>
                         </Link>
+                        {user.role === "admin" && (
+                            <>
+                                <Link href="/card/new">
+                                    <a className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 my-2 min-w-max w-2/4 rounded-full">
+                                        Create Card
+                                    </a>
+                                </Link>
+                                <Link href={`/card/all`}>
+                                    <a className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 my-2 min-w-max w-2/4 rounded-full">
+                                        Cards
+                                    </a>
+                                </Link>
+                                <Link href={`/users/manage`}>
+                                    <a className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 my-2 min-w-max w-2/4 rounded-full">
+                                        Manage Users
+                                    </a>
+                                </Link>
+                            </>
+                        )}
                     </div>
                 </main>
             </div>
