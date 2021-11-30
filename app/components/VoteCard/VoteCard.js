@@ -13,8 +13,6 @@ function VoteCard({ gameId, yesCards, setPlayState }) {
         voteRandomIndex: ArrayMethods.getRandomIndex(yesCards.slice(1))
     });
 
-    console.log("voteCardState", voteCardState);
-
     const { tempYesCards, newYesCard, voteRandomIndex } = voteCardState;
 
     const handleCardClick = async (cardId) => {
@@ -25,20 +23,22 @@ function VoteCard({ gameId, yesCards, setPlayState }) {
         }
 
         // If picked cardID is newYesCard, set tempYesCards to upper half of voteRandomIndex in yesCards
+        let functionTempYesCards;
         if (cardId === newYesCard._id) {
-            tempYesCards = tempYesCards.slice(0, voteRandomIndex);
+            functionTempYesCards = tempYesCards.slice(0, voteRandomIndex);
         } else {
-            tempYesCards = tempYesCards.slice(voteRandomIndex + 1);
+            functionTempYesCards = tempYesCards.slice(voteRandomIndex + 1);
         }
 
         // Set the new Card in appropriate order, if no card is available in lower/higher of tempYesCards
-        if (tempYesCards.length <= 1) {
+        if (functionTempYesCards.length <= 1) {
             terminateVote(cardId);
             return;
         }
 
         setVoteCardState({
-            voteRandomIndex: ArrayMethods.getRandomIndex(tempYesCards)
+            tempYesCards: functionTempYesCards,
+            voteRandomIndex: ArrayMethods.getRandomIndex(functionTempYesCards)
         });
     };
 
