@@ -27,32 +27,6 @@ class userService {
         }
     }
 
-    async getAllHashtags() {
-        try {
-            const response = await $http.get("/api/user/hashtags");
-
-            if (response.data.success) {
-                return {
-                    success: true,
-                    message: response.data.message,
-                    data: response.data.data
-                };
-            } else {
-                return {
-                    success: false,
-                    message: response.data.message
-                };
-            }
-        } catch (error) {
-            return {
-                success: false,
-                message: error.response
-                    ? error.response.data.message
-                    : error.message
-            };
-        }
-    }
-
     async getUser(userId) {
         try {
             const response = await $http.get(`/api/user/${userId}`);
@@ -62,57 +36,6 @@ class userService {
                     success: true,
                     message: response.data.message,
                     data: response.data.data
-                };
-            } else {
-                return {
-                    success: false,
-                    message: response.data.message
-                };
-            }
-        } catch (error) {
-            return {
-                success: false,
-                message: error.response
-                    ? error.response.data.message
-                    : error.message
-            };
-        }
-    }
-
-    async getAllByMe() {
-        try {
-            const response = await $http.get("/api/user/me");
-
-            if (response.data.success) {
-                return {
-                    success: true,
-                    message: response.data.message,
-                    data: response.data.data
-                };
-            } else {
-                return {
-                    success: false,
-                    message: response.data.message
-                };
-            }
-        } catch (error) {
-            return {
-                success: false,
-                message: error.response
-                    ? error.response.data.message
-                    : error.message
-            };
-        }
-    }
-
-    async updateEloRating(data) {
-        try {
-            const response = await $http.put("/api/user/elo_rating_update", data);
-
-            if (response.data.success) {
-                return {
-                    success: true,
-                    message: response.data.message
                 };
             } else {
                 return {
