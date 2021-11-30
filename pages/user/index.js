@@ -37,11 +37,6 @@ function Index() {
                                 About Me
                             </a>
                         </Link>
-                        <Link href="/logout">
-                            <a className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 my-2 min-w-max w-2/4 rounded-full">
-                                Logout
-                            </a>
-                        </Link>
                         {user.role === "admin" && (
                             <>
                                 <Link href="/card/new">
@@ -61,6 +56,11 @@ function Index() {
                                 </Link>
                             </>
                         )}
+                        <Link href="/logout">
+                            <a className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 my-2 min-w-max w-2/4 rounded-full">
+                                Logout
+                            </a>
+                        </Link>
                     </div>
                 </main>
             </div>
