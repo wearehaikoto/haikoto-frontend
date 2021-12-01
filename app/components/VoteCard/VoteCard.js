@@ -87,7 +87,7 @@ function VoteCard({ gameId, yesCards, setPlayState }) {
                 >
                     <div className="h-52 w-52 md:h-[30vw] md:w-[30vw] relative mx-auto">
                         <Image
-                            src={newYesCard.cardImage}
+                            src={newYesCard.image}
                             layout="fill"
                             objectFit="cover"
                             placeholder="blur"
@@ -95,10 +95,10 @@ function VoteCard({ gameId, yesCards, setPlayState }) {
                         />
                     </div>
                     <h1 className="font-bold max-w-xs text-[4vh] mx-auto text-center mt-3">
-                        {newYesCard.cardTitle}
+                        {newYesCard.title}
                     </h1>
                     <p className="text-center text-[4vh]">
-                        {newYesCard.cardHashtags.map((hashtag) => (
+                        {newYesCard.hashtags.map((hashtag) => (
                             <span
                                 key={hashtag}
                                 className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 my-2"
@@ -116,7 +116,7 @@ function VoteCard({ gameId, yesCards, setPlayState }) {
                 >
                     <div className="h-52 w-52 md:h-[30vw] md:w-[30vw] relative mx-auto">
                         <Image
-                            src={tempYesCards[voteRandomIndex].cardImage}
+                            src={tempYesCards[voteRandomIndex].image}
                             layout="fill"
                             objectFit="cover"
                             placeholder="blur"
@@ -124,9 +124,9 @@ function VoteCard({ gameId, yesCards, setPlayState }) {
                         />
                     </div>
                     <h1 className="font-bold max-w-xs text-[4vh] mx-auto text-center mt-3">
-                        {tempYesCards[voteRandomIndex].cardTitle}
+                        {tempYesCards[voteRandomIndex].title}
                         <p className="text-center text-[4vh]">
-                            {tempYesCards[voteRandomIndex].cardHashtags.map(
+                            {tempYesCards[voteRandomIndex].hashtags.map(
                                 (hashtag) => (
                                     <span
                                         key={hashtag}

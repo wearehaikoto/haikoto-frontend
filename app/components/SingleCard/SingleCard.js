@@ -9,7 +9,7 @@ function SingleCard({ card, handleAnswerClick }) {
             <div className="mt-2 mb-5 p-4 hidden portrait:block">
                 <div className="h-52 w-52 lg:h-80 lg:w-80 relative mx-auto">
                     <Image
-                        src={card.cardImage}
+                        src={card.image}
                         layout="fill"
                         objectFit="cover"
                         placeholder="blur"
@@ -19,10 +19,10 @@ function SingleCard({ card, handleAnswerClick }) {
 
                 <div className="mt-4 mb-8">
                     <h1 className="font-bold md:max-w-xs text-[5vh] mx-auto text-center">
-                        {card.cardTitle}
+                        {card.title}
                     </h1>
                     <p className="text-center text-[4vh]">
-                        {card.cardHashtags.map((hashtag) => (
+                        {card.hashtags.map((hashtag) => (
                             <span
                                 key={hashtag}
                                 className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2"
@@ -68,7 +68,7 @@ function SingleCard({ card, handleAnswerClick }) {
                     >
                         <div className="h-52 w-52 lg:h-80 lg:w-80 relative mx-auto">
                             <Image
-                                src={card.cardImage}
+                                src={card.image}
                                 layout="fill"
                                 objectFit="cover"
                                 placeholder="blur"
@@ -78,10 +78,10 @@ function SingleCard({ card, handleAnswerClick }) {
 
                         <div className="mt-4 w-full">
                             <h1 className="font-bold md:max-w-xs text-[5vh] mx-auto text-center">
-                                {card.cardTitle}
+                                {card.title}
                             </h1>
                             <p className="text-center text-[4vh]">
-                                {card.cardHashtags.map((hashtag) => (
+                                {card.hashtags.map((hashtag) => (
                                     <span
                                         key={hashtag}
                                         className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2"

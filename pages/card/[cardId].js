@@ -56,7 +56,7 @@ function getCard() {
           <div className="m-10 md:mx-44">
             <div className="mb-4">
               <h1 className="text-center text-xl md:text-3xl">
-                {card.cardTitle}
+                {card.title}
               </h1>
             </div>
 

@@ -21,9 +21,9 @@ function createCard() {
         type: ""
     });
     const [formInput, setFormInput] = React.useState({
-        cardImage: "",
-        cardTitle: "",
-        cardHashtags: ""
+        image: "",
+        title: "",
+        hashtags: ""
     });
 
     async function processCreateCard(e) {
@@ -34,9 +34,9 @@ function createCard() {
         setAlertState({ show: false, message: "", type: "" });
 
         // Extract formData from formInput state
-        const { cardImage, cardTitle, cardHashtags } = formInput;
+        const { image, title, hashtags } = formInput;
 
-        if (!cardImage) {
+        if (!image) {
             setAlertState({
                 show: true,
                 message: "Please upload a card image",
@@ -44,7 +44,7 @@ function createCard() {
             });
             return;
         }
-        if (!cardTitle) {
+        if (!title) {
             setAlertState({
                 show: true,
                 message: "Please enter a title",
@@ -52,7 +52,7 @@ function createCard() {
             });
             return;
         }
-        if (!cardHashtags) {
+        if (!hashtags) {
             setAlertState({
                 show: true,
                 message: "Please enter hashtags",
@@ -89,8 +89,8 @@ function createCard() {
 
     React.useEffect(async () => {
         // Get pre existing card hashtags from DB
-        const cardHashtags = await cardService.getAllHashtags();
-        if (cardHashtags.success) setHashtags(cardHashtags.data);
+        const hashtags = await cardService.getAllHashtags();
+        if (hashtags.success) setHashtags(hashtags.data);
     }, []);
 
     return (
@@ -144,7 +144,7 @@ function createCard() {
                                         // Set the Form Input State
                                         setFormInput({
                                             ...formInput,
-                                            cardImage: image.url
+                                            image: image.url
                                         });
                                     } else {
                                         window.scrollTo(0, 0);
@@ -172,7 +172,7 @@ function createCard() {
                                     onChange={(e) => {
                                         setFormInput({
                                             ...formInput,
-                                            cardTitle: e.target.value
+                                            title: e.target.value
                                         });
                                     }}
                                 />
@@ -185,7 +185,7 @@ function createCard() {
                                     onChange={(e) => {
                                         setFormInput({
                                             ...formInput,
-                                            cardHashtags: e.map((e) => e.value.toLowerCase().trim())
+                                            hashtags: e.map((e) => e.value.toLowerCase().trim())
                                         });
                                     }}
                                     options={hashtags.map((hashtag) => {

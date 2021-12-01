@@ -79,7 +79,7 @@ function createCard() {
                                 {index + 1}
                               </td>
                               <td className="border px-4 py-2 text-blue-600 border-blue-500 font-medium">
-                                {card.cardTitle}
+                                {card.title}
                               </td>
                               <td className="border px-4 py-2 border-blue-500 font-medium">
                                 <span className="text-green-500"> True </span>
@@ -98,7 +98,7 @@ function createCard() {
                                 {index + 1}
                               </td>
                               <td className="border px-4 py-2 text-blue-600 border-blue-500 font-medium">
-                                {card.cardTitle}
+                                {card.title}
                               </td>
                               <td className="border px-4 py-2 border-blue-500 font-medium">
                                 <span className="text-red-500"> False </span>
