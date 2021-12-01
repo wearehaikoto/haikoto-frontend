@@ -9,3 +9,5 @@ export { default as CardCancelButton } from "./Buttons/CardCancelButton";
 
 export { default as VoteCard } from "./VoteCard/VoteCard";
 export { default as SingleCard } from "./SingleCard/SingleCard";
+export { default as HashtagCard } from "./HashtagCard/HashtagCard";
+

@@ -29,6 +29,20 @@ class gameService {
         }
     }
 
+    async newHashtag(gameId) {
+        try {
+            const response = await $http.post(`/api/game/${gameId}/newHashtag`);
+
+            return serviceResponse(
+                response.data.message,
+                response.data.data,
+                response.data.success
+            );
+        } catch (error) {
+            return serviceResponse(error.response ? error.response.data.message : error.message);
+        }
+    }
+
     async getAll() {
         try {
             const response = await $http.get("/api/game");
@@ -91,6 +105,34 @@ class gameService {
                 `/api/game/${gameId}/addRightSwipedCard`,
                 data
             );
+
+            return serviceResponse(
+                response.data.message,
+                response.data.data,
+                response.data.success
+            );
+        } catch (error) {
+            return serviceResponse(error.response ? error.response.data.message : error.message);
+        }
+    }
+
+    async addLeftSwipedHashtag(gameId, data) {
+        try {
+            const response = await $http.put(`/api/game/${gameId}/addLeftSwipedHashtag`, data);
+
+            return serviceResponse(
+                response.data.message,
+                response.data.data,
+                response.data.success
+            );
+        } catch (error) {
+            return serviceResponse(error.response ? error.response.data.message : error.message);
+        }
+    }
+
+    async addRightSwipedHashtag(gameId, data) {
+        try {
+            const response = await $http.put(`/api/game/${gameId}/addRightSwipedHashtag`, data);
 
             return serviceResponse(
                 response.data.message,
