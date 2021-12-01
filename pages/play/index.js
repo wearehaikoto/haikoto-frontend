@@ -24,8 +24,8 @@ function playCards() {
 
     // Cards
     allCards: [],
-    yesCards: [],
-    noCards: [],
+    rightSwipedCards: [],
+    leftSwipedCards: [],
 
     // Vote
     voteMode: false,
@@ -35,7 +35,7 @@ function playCards() {
     lastCardVote: false,
   });
 
-  const { loading_show, loading_text, loading_description, gameId, allCards, yesCards, noCards, voteMode, currentCard, lastCardVote } = playState;
+  const { loading_show, loading_text, loading_description, gameId, allCards, rightSwipedCards, leftSwipedCards, voteMode, currentCard, lastCardVote } = playState;
 
   const handleAnswerClick = async (cardId, answer) => {
     // Scroll to top (good UX)
@@ -47,17 +47,17 @@ function playCards() {
     // Get the Card Data
     const card = allCards.find((card) => card._id === cardId);
 
-    // If answer is true add to yesCards bucket
+    // If answer is true add to rightSwipedCards bucket
     if (answer) {
 
-      yesCards.unshift(card);
-      // Add yes Card to the Game - Commented  (Do not rank the cards yet)
-      // await gameService.addYesCard(gameId, { cardId });
+      rightSwipedCards.unshift(card);
+      // Add rightSwiped Card to the Game - Commented  (Do not rank the cards yet)
+      // await gameService.addRightSwipedCard(gameId, { cardId });
     } else {
 
-      noCards.unshift(card);
+      leftSwipedCards.unshift(card);
       // Add No Card to the Game 
-      await gameService.addNoCard(gameId, { cardId });
+      await gameService.addLeftSwipedCard(gameId, { cardId });
     }
 
     setPlayState({
@@ -65,17 +65,17 @@ function playCards() {
       loading_show: false,
 
       // Cards
-      yesCards,
-      noCards,
+      rightSwipedCards,
+      leftSwipedCards,
     });
 
-    // If the answer is true and number of cards in yesCards bucket is greater than 2
-    if (answer && yesCards.length >= 2) {
-      // Enter Vote mode to rank yesCards
+    // If the answer is true and number of cards in rightSwipedCards bucket is greater than 2
+    if (answer && rightSwipedCards.length >= 2) {
+      // Enter Vote mode to rank rightSwipedCards
       setPlayState({ voteMode: true });
     }
 
-    // Get new Card based on yes/no Cards from the Database / Check if the game is over
+    // Get new Card based on yes/leftSwiped Cards from the Database / Check if the game is over
     const newCards = await gameService.newCard(gameId);
     if (newCards.success) {
       // Add the new Cards to the allCards bucket
@@ -88,9 +88,9 @@ function playCards() {
     }
 
     // Last Card Vote
-    if (allCards.length === currentCard && yesCards.length >= 2 && answer) {
+    if (allCards.length === currentCard && rightSwipedCards.length >= 2 && answer) {
       // If the current Card is equal to number of Cards and answer is true
-      // Enter Vote mode to rank yesCards
+      // Enter Vote mode to rank rightSwipedCards
       setPlayState({ voteMode: true, lastCardVote: true });
       return;
     }
@@ -173,7 +173,7 @@ function playCards() {
           {voteMode ? (
             <VoteCard
               gameId={gameId}
-              yesCards={yesCards}
+              rightSwipedCards={rightSwipedCards}
               setPlayState={setPlayState}
             />
           ) : (

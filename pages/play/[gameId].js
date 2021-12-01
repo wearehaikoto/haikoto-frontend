@@ -74,7 +74,7 @@ function getGame() {
                                         </tr>
                                     </thead>
                                     <tbody className="text-sm">
-                                        {game.yesCards.map((card, index) => {
+                                        {game.rightSwipedCards.map((card, index) => {
                                             return (
                                                 <tr key={card._id}>
                                                     <td className="border px-4 py-2 text-blue-600 border-blue-500 font-medium">
@@ -92,7 +92,7 @@ function getGame() {
                                                 </tr>
                                             );
                                         })}
-                                        {game.noCards.map((card, index) => {
+                                        {game.leftSwipedCards.map((card, index) => {
                                             return (
                                                 <tr key={card._id}>
                                                     <td className="border px-4 py-2 text-blue-600 border-blue-500 font-medium">

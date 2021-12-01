@@ -6,76 +6,76 @@ import { gameService } from "../../services";
 import { useMergeState, ArrayMethods, EloRatingAlgorithm } from "../../utils";
 import { LoadingImagePlacepholder } from "../../assets";
 
-function VoteCard({ gameId, yesCards, setPlayState }) {
+function VoteCard({ gameId, rightSwipedCards, setPlayState }) {
     const [voteCardState, setVoteCardState] = useMergeState({
-        tempYesCards: yesCards.slice(1),
-        newYesCard: yesCards[0],
-        voteRandomIndex: ArrayMethods.getRandomIndex(yesCards.slice(1))
+        tempRightSwipedCards: rightSwipedCards.slice(1),
+        newRightSwipedCard: rightSwipedCards[0],
+        voteRandomIndex: ArrayMethods.getRandomIndex(rightSwipedCards.slice(1))
     });
 
-    const { tempYesCards, newYesCard, voteRandomIndex } = voteCardState;
+    const { tempRightSwipedCards, newRightSwipedCard, voteRandomIndex } = voteCardState;
 
     const handleCardClick = async (cardId) => {
-        // If picked cardID is newYesCard, set tempYesCards to upper half of voteRandomIndex in yesCards
-        let functionTempYesCards;
-        if (cardId === newYesCard._id) {
-            functionTempYesCards = tempYesCards.slice(0, voteRandomIndex);
+        // If picked cardID is newRightSwipedCard, set tempRightSwipedCards to upper half of voteRandomIndex in rightSwipedCards
+        let functionTempRightSwipedCards;
+        if (cardId === newRightSwipedCard._id) {
+            functionTempRightSwipedCards = tempRightSwipedCards.slice(0, voteRandomIndex);
         } else {
-            functionTempYesCards = tempYesCards.slice(voteRandomIndex + 1);
+            functionTempRightSwipedCards = tempRightSwipedCards.slice(voteRandomIndex + 1);
         }
 
-        // Set the new Card in appropriate order, if no card is available in lower/higher of tempYesCards
-        if (functionTempYesCards.length <= 0) {
+        // Set the new Card in appropriate order, if leftSwiped card is available in lower/higher of tempRightSwipedCards
+        if (functionTempRightSwipedCards.length <= 0) {
             terminateVote(cardId);
             return;
         }
 
         setVoteCardState({
-            tempYesCards: functionTempYesCards,
-            voteRandomIndex: ArrayMethods.getRandomIndex(functionTempYesCards)
+            tempRightSwipedCards: functionTempRightSwipedCards,
+            voteRandomIndex: ArrayMethods.getRandomIndex(functionTempRightSwipedCards)
         });
     };
 
     const terminateVote = async (cardId) => {
-        // const newYesCardIndexInYesCards = yesCards.findIndex(card => card._id === newYesCard._id);
-        const voteRandomIndexCardInYesCards = yesCards
+        // const newRightSwipedCardIndexInRightSwipedCards = rightSwipedCards.findIndex(card => card._id === newRightSwipedCard._id);
+        const voteRandomIndexCardInRightSwipedCards = rightSwipedCards
             .slice(1)
             .findIndex(
-                (card) => card._id === tempYesCards[voteRandomIndex]._id
+                (card) => card._id === tempRightSwipedCards[voteRandomIndex]._id
             );
 
-        let newlyGeneratedYesCards;
+        let newlyGeneratedRightSwipedCards;
 
-        if (cardId === newYesCard._id) {
-            // Insert newYesCard before the index of voteRandomIndex
-            newlyGeneratedYesCards = ArrayMethods.insertItem(
-                yesCards.slice(1),
-                voteRandomIndexCardInYesCards,
-                newYesCard
+        if (cardId === newRightSwipedCard._id) {
+            // Insert newRightSwipedCard before the index of voteRandomIndex
+            newlyGeneratedRightSwipedCards = ArrayMethods.insertItem(
+                rightSwipedCards.slice(1),
+                voteRandomIndexCardInRightSwipedCards,
+                newRightSwipedCard
             );
         } else {
-            // Insert newYesCard after the index of voteRandomIndex
-            newlyGeneratedYesCards = ArrayMethods.insertItem(
-                yesCards.slice(1),
-                voteRandomIndexCardInYesCards + 1,
-                newYesCard
+            // Insert newRightSwipedCard after the index of voteRandomIndex
+            newlyGeneratedRightSwipedCards = ArrayMethods.insertItem(
+                rightSwipedCards.slice(1),
+                voteRandomIndexCardInRightSwipedCards + 1,
+                newRightSwipedCard
             );
         }
 
-        await gameService.updateYesCards(gameId, {
-            cardIds: newlyGeneratedYesCards.map((card) => card._id),
-            eloScores: newlyGeneratedYesCards.map((card) => card.eloRating)
+        await gameService.updateRightSwipedCards(gameId, {
+            cardIds: newlyGeneratedRightSwipedCards.map((card) => card._id),
+            eloScores: newlyGeneratedRightSwipedCards.map((card) => card.eloRating)
         });
 
-        setPlayState({ yesCards: newlyGeneratedYesCards, voteMode: false });
+        setPlayState({ rightSwipedCards: newlyGeneratedRightSwipedCards, voteMode: false });
     };
 
     useKeyPressEvent("ArrowRight", () => {
-        handleCardClick(tempYesCards[voteRandomIndex]._id);
+        handleCardClick(tempRightSwipedCards[voteRandomIndex]._id);
     });
 
     useKeyPressEvent("ArrowLeft", () => {
-        handleCardClick(newYesCard._id);
+        handleCardClick(newRightSwipedCard._id);
     });
 
     return (
@@ -83,11 +83,11 @@ function VoteCard({ gameId, yesCards, setPlayState }) {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 lg:gap-8">
                 <div
                     className="cursor-pointer"
-                    onClick={() => handleCardClick(newYesCard._id)}
+                    onClick={() => handleCardClick(newRightSwipedCard._id)}
                 >
                     <div className="h-52 w-52 md:h-[30vw] md:w-[30vw] relative mx-auto">
                         <Image
-                            src={newYesCard.image}
+                            src={newRightSwipedCard.image}
                             layout="fill"
                             objectFit="cover"
                             placeholder="blur"
@@ -95,10 +95,10 @@ function VoteCard({ gameId, yesCards, setPlayState }) {
                         />
                     </div>
                     <h1 className="font-bold max-w-xs text-[4vh] mx-auto text-center mt-3">
-                        {newYesCard.title}
+                        {newRightSwipedCard.title}
                     </h1>
                     <p className="text-center text-[4vh]">
-                        {newYesCard.hashtags.map((hashtag) => (
+                        {newRightSwipedCard.hashtags.map((hashtag) => (
                             <span
                                 key={hashtag._id}
                                 className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 my-2"
@@ -111,12 +111,12 @@ function VoteCard({ gameId, yesCards, setPlayState }) {
                 <div
                     className="cursor-pointer"
                     onClick={() =>
-                        handleCardClick(tempYesCards[voteRandomIndex]._id)
+                        handleCardClick(tempRightSwipedCards[voteRandomIndex]._id)
                     }
                 >
                     <div className="h-52 w-52 md:h-[30vw] md:w-[30vw] relative mx-auto">
                         <Image
-                            src={tempYesCards[voteRandomIndex].image}
+                            src={tempRightSwipedCards[voteRandomIndex].image}
                             layout="fill"
                             objectFit="cover"
                             placeholder="blur"
@@ -124,9 +124,9 @@ function VoteCard({ gameId, yesCards, setPlayState }) {
                         />
                     </div>
                     <h1 className="font-bold max-w-xs text-[4vh] mx-auto text-center mt-3">
-                        {tempYesCards[voteRandomIndex].title}
+                        {tempRightSwipedCards[voteRandomIndex].title}
                         <p className="text-center text-[4vh]">
-                            {tempYesCards[voteRandomIndex].hashtags.map(
+                            {tempRightSwipedCards[voteRandomIndex].hashtags.map(
                                 (hashtag) => (
                                     <span
                                         key={hashtag._id}

@@ -71,9 +71,9 @@ class gameService {
         }
     }
 
-    async addNoCard(gameId, data) {
+    async addLeftSwipedCard(gameId, data) {
         try {
-            const response = await $http.put(`/api/game/${gameId}/addNoCard`, data);
+            const response = await $http.put(`/api/game/${gameId}/addLeftSwipedCard`, data);
 
             return serviceResponse(
                 response.data.message,
@@ -85,10 +85,10 @@ class gameService {
         }
     }
 
-    async addYesCard(gameId, data) {
+    async addRightSwipedCard(gameId, data) {
         try {
             const response = await $http.put(
-                `/api/game/${gameId}/addYesCard`,
+                `/api/game/${gameId}/addRightSwipedCard`,
                 data
             );
 
@@ -102,10 +102,10 @@ class gameService {
         }
     }
 
-    async updateYesCards(gameId, data) {
+    async updateRightSwipedCards(gameId, data) {
         try {
             const response = await $http.patch(
-                `/api/game/${gameId}/updateYesCards`,
+                `/api/game/${gameId}/updateRightSwipedCards`,
                 data
             );
 
