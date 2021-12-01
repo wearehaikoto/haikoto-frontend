@@ -4,7 +4,7 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 import CreatableSelect from "react-select/creatable";
 
-import { cardService } from "../../app/services";
+import { cardService, hashtagService } from "../../app/services";
 import { createCardUploadGreyImage } from "../../app/assets";
 import { currentUser, withAuth, uploadImage } from "../../app/utils";
 import { CardCancelButton, AlertComponent } from "../../app/components";
@@ -85,11 +85,9 @@ function createCard() {
         }
     }
 
-    console.log("formInput", formInput);
-
     React.useEffect(async () => {
         // Get pre existing card hashtags from DB
-        const hashtags = await cardService.getAllHashtags();
+        const hashtags = await hashtagService.getAll();
         if (hashtags.success) setHashtags(hashtags.data);
     }, []);
 
@@ -190,8 +188,8 @@ function createCard() {
                                     }}
                                     options={hashtags.map((hashtag) => {
                                         return {
-                                            value: hashtag,
-                                            label: hashtag
+                                            value: hashtag.name,
+                                            label: hashtag.name
                                         };
                                     })}
                                 />
