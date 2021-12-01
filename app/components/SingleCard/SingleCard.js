@@ -24,10 +24,10 @@ function SingleCard({ card, handleAnswerClick }) {
                     <p className="text-center text-[4vh]">
                         {card.hashtags.map((hashtag) => (
                             <span
-                                key={hashtag}
+                                key={hashtag._id}
                                 className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2"
                             >
-                                #{hashtag}
+                                #{hashtag.name}
                             </span>
                         ))}
                     </p>
@@ -83,10 +83,10 @@ function SingleCard({ card, handleAnswerClick }) {
                             <p className="text-center text-[4vh]">
                                 {card.hashtags.map((hashtag) => (
                                     <span
-                                        key={hashtag}
+                                        key={hashtag._id}
                                         className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2"
                                     >
-                                        #{hashtag}
+                                        #{hashtag.name}
                                     </span>
                                 ))}
                             </p>

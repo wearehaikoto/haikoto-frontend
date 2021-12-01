@@ -100,10 +100,10 @@ function VoteCard({ gameId, yesCards, setPlayState }) {
                     <p className="text-center text-[4vh]">
                         {newYesCard.hashtags.map((hashtag) => (
                             <span
-                                key={hashtag}
+                                key={hashtag._id}
                                 className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 my-2"
                             >
-                                #{hashtag}
+                                #{hashtag.name}
                             </span>
                         ))}
                     </p>
@@ -129,10 +129,10 @@ function VoteCard({ gameId, yesCards, setPlayState }) {
                             {tempYesCards[voteRandomIndex].hashtags.map(
                                 (hashtag) => (
                                     <span
-                                        key={hashtag}
+                                        key={hashtag._id}
                                         className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 my-2"
                                     >
-                                        #{hashtag}
+                                        #{hashtag.name}
                                     </span>
                                 )
                             )}
