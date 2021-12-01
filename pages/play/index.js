@@ -75,15 +75,20 @@ function playCards() {
       setPlayState({ voteMode: true });
     }
 
-    // Check if current Card is equal to number of Cards
-    if (allCards.length > currentCard) {
+    // Get new Card based on yes/no Cards from the Database / Check if the game is over
+    const newCards = await gameService.newCard(gameId);
+    if (newCards.success) {
+      // Add the new Cards to the allCards bucket
       // Update the current Card Number +1 and continue game
-      setPlayState({ currentCard: currentCard + 1 });
+      setPlayState({
+        allCards: [...allCards, ...newCards.data.newCard],
+        currentCard: currentCard + 1,
+      });
       return;
     }
 
     // Last Card Vote
-    if (allCards.length === currentCard && answer) {
+    if (allCards.length === currentCard && yesCards.length >= 2 && answer) {
       // If the current Card is equal to number of Cards and answer is true
       // Enter Vote mode to rank yesCards
       setPlayState({ voteMode: true, lastCardVote: true });

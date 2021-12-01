@@ -15,6 +15,20 @@ class gameService {
         }
     }
 
+    async newCard(gameId) {
+        try {
+            const response = await $http.post(`/api/game/${gameId}/newCard`);
+
+            return serviceResponse(
+                response.data.message,
+                response.data.data,
+                response.data.success
+            );
+        } catch (error) {
+            return serviceResponse(error.response ? error.response.data.message : error.message);
+        }
+    }
+
     async getAll() {
         try {
             const response = await $http.get("/api/game");
@@ -59,7 +73,7 @@ class gameService {
 
     async addNoCard(gameId, data) {
         try {
-            const response = await $http.put(`/api/game/${gameId}/addNoCard`, data );
+            const response = await $http.put(`/api/game/${gameId}/addNoCard`, data);
 
             return serviceResponse(
                 response.data.message,
