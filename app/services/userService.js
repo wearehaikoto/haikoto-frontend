@@ -1,29 +1,17 @@
-import { $http } from "../utils";
+import { $http, serviceResponse } from "../utils";
 
 class userService {
     async getAll() {
         try {
             const response = await $http.get("/api/user");
 
-            if (response.data.success) {
-                return {
-                    success: true,
-                    message: response.data.message,
-                    data: response.data.data
-                };
-            } else {
-                return {
-                    success: false,
-                    message: response.data.message
-                };
-            }
+            return serviceResponse(
+                response.data.message,
+                response.data.data,
+                response.data.success
+            );
         } catch (error) {
-            return {
-                success: false,
-                message: error.response
-                    ? error.response.data.message
-                    : error.message
-            };
+            return serviceResponse(error.response ? error.response.data.message : error.message);
         }
     }
 
@@ -31,51 +19,30 @@ class userService {
         try {
             const response = await $http.get(`/api/user/${userId}`);
 
-            if (response.data.success) {
-                return {
-                    success: true,
-                    message: response.data.message,
-                    data: response.data.data
-                };
-            } else {
-                return {
-                    success: false,
-                    message: response.data.message
-                };
-            }
+            return serviceResponse(
+                response.data.message,
+                response.data.data,
+                response.data.success
+            );
         } catch (error) {
-            return {
-                success: false,
-                message: error.response
-                    ? error.response.data.message
-                    : error.message
-            };
+            return serviceResponse(error.response ? error.response.data.message : error.message);
         }
     }
 
     async updateRole(userId, data) {
         try {
-            const response = await $http.patch(`/api/user/${userId}/updateRole`, data);
+            const response = await $http.patch(
+                `/api/user/${userId}/updateRole`,
+                data
+            );
 
-            if (response.data.success) {
-                return {
-                    success: true,
-                    message: response.data.message,
-                    data: response.data.data
-                };
-            } else {
-                return {
-                    success: false,
-                    message: response.data.message
-                };
-            }
+            return serviceResponse(
+                response.data.message,
+                response.data.data,
+                response.data.success
+            );
         } catch (error) {
-            return {
-                success: false,
-                message: error.response
-                    ? error.response.data.message
-                    : error.message
-            };
+            return serviceResponse(error.response ? error.response.data.message : error.message);
         }
     }
 
@@ -83,25 +50,13 @@ class userService {
         try {
             const response = await $http.delete(`/api/user/${userId}`);
 
-            if (response.data.success) {
-                return {
-                    success: true,
-                    message: response.data.message,
-                    data: response.data.data
-                };
-            } else {
-                return {
-                    success: false,
-                    message: response.data.message
-                };
-            }
+            return serviceResponse(
+                response.data.message,
+                response.data.data,
+                response.data.success
+            );
         } catch (error) {
-            return {
-                success: false,
-                message: error.response
-                    ? error.response.data.message
-                    : error.message
-            };
+            return serviceResponse(error.response ? error.response.data.message : error.message);
         }
     }
 }
