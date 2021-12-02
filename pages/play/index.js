@@ -30,13 +30,14 @@ function playCards() {
     // Vote
     voteMode: false,
     hashTagSwipeMode: true,
+    finalHashTagSwipeMode: false,
 
     // Gameplay
     currentCard: 0,
     lastCardVote: false,
   });
 
-  const { loading_show, loading_text, loading_description, gameId, allCards, rightSwipedCards, leftSwipedCards, voteMode, hashTagSwipeMode, currentCard, lastCardVote } = playState;
+  const { loading_show, loading_text, loading_description, gameId, allCards, rightSwipedCards, leftSwipedCards, voteMode, hashTagSwipeMode, finalHashTagSwipeMode, currentCard, lastCardVote } = playState;
 
   const handleAnswerClick = async (cardId, answer) => {
     // Scroll to top (good UX)
@@ -101,6 +102,8 @@ function playCards() {
       return;
     }
 
+    if (!finalHashTagSwipeMode) return;
+
     // Call finish Game Function
     finishGame();
   };
@@ -110,9 +113,9 @@ function playCards() {
     setPlayState({ loading_show: true, loading_text: "Generating result..." });
 
     // Take a while before redirecting to result
-    setTimeout(() => {
-      router.push(`/play/${gameId}`);
-    }, 1500)
+    // setTimeout(() => {
+    router.push(`/play/${gameId}`);
+    // }, 1500)
   };
 
   React.useEffect(async () => {
@@ -138,7 +141,7 @@ function playCards() {
   }, []);
 
   React.useEffect(async () => {
-    if (!hashTagSwipeMode) {
+    if (hashTagSwipeMode !== true) {
       // Get new Card based on yes/leftSwiped Hashtags from the Database / Check if the game is over
       const newCards = await gameService.newCard(gameId);
 
@@ -153,6 +156,7 @@ function playCards() {
       } else {
         // Out of Cards for the Hashtag, Enter hashTagSwipeMode
         setPlayState({
+          loading_show: false,
           hashTagSwipeMode: true,
         });
       }
@@ -189,7 +193,7 @@ function playCards() {
 
       {!loading_show ? (
         <>
-          {hashTagSwipeMode ? (
+          {hashTagSwipeMode && !voteMode ? (
             <HashtagCard playState={playState} setPlayState={setPlayState} />
           ) : (
             <div

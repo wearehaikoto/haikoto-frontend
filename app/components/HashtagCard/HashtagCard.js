@@ -18,7 +18,8 @@ function HashtagCard({ playState, setPlayState }) {
             } else {
                 setPlayState({
                     lastCardVote: true,
-                    hashTagSwipeMode: false
+                    hashTagSwipeMode: false,
+                    finalHashTagSwipeMode: true,
                 });
             }
         }
