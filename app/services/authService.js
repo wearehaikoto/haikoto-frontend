@@ -1,28 +1,23 @@
-import { $http } from "../utils";
+import { $http, serviceResponse } from "../utils";
 
 class authService {
     async loginOrSignup(codeName) {
         try {
-            const response = await $http.post("/api/auth/loginOrSignup", { codeName });
+            const response = await $http.post("/api/auth/loginOrSignup", {
+                codeName
+            });
+
             if (response.data.success) {
                 localStorage.setItem("auth-token", response.data.data.token);
-                return {
-                    success: true,
-                    message: response.data.message
-                };
-            } else {
-                return {
-                    success: false,
-                    message: response.data.message
-                };
             }
+
+            return serviceResponse(
+                response.data.message,
+                response.data.data,
+                response.data.success
+            );
         } catch (error) {
-            return {
-                success: false,
-                message: error.response
-                    ? error.response.data.message
-                    : error.message
-            };
+            return serviceResponse(error.response ? error.response.data.message : error.message);
         }
     }
 }

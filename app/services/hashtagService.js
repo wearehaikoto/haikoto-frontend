@@ -1,9 +1,23 @@
 import { $http, serviceResponse } from "../utils";
 
-class userService {
+class hashtagService {
+    async create(data) {
+        try {
+            const response = await $http.post("/api/hashtag/create", data);
+
+            return serviceResponse(
+                response.data.message,
+                response.data.data,
+                response.data.success
+            );
+        } catch (error) {
+            return serviceResponse(error.response ? error.response.data.message : error.message);
+        }
+    }
+
     async getAll() {
         try {
-            const response = await $http.get("/api/user");
+            const response = await $http.get("/api/hashtag");
 
             return serviceResponse(
                 response.data.message,
@@ -15,40 +29,9 @@ class userService {
         }
     }
 
-    async getUser(userId) {
+    async getHashtag(hashtagId) {
         try {
-            const response = await $http.get(`/api/user/${userId}`);
-
-            return serviceResponse(
-                response.data.message,
-                response.data.data,
-                response.data.success
-            );
-        } catch (error) {
-            return serviceResponse(error.response ? error.response.data.message : error.message);
-        }
-    }
-
-    async updateRole(userId, data) {
-        try {
-            const response = await $http.patch(
-                `/api/user/${userId}/updateRole`,
-                data
-            );
-
-            return serviceResponse(
-                response.data.message,
-                response.data.data,
-                response.data.success
-            );
-        } catch (error) {
-            return serviceResponse(error.response ? error.response.data.message : error.message);
-        }
-    }
-
-    async deleteUser(userId) {
-        try {
-            const response = await $http.delete(`/api/user/${userId}`);
+            const response = await $http.get(`/api/hashtag/${hashtagId}`);
 
             return serviceResponse(
                 response.data.message,
@@ -61,4 +44,4 @@ class userService {
     }
 }
 
-export default new userService();
+export default new hashtagService();
