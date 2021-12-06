@@ -11,7 +11,9 @@ class hashtagService {
                 response.data.success
             );
         } catch (error) {
-            return serviceResponse(error.response ? error.response.data.message : error.message);
+            return serviceResponse(
+                error.response ? error.response.data.message : error.message
+            );
         }
     }
 
@@ -25,7 +27,9 @@ class hashtagService {
                 response.data.success
             );
         } catch (error) {
-            return serviceResponse(error.response ? error.response.data.message : error.message);
+            return serviceResponse(
+                error.response ? error.response.data.message : error.message
+            );
         }
     }
 
@@ -39,7 +43,63 @@ class hashtagService {
                 response.data.success
             );
         } catch (error) {
-            return serviceResponse(error.response ? error.response.data.message : error.message);
+            return serviceResponse(
+                error.response ? error.response.data.message : error.message
+            );
+        }
+    }
+
+    async getAllParentHashtags() {
+        try {
+            const response = await $http.get(
+                `/api/hashtag/getAllParentHashtags`
+            );
+
+            return serviceResponse(
+                response.data.message,
+                response.data.data,
+                response.data.success
+            );
+        } catch (error) {
+            return serviceResponse(
+                error.response ? error.response.data.message : error.message
+            );
+        }
+    }
+
+    async getAllChildrenHashtags() {
+        try {
+            const response = await $http.get(
+                `/api/hashtag/getAllChildrenHashtags`
+            );
+
+            return serviceResponse(
+                response.data.message,
+                response.data.data,
+                response.data.success
+            );
+        } catch (error) {
+            return serviceResponse(
+                error.response ? error.response.data.message : error.message
+            );
+        }
+    }
+
+    async getAllChildrenHashtagsByParent(hashtagId) {
+        try {
+            const response = await $http.get(
+                `/api/hashtag/getAllChildrenHashtagsByParent/${hashtagId}`
+            );
+
+            return serviceResponse(
+                response.data.message,
+                response.data.data,
+                response.data.success
+            );
+        } catch (error) {
+            return serviceResponse(
+                error.response ? error.response.data.message : error.message
+            );
         }
     }
 }
