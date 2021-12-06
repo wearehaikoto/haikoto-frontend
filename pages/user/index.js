@@ -2,10 +2,20 @@ import React from "react";
 import Head from "next/head";
 import Link from "next/link";
 
+import { gameService } from "../../app/services";
 import { currentUser, withAuth } from "../../app/utils";
 
 function Index() {
     const user = currentUser().userData;
+
+    const [showPlayButton, setShowPlayButton] = React.useState(false);
+
+    React.useEffect(async () => {
+        const checkIfNewCardForGame = await gameService.checkIfNewCardForGame();
+        if (checkIfNewCardForGame.success) {
+            setShowPlayButton(checkIfNewCardForGame.data);
+        }
+    }, []);
 
     return (
         <>
@@ -27,11 +37,17 @@ function Index() {
 
                     {/* Login | Signup Buttons */}
                     <div className="flex flex-col items-center justify-center w-full">
-                        <Link href="/play">
-                            <a className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 my-2 min-w-max w-2/4 rounded-full">
-                                Play Cards
+                        {showPlayButton ? (
+                            <Link href="/play">
+                                <a className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 my-2 min-w-max w-2/4 rounded-full">
+                                    Play Cards
+                                </a>
+                            </Link>
+                        ) : (
+                            <a className="bg-gray-400 hover:bg-gray-500 text-white font-bold py-2 px-6 my-2 min-w-max w-2/4 rounded-full cursor-not-allowed">
+                                No new Card
                             </a>
-                        </Link>
+                        )}
                         <Link href="/user/about-me">
                             <a className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 my-2 min-w-max w-2/4 rounded-full">
                                 About Me

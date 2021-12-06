@@ -85,6 +85,20 @@ class gameService {
         }
     }
 
+    async checkIfNewCardForGame() {
+        try {
+            const response = await $http.get("/api/game/checkIfNewCardForGame");
+
+            return serviceResponse(
+                response.data.message,
+                response.data.data,
+                response.data.success
+            );
+        } catch (error) {
+            return serviceResponse(error.response ? error.response.data.message : error.message);
+        }
+    }
+
     async addLeftSwipedCard(gameId, data) {
         try {
             const response = await $http.put(`/api/game/${gameId}/addLeftSwipedCard`, data);
