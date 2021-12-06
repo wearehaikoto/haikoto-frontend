@@ -88,8 +88,9 @@ function createCard() {
     React.useEffect(async () => {
         // Get pre existing card hashtags from DB
         const getAllCardsAsHashtag = await cardService.getAllCardsAsHashtag();
-        if (getAllCardsAsHashtag.success)
+        if (getAllCardsAsHashtag.success) {
             setCardsAsHashtags(getAllCardsAsHashtag.data);
+        }
     }, []);
 
     return (
