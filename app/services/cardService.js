@@ -40,9 +40,9 @@ class cardService {
         }
     }
 
-    async getAllHashtags() {
+    async getAllCardsAsHashtag() {
         try {
-            const response = await $http.get("/api/card/hashtags");
+            const response = await $http.get("/api/card/getAllCardsAsHashtag");
 
             return serviceResponse(
                 response.data.message,

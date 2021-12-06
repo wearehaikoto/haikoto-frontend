@@ -4,14 +4,9 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 import CreatableSelect from "react-select/creatable";
 
-import { cardService, hashtagService } from "../../app/services";
+import { cardService } from "../../app/services";
 import { createCardUploadGreyImage } from "../../app/assets";
-import {
-    currentUser,
-    withAuth,
-    uploadImage,
-    useMergeState
-} from "../../app/utils";
+import { currentUser, withAuth, uploadImage } from "../../app/utils";
 import { CardCancelButton, AlertComponent } from "../../app/components";
 
 function createCard() {
@@ -19,23 +14,17 @@ function createCard() {
     const router = useRouter();
 
     const [previewImage, setPreviewImage] = React.useState(null);
-    const [hashtags, setHashtags] = React.useState([]);
+    const [cardsAsHashtags, setCardsAsHashtags] = React.useState([]);
     const [alertState, setAlertState] = React.useState({
         show: false,
         message: "",
         type: ""
     });
-    const [formInput, setFormInput] = useMergeState({
+    const [formInput, setFormInput] = React.useState({
         image: "",
         title: "",
-        parentHashtag: "",
-        childrenHashtags: ""
+        hashtags: ""
     });
-
-    console.log(formInput);
-
-    // Extract formData from formInput state
-    const { image, title, parentHashtag, childrenHashtags } = formInput;
 
     async function processCreateCard(e) {
         e.preventDefault();
@@ -43,6 +32,9 @@ function createCard() {
 
         // Set alert state to default
         setAlertState({ show: false, message: "", type: "" });
+
+        // Extract formData from formInput state
+        const { image, title, hashtags } = formInput;
 
         if (!image) {
             setAlertState({
@@ -60,18 +52,10 @@ function createCard() {
             });
             return;
         }
-        if (!parentHashtag) {
+        if (!hashtags) {
             setAlertState({
                 show: true,
-                message: "Please choose a parent hashtag",
-                type: "error"
-            });
-            return;
-        }
-        if (!childrenHashtags) {
-            setAlertState({
-                show: true,
-                message: "Please choose a child hashtag",
+                message: "Please enter hashtags",
                 type: "error"
             });
             return;
@@ -103,8 +87,9 @@ function createCard() {
 
     React.useEffect(async () => {
         // Get pre existing card hashtags from DB
-        const hashtags = await hashtagService.getAll();
-        if (hashtags.success) setHashtags(hashtags.data);
+        const getAllCardsAsHashtag = await cardService.getAllCardsAsHashtag();
+        if (getAllCardsAsHashtag.success)
+            setCardsAsHashtags(getAllCardsAsHashtag.data);
     }, []);
 
     return (
@@ -121,7 +106,7 @@ function createCard() {
                         </h1>
                     </div>
                     {alertState.show && <AlertComponent {...alertState} />}
-                    <div className="mt-2 p-4 md:py-16">
+                    <div className="mt-2 p-4 md:py-16 max-w-lg">
                         <form onSubmit={processCreateCard}>
                             <label htmlFor="upload-button">
                                 <div className="flex justify-center relative">
@@ -156,7 +141,10 @@ function createCard() {
                                     const image = await uploadImage(file);
                                     if (image.success) {
                                         // Set the Form Input State
-                                        setFormInput({ image: image.url });
+                                        setFormInput({
+                                            ...formInput,
+                                            image: image.url
+                                        });
                                     } else {
                                         window.scrollTo(0, 0);
                                         setAlertState({
@@ -174,8 +162,6 @@ function createCard() {
                                 <h1 className="md:text-3xl text-center">
                                     Choose an Image
                                 </h1>
-                            </div>
-                            <div>
                                 <h1 className="font-bold text-xl md:text-3xl text-center mt-4 md:mt-10">
                                     Title
                                 </h1>
@@ -183,62 +169,33 @@ function createCard() {
                                     className="border-black border-2 my-2 w-full p-2"
                                     type="text"
                                     onChange={(e) => {
-                                        setFormInput({ title: e.target.value });
-                                    }}
-                                />
-                            </div>
-                            <div>
-                                <h1 className="font-bold text-xl md:text-3xl text-center mt-4 md:mt-10">
-                                    Parent Hashtag
-                                </h1>
-                                <CreatableSelect
-                                    className="border-black border-2 my-2 w-full"
-                                    onChange={(e) => {
                                         setFormInput({
-                                            parentHashtag: e.value
+                                            ...formInput,
+                                            title: e.target.value
                                         });
                                     }}
-                                    options={hashtags
-                                        .filter(
-                                            (hashtag) =>
-                                                hashtag.parentHashtag !== null
-                                        )
-                                        .map((hashtag) => {
-                                            return {
-                                                value: hashtag.name,
-                                                label: hashtag.name
-                                            };
-                                        })}
                                 />
-                            </div>
-                            <div>
                                 <h1 className="font-bold text-xl md:text-3xl text-center mt-4 md:mt-10">
-                                    Children Hashtags
+                                    Hashtags (Parent Cards)
                                 </h1>
                                 <CreatableSelect
                                     className="border-black border-2 my-2 w-full"
                                     isMulti
                                     onChange={(e) => {
                                         setFormInput({
-                                            childrenHashtags: e.map((e) =>
+                                            ...formInput,
+                                            hashtags: e.map((e) =>
                                                 e.value.toLowerCase().trim()
                                             )
                                         });
                                     }}
-                                    options={hashtags
-                                        .filter(
-                                            (hashtag) =>
-                                                hashtag.parentHashtag === parentHashtag._id
-                                        )
-                                        .map((hashtag) => {
-                                            return {
-                                                value: hashtag.name,
-                                                label: hashtag.name
-                                            };
-                                        })}
+                                    options={cardsAsHashtags.map((hashtag) => {
+                                        return {
+                                            value: hashtag.title,
+                                            label: hashtag.title
+                                        };
+                                    })}
                                 />
-                            </div>
-                            <div>
                                 {/* Submit Button */}
                                 <div className="flex justify-center mt-8">
                                     <button
