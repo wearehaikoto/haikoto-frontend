@@ -192,8 +192,8 @@ function createCard() {
                                     }}
                                     options={cardsAsHashtags.map((hashtag) => {
                                         return {
-                                            value: hashtag.title,
-                                            label: hashtag.title
+                                            value: hashtag,
+                                            label: hashtag
                                         };
                                     })}
                                 />
