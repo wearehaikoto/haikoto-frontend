@@ -69,7 +69,7 @@ function manageHashtag() {
                                     <thead className="bg-blue-600">
                                         <tr>
                                             <th className="px-4 py-2 text-xs text-white text-left">
-                                                Hashtag ID - Role
+                                                Hashtag ID
                                             </th>
                                             <th className="px-4 py-2 text-xs text-white text-left">
                                                 Name
