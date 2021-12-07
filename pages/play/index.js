@@ -123,10 +123,26 @@ function playCards() {
     const createGame = await gameService.create();
 
     if (createGame.success) {
-      setPlayState({
-        loading_show: false,
-        gameId: createGame.data._id,
-      });
+      // Check if we're continuing a game
+      if (!createGame.data.continue) {
+        // Set GameId and continue play flow
+        setPlayState({
+          loading_show: false,
+          gameId: createGame.data._id,
+        });
+      } else {
+        setPlayState({
+          loading_show: false,
+          gameId: createGame.data._id,
+          // Cards
+          allCards: createGame.data.cards,
+          rightSwipedCards: createGame.data.rightSwipedCards,
+          leftSwipedCards: createGame.data.leftSwipedCards,
+          currentCard: createGame.data.cards.length,
+
+          hashTagSwipeMode: false,
+        });
+      }
     } else {
       setPlayState({
         loading_show: true,
