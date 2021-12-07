@@ -140,7 +140,7 @@ function playCards() {
           leftSwipedCards: createGame.data.leftSwipedCards,
           currentCard: createGame.data.cards.length,
 
-          hashTagSwipeMode: false,
+          hashTagSwipeMode: (createGame.data.cards.length > 0) ? false : true,
         });
       }
     } else {
