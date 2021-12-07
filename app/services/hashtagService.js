@@ -102,6 +102,22 @@ class hashtagService {
             );
         }
     }
+
+    async deleteHashtag(hashtagId) {
+        try {
+            const response = await $http.delete(`/api/hashtag/${hashtagId}`);
+
+            return serviceResponse(
+                response.data.message,
+                response.data.data,
+                response.data.success
+            );
+        } catch (error) {
+            return serviceResponse(
+                error.response ? error.response.data.message : error.message
+            );
+        }
+    }
 }
 
 export default new hashtagService();
