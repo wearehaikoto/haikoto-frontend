@@ -52,14 +52,6 @@ function createCard() {
             });
             return;
         }
-        // if (!hashtags) {
-        //     setAlertState({
-        //         show: true,
-        //         message: "Please enter hashtags",
-        //         type: "error"
-        //     });
-        //     return;
-        // }
 
         // Create card
         const createCard = await cardService.create(formInput);
@@ -192,8 +184,8 @@ function createCard() {
                                     }}
                                     options={cardsAsHashtags.map((hashtag) => {
                                         return {
-                                            value: hashtag,
-                                            label: hashtag
+                                            value: hashtag._id,
+                                            label: hashtag.title
                                         };
                                     })}
                                 />

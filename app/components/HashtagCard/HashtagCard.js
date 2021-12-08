@@ -1,12 +1,13 @@
 import React from "react";
-import Lottie from "react-lottie-player";
+import Image from "next/image";
 
 import { gameService } from "../../services";
-import { LottiePickHashtagAnimationData } from "../../assets";
+import {
+    LoadingImagePlacepholder,
+} from "../../assets";
 import { CardYesButton, CardNoButton } from "../../components";
 
 function HashtagCard({ playState, setPlayState }) {
-
     const [hashtag, setHashtag] = React.useState(null);
 
     React.useEffect(async () => {
@@ -19,7 +20,7 @@ function HashtagCard({ playState, setPlayState }) {
                 setPlayState({
                     lastCardVote: true,
                     hashTagSwipeMode: false,
-                    finalHashTagSwipeMode: true,
+                    finalHashTagSwipeMode: true
                 });
             }
         }
@@ -27,15 +28,19 @@ function HashtagCard({ playState, setPlayState }) {
 
     const handleHashtagClick = async (answer) => {
         if (answer) {
-            await gameService.addRightSwipedHashtag(playState.gameId, { hashtagId: hashtag._id });
+            await gameService.addRightSwipedHashtag(playState.gameId, {
+                hashtagId: hashtag._id
+            });
             setPlayState({ loading_show: true, hashTagSwipeMode: false });
         }
 
         if (!answer) {
-            await gameService.addLeftSwipedHashtag(playState.gameId, { hashtagId: hashtag._id });
+            await gameService.addLeftSwipedHashtag(playState.gameId, {
+                hashtagId: hashtag._id
+            });
             setHashtag(null);
         }
-    }
+    };
 
     return (
         <>
@@ -44,17 +49,18 @@ function HashtagCard({ playState, setPlayState }) {
                     {/* Potrait */}
                     <div className="mt-2 mb-5 p-4 hidden portrait:block">
                         <div className="h-52 w-52 lg:h-80 lg:w-80 relative mx-auto">
-                            <Lottie
-                                className="w-full h-full md:block"
-                                animationData={LottiePickHashtagAnimationData}
-                                loop={true}
-                                play={true}
+                            <Image
+                                src={hashtag.image}
+                                layout="fill"
+                                objectFit="cover"
+                                placeholder="blur"
+                                blurDataURL={LoadingImagePlacepholder}
                             />
                         </div>
 
                         <div className="mt-4 mb-8">
                             <h1 className="font-bold md:max-w-xs text-[5vh] mx-auto text-center">
-                                {hashtag.name}
+                                {hashtag.title}
                             </h1>
                         </div>
 
@@ -88,21 +94,24 @@ function HashtagCard({ playState, setPlayState }) {
                             )}
                             <div
                                 className={
-                                    setPlayState ? "col-span-2" : "col-span-full"
+                                    setPlayState
+                                        ? "col-span-2"
+                                        : "col-span-full"
                                 }
                             >
                                 <div className="h-52 w-52 lg:h-80 lg:w-80 relative mx-auto">
-                                    <Lottie
-                                        className="w-full h-full md:block"
-                                        animationData={LottiePickHashtagAnimationData}
-                                        loop={true}
-                                        play={true}
+                                    <Image
+                                        src={hashtag.image}
+                                        layout="fill"
+                                        objectFit="cover"
+                                        placeholder="blur"
+                                        blurDataURL={LoadingImagePlacepholder}
                                     />
                                 </div>
 
                                 <div className="mt-4 w-full">
                                     <h1 className="font-bold md:max-w-xs text-[5vh] mx-auto text-center">
-                                        {hashtag.name}
+                                        {hashtag.title}
                                     </h1>
                                 </div>
                             </div>

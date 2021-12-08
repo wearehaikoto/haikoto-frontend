@@ -70,11 +70,6 @@ function Index() {
                                         Manage Users
                                     </a>
                                 </Link>
-                                <Link href={`/hashtag/manage`}>
-                                    <a className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 my-2 min-w-max w-2/4 rounded-full">
-                                        Manage Hashtags
-                                    </a>
-                                </Link>
                             </>
                         )}
                         <Link href="/logout">
