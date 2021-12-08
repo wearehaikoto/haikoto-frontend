@@ -52,14 +52,14 @@ function createCard() {
             });
             return;
         }
-        if (!hashtags) {
-            setAlertState({
-                show: true,
-                message: "Please enter hashtags",
-                type: "error"
-            });
-            return;
-        }
+        // if (!hashtags) {
+        //     setAlertState({
+        //         show: true,
+        //         message: "Please enter hashtags",
+        //         type: "error"
+        //     });
+        //     return;
+        // }
 
         // Create card
         const createCard = await cardService.create(formInput);
