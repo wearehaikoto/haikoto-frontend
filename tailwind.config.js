@@ -1,10 +1,10 @@
 module.exports = {
     mode: "jit",
-    purge: [
+    content: [
         "./pages/**/*.{js,ts,jsx,tsx}",
         "./app/**/*.{js,ts,jsx,tsx}"
     ],
-    darkMode: false, // or 'media' or 'class'
+    darkMode: "media",
     theme: {
         extend: {
             screens: {
