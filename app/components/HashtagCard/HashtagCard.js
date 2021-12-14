@@ -1,10 +1,9 @@
 import React from "react";
 import Image from "next/image";
+import { useKeyPressEvent } from "react-use";
 
 import { gameService } from "../../services";
-import {
-    LoadingImagePlacepholder,
-} from "../../assets";
+import { LoadingImagePlacepholder } from "../../assets";
 import { CardYesButton, CardNoButton } from "../../components";
 
 function HashtagCard({ playState, setPlayState }) {
@@ -41,6 +40,14 @@ function HashtagCard({ playState, setPlayState }) {
             setHashtag(null);
         }
     };
+
+    // Key Press Event Handlers
+    useKeyPressEvent("ArrowRight", () => {
+        handleHashtagClick(true);
+    });
+    useKeyPressEvent("ArrowLeft", () => {
+        handleHashtagClick(false);
+    });
 
     return (
         <>
