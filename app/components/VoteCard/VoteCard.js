@@ -8,7 +8,17 @@ import { LoadingImagePlacepholder } from "../../assets";
 
 function VoteCard({ gameId, rightSwipedCards, setPlayState }) {
     const [voteCardState, setVoteCardState] = useMergeState({
-        tempRightSwipedCards: rightSwipedCards.slice(1),
+        tempRightSwipedCards: rightSwipedCards
+            .slice(1)
+            .filter((card) =>
+                card.hashtags
+                    .map((h) => h._id)
+                    .every((hId) =>
+                        hId.includes(
+                            rightSwipedCards[0].hashtags.map((h) => h._id)
+                        )
+                    )
+            ),
         newRightSwipedCard: rightSwipedCards[0],
         voteRandomIndex: ArrayMethods.getRandomIndex(rightSwipedCards.slice(1))
     });
