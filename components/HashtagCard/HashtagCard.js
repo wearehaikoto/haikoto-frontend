@@ -1,5 +1,6 @@
 import React from "react";
 import Image from "next/image";
+import { useRouter } from "next/router";
 import { useKeyPressEvent } from "react-use";
 
 import { gameService } from "../../services";
@@ -7,18 +8,35 @@ import { LoadingImagePlacepholder } from "../../assets";
 import { CardYesButton, CardNoButton } from "../../components";
 
 function HashtagCard({ playState, setPlayState }) {
+    const router = useRouter();
+
     const [hashtag, setHashtag] = React.useState(null);
 
+    React.useEffect(() => {
+        // All hashtags exhausted flag detected
+        if (playState.finalHashTagSwipeMode === true) {
+            // Update Loading State
+            setPlayState({
+                loading_show: true,
+                loading_text: "Generating result..."
+            });
+
+            // Take a while before redirecting to result
+            setTimeout(() => {
+                router.push(`/play/${playState.gameId}`);
+            }, 1500);
+        }
+    }, []);
+
     React.useEffect(async () => {
-        if (!hashtag) {
+        if (!hashtag && !playState.finalHashTagSwipeMode) {
             const newHashtags = await gameService.newHashtag(playState.gameId);
 
             if (newHashtags.success) {
                 setHashtag(newHashtags.data.newHashtag);
             } else {
                 setPlayState({
-                    lastCardVote: true,
-                    hashTagSwipeMode: false,
+                    gameMode: "swipe",
                     finalHashTagSwipeMode: true
                 });
             }
@@ -30,7 +48,7 @@ function HashtagCard({ playState, setPlayState }) {
             await gameService.addRightSwipedHashtag(playState.gameId, {
                 hashtagId: hashtag._id
             });
-            setPlayState({ loading_show: true, hashTagSwipeMode: false });
+            setPlayState({ loading_show: true, gameMode: "swipe" });
         }
 
         if (!answer) {

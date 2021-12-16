@@ -7,24 +7,29 @@ import { useMergeState, ArrayMethods } from "../../utils";
 import { LoadingImagePlacepholder } from "../../assets";
 
 function VoteCard({ gameId, rightSwipedCards, setPlayState }) {
+    const filteredCardsBySameHashtag = rightSwipedCards
+        .slice(1)
+        .filter((card) =>
+            card.hashtags
+                .map((h) => h._id)
+                .every((hId) =>
+                    hId.includes(rightSwipedCards[0].hashtags.map((h) => h._id))
+                )
+        );
+
     const [voteCardState, setVoteCardState] = useMergeState({
-        tempRightSwipedCards: rightSwipedCards
-            .slice(1)
-            .filter((card) =>
-                card.hashtags
-                    .map((h) => h._id)
-                    .every((hId) =>
-                        hId.includes(
-                            rightSwipedCards[0].hashtags.map((h) => h._id)
-                        )
-                    )
-            ),
+        tempRightSwipedCards: filteredCardsBySameHashtag,
         newRightSwipedCard: rightSwipedCards[0],
-        voteRandomIndex: ArrayMethods.getRandomIndex(rightSwipedCards.slice(1))
+        voteRandomIndex: ArrayMethods.getRandomIndex(filteredCardsBySameHashtag)
     });
 
     const { tempRightSwipedCards, newRightSwipedCard, voteRandomIndex } =
         voteCardState;
+
+    if (typeof tempRightSwipedCards[voteRandomIndex] === "undefined") {
+        setPlayState({ gameMode: "swipe" });
+        return null;
+    }
 
     const handleCardClick = async (cardId) => {
         // If picked cardID is newRightSwipedCard, set tempRightSwipedCards to upper half of voteRandomIndex in rightSwipedCards
@@ -89,7 +94,7 @@ function VoteCard({ gameId, rightSwipedCards, setPlayState }) {
 
         setPlayState({
             rightSwipedCards: newlyGeneratedRightSwipedCards,
-            voteMode: false
+            gameMode: "swipe"
         });
     };
 
@@ -103,68 +108,72 @@ function VoteCard({ gameId, rightSwipedCards, setPlayState }) {
 
     return (
         <>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 lg:gap-8">
-                <div
-                    className="cursor-pointer"
-                    onClick={() => handleCardClick(newRightSwipedCard._id)}
-                >
-                    <div className="h-52 w-52 md:h-[30vw] md:w-[30vw] relative mx-auto">
-                        <Image
-                            src={newRightSwipedCard.image}
-                            layout="fill"
-                            objectFit="cover"
-                            placeholder="blur"
-                            blurDataURL={LoadingImagePlacepholder}
-                        />
-                    </div>
-                    <h1 className="font-bold max-w-xs text-[4vh] mx-auto text-center mt-3">
-                        {newRightSwipedCard.title}
-                    </h1>
-                    <p className="text-center text-[4vh]">
-                        {newRightSwipedCard.hashtags.map((hashtag) => (
-                            <span
-                                key={hashtag._id}
-                                className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 my-2"
-                            >
-                                #{hashtag.title}
-                            </span>
-                        ))}
-                    </p>
-                </div>
-                <div
-                    className="cursor-pointer"
-                    onClick={() =>
-                        handleCardClick(
-                            tempRightSwipedCards[voteRandomIndex]._id
-                        )
-                    }
-                >
-                    <div className="h-52 w-52 md:h-[30vw] md:w-[30vw] relative mx-auto">
-                        <Image
-                            src={tempRightSwipedCards[voteRandomIndex].image}
-                            layout="fill"
-                            objectFit="cover"
-                            placeholder="blur"
-                            blurDataURL={LoadingImagePlacepholder}
-                        />
-                    </div>
-                    <h1 className="font-bold max-w-xs text-[4vh] mx-auto text-center mt-3">
-                        {tempRightSwipedCards[voteRandomIndex].title}
+            {filteredCardsBySameHashtag.length > 0 && (
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 lg:gap-8">
+                    <div
+                        className="cursor-pointer"
+                        onClick={() => handleCardClick(newRightSwipedCard._id)}
+                    >
+                        <div className="h-52 w-52 md:h-[30vw] md:w-[30vw] relative mx-auto">
+                            <Image
+                                src={newRightSwipedCard.image}
+                                layout="fill"
+                                objectFit="cover"
+                                placeholder="blur"
+                                blurDataURL={LoadingImagePlacepholder}
+                            />
+                        </div>
+                        <h1 className="font-bold max-w-xs text-[4vh] mx-auto text-center mt-3">
+                            {newRightSwipedCard.title}
+                        </h1>
                         <p className="text-center text-[4vh]">
-                            {tempRightSwipedCards[voteRandomIndex].hashtags.map(
-                                (hashtag) => (
+                            {newRightSwipedCard.hashtags.map((hashtag) => (
+                                <span
+                                    key={hashtag._id}
+                                    className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 my-2"
+                                >
+                                    #{hashtag.title}
+                                </span>
+                            ))}
+                        </p>
+                    </div>
+                    <div
+                        className="cursor-pointer"
+                        onClick={() =>
+                            handleCardClick(
+                                tempRightSwipedCards[voteRandomIndex]._id
+                            )
+                        }
+                    >
+                        <div className="h-52 w-52 md:h-[30vw] md:w-[30vw] relative mx-auto">
+                            <Image
+                                src={
+                                    tempRightSwipedCards[voteRandomIndex].image
+                                }
+                                layout="fill"
+                                objectFit="cover"
+                                placeholder="blur"
+                                blurDataURL={LoadingImagePlacepholder}
+                            />
+                        </div>
+                        <h1 className="font-bold max-w-xs text-[4vh] mx-auto text-center mt-3">
+                            {tempRightSwipedCards[voteRandomIndex].title}
+                            <p className="text-center text-[4vh]">
+                                {tempRightSwipedCards[
+                                    voteRandomIndex
+                                ].hashtags.map((hashtag) => (
                                     <span
                                         key={hashtag._id}
                                         className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 my-2"
                                     >
                                         #{hashtag.title}
                                     </span>
-                                )
-                            )}
-                        </p>
-                    </h1>
+                                ))}
+                            </p>
+                        </h1>
+                    </div>
                 </div>
-            </div>
+            )}
         </>
     );
 }
