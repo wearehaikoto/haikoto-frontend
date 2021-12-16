@@ -58,15 +58,18 @@ function playCards() {
                     gameId: createGame.data._id
                 });
             } else {
+                const allCards = createGame.data.leftSwipedCards.concat(
+                    createGame.data.rightSwipedCards
+                );
+
                 setPlayState({
                     loading_show: false,
                     gameId: createGame.data._id,
-                    allCards: createGame.data.cards,
+                    allCards: allCards,
                     rightSwipedCards: createGame.data.rightSwipedCards,
                     leftSwipedCards: createGame.data.leftSwipedCards,
-                    currentCard: createGame.data.cards.length,
-                    gameMode:
-                        createGame.data.cards.length > 0 ? "swipe" : "hashtag"
+                    currentCard: allCards.length,
+                    gameMode: allCards.length > 0 ? "swipe" : "hashtag"
                 });
             }
         } else {
@@ -113,18 +116,19 @@ function playCards() {
 
             {!loading_show ? (
                 <>
-                    {gameMode === "swipe" && typeof allCards[currentCard - 1] !== "undefined" && (
-                        <SingleCard
-                            card={allCards[currentCard - 1]}
-                            playState={playState}
-                            setPlayState={setPlayState}
-                        />
-                    )}
+                    {gameMode === "swipe" &&
+                        typeof allCards[currentCard - 1] !== "undefined" && (
+                            <SingleCard
+                                card={allCards[currentCard - 1]}
+                                playState={playState}
+                                setPlayState={setPlayState}
+                            />
+                        )}
                     {gameMode === "vote" && (
                         <VoteCard
                             gameId={gameId}
-                            rightSwipedCards={rightSwipedCards}
                             setPlayState={setPlayState}
+                            rightSwipedCards={rightSwipedCards}
                         />
                     )}
                     {gameMode === "hashtag" && (

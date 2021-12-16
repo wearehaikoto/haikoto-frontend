@@ -12,9 +12,11 @@ function VoteCard({ gameId, rightSwipedCards, setPlayState }) {
         .filter((card) =>
             card.hashtags
                 .map((h) => h._id)
-                .every((hId) =>
-                    hId.includes(rightSwipedCards[0].hashtags.map((h) => h._id))
-                )
+                .every((hId) => {
+                    return hId.includes(
+                        rightSwipedCards[0].hashtags.map((h) => h._id)
+                    );
+                })
         );
 
     const [voteCardState, setVoteCardState] = useMergeState({

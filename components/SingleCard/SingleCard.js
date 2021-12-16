@@ -60,21 +60,16 @@ function SingleCard({ card, playState, setPlayState }) {
             setPlayState({ gameMode: "vote" });
         }
 
-        if (!answer) {
-            // Get new Card based on yes/leftSwiped Cards from the Database / Check if the game is over
-            const newCards = await gameService.newCard(playState.gameId);
-            if (newCards.success) {
-                // Add the new Cards to the allCards bucket
-                // Update the current Card Number +1 and continue game
-                setPlayState({
-                    allCards: [...playState.allCards, ...newCards.data.newCard],
-                    currentCard: playState.currentCard + 1
-                });
-                return;
-            } else {
-                // Out of Cards for the Hashtag, Enter hashTagSwipeMode
-                setPlayState({ gameMode: "hashtag" });
-            }
+        // Get new Card based on yes/leftSwiped Cards from the Database / Check if the game is over
+        const newCards = await gameService.newCard(playState.gameId);
+        if (newCards.success) {
+            // Add the new Cards to the allCards bucket
+            // Update the current Card Number +1 and continue game
+            setPlayState({
+                allCards: [...playState.allCards, ...newCards.data.newCard],
+                currentCard: playState.currentCard + 1
+            });
+            return;
         }
 
         // Last Card Vote
@@ -86,6 +81,12 @@ function SingleCard({ card, playState, setPlayState }) {
             // If the current Card is equal to number of Cards and answer is true
             // Enter Vote mode to rank rightSwipedCards
             setPlayState({ gameMode: "vote" });
+            return;
+        }
+
+        if (!newCards.success) {
+            // Out of Cards for the Hashtag, Enter hashTagSwipeMode
+            setPlayState({ gameMode: "hashtag" });
             return;
         }
     };
