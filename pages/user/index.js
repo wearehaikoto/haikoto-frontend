@@ -2,8 +2,8 @@ import React from "react";
 import Head from "next/head";
 import Link from "next/link";
 
-import { gameService } from "../../app/services";
-import { currentUser, withAuth } from "../../app/utils";
+import { gameService } from "../../services";
+import { currentUser, withAuth } from "../../utils";
 
 function Index() {
     const user = currentUser().userData;

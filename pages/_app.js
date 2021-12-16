@@ -4,7 +4,7 @@ import Router from "next/router";
 import "tailwindcss/tailwind.css";
 import TagManager from "react-gtm-module";
 
-import { LoadingComponent } from "../app/components";
+import { LoadingComponent } from "../components";
 
 function MyApp({ Component, pageProps }) {
     const [isLoading, setIsLoading] = React.useState(false);

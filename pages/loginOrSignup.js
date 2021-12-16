@@ -4,10 +4,10 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import Lottie from "react-lottie-player";
 
-import { authService } from "../app/services";
-import { withoutAuth } from "../app/utils";
-import { AlertComponent } from "../app/components";
-import { LottieLoginAnimationData } from "../app/assets";
+import { withoutAuth } from "../utils";
+import { authService } from "../services";
+import { AlertComponent } from "../components";
+import { LottieLoginAnimationData } from "../assets";
 
 function loginOrSignup() {
     const router = useRouter();

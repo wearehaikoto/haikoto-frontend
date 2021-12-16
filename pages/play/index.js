@@ -4,242 +4,266 @@ import { useRouter } from "next/router";
 import { useKeyPressEvent } from "react-use";
 import { useSwipeable } from "react-swipeable";
 
-import { gameService } from "../../app/services";
-import { useMergeState, currentUser, withAuth } from "../../app/utils";
-import { SingleCard, VoteCard, HashtagCard } from "../../app/components";
-import { CardCancelButton, LoadingComponent } from "../../app/components";
+import { gameService } from "../../services";
+import { useMergeState, withAuth } from "../../utils";
+import { SingleCard, VoteCard, HashtagCard } from "../../components";
+import { CardCancelButton, LoadingComponent } from "../../components";
 
 function playCards() {
-  const user = currentUser();
-  const router = useRouter();
+    const router = useRouter();
 
-  const [playState, setPlayState] = useMergeState({
-    // UI State
-    loading_show: true,
-    loading_text: "Loading...",
-    loading_description: "",
+    const [playState, setPlayState] = useMergeState({
+        // UI State
+        loading_show: true,
+        loading_text: "Loading...",
+        loading_description: "",
 
-    // Game
-    gameId: null,
+        // Game
+        gameId: null,
 
-    // Cards
-    allCards: [],
-    rightSwipedCards: [],
-    leftSwipedCards: [],
+        // Cards
+        allCards: [],
+        rightSwipedCards: [],
+        leftSwipedCards: [],
 
-    // Vote
-    voteMode: false,
-    hashTagSwipeMode: true,
-    finalHashTagSwipeMode: false,
+        // Vote
+        voteMode: false,
+        hashTagSwipeMode: true,
+        finalHashTagSwipeMode: false,
 
-    // Gameplay
-    currentCard: 0,
-    lastCardVote: false,
-  });
-
-  const { loading_show, loading_text, loading_description, gameId, allCards, rightSwipedCards, leftSwipedCards, voteMode, hashTagSwipeMode, finalHashTagSwipeMode, currentCard, lastCardVote } = playState;
-
-  const handleAnswerClick = async (cardId, answer) => {
-    // Scroll to top (good UX)
-    window.scrollTo(0, 0);
-
-    // Show loading screen for api callss to process
-    setPlayState({ loading_show: true });
-
-    // Get the Card Data
-    const card = allCards.find((card) => card._id === cardId);
-
-    // If answer is true add to rightSwipedCards bucket
-    if (answer) {
-
-      rightSwipedCards.unshift(card);
-      // Add rightSwiped Card to the Game - Commented  (Do not rank the cards yet)
-      // await gameService.addRightSwipedCard(gameId, { cardId });
-    } else {
-
-      leftSwipedCards.unshift(card);
-      // Add No Card to the Game 
-      await gameService.addLeftSwipedCard(gameId, { cardId });
-    }
-
-    setPlayState({
-      // Close the loading screen, api calls would be done now
-      loading_show: false,
-
-      // Cards
-      rightSwipedCards,
-      leftSwipedCards,
+        // Gameplay
+        currentCard: 0,
+        lastCardVote: false
     });
 
-    // If the answer is true and number of cards in rightSwipedCards bucket is greater than 2
-    if (answer && rightSwipedCards.length >= 2) {
-      // Enter Vote mode to rank rightSwipedCards
-      setPlayState({ voteMode: true });
-    }
+    const {
+        loading_show,
+        loading_text,
+        loading_description,
+        gameId,
+        allCards,
+        rightSwipedCards,
+        leftSwipedCards,
+        voteMode,
+        hashTagSwipeMode,
+        finalHashTagSwipeMode,
+        currentCard,
+        lastCardVote
+    } = playState;
 
-    // Get new Card based on yes/leftSwiped Cards from the Database / Check if the game is over
-    const newCards = await gameService.newCard(gameId);
-    if (newCards.success) {
-      // Add the new Cards to the allCards bucket
-      // Update the current Card Number +1 and continue game
-      setPlayState({
-        allCards: [...allCards, ...newCards.data.newCard],
-        currentCard: currentCard + 1,
-      });
-      return;
-    } else {
-      // Out of Cards for the Hashtag, Enter hashTagSwipeMode
-      setPlayState({
-        hashTagSwipeMode: true,
-      });
-    }
+    const handleAnswerClick = async (cardId, answer) => {
+        // Scroll to top (good UX)
+        window.scrollTo(0, 0);
 
-    // Last Card Vote
-    if (allCards.length === currentCard && rightSwipedCards.length >= 2 && answer) {
-      // If the current Card is equal to number of Cards and answer is true
-      // Enter Vote mode to rank rightSwipedCards
-      setPlayState({ voteMode: true, lastCardVote: true });
-      return;
-    }
+        // Show loading screen for api callss to process
+        setPlayState({ loading_show: true });
 
-    if (!finalHashTagSwipeMode) return;
+        // Get the Card Data
+        const card = allCards.find((card) => card._id === cardId);
 
-    // Call finish Game Function
-    finishGame();
-  };
+        // If answer is true add to rightSwipedCards bucket
+        if (answer) {
+            rightSwipedCards.unshift(card);
+            // Add rightSwiped Card to the Game - Commented  (Do not rank the cards yet)
+            // await gameService.addRightSwipedCard(gameId, { cardId });
+        } else {
+            leftSwipedCards.unshift(card);
+            // Add No Card to the Game
+            await gameService.addLeftSwipedCard(gameId, { cardId });
+        }
 
-  const finishGame = async () => {
-    // Update Loading State
-    setPlayState({ loading_show: true, loading_text: "Generating result..." });
-
-    // Take a while before redirecting to result
-    // setTimeout(() => {
-    router.push(`/play/${gameId}`);
-    // }, 1500)
-  };
-
-  React.useEffect(async () => {
-    // Create a new Game
-    const createGame = await gameService.create();
-
-    if (createGame.success) {
-      // Check if we're continuing a game
-      if (!createGame.data.continue) {
-        // Set GameId and continue play flow
         setPlayState({
-          loading_show: false,
-          gameId: createGame.data._id,
+            // Close the loading screen, api calls would be done now
+            loading_show: false,
+
+            // Cards
+            rightSwipedCards,
+            leftSwipedCards
         });
-      } else {
+
+        // If the answer is true and number of cards in rightSwipedCards bucket is greater than 2
+        if (answer && rightSwipedCards.length >= 2) {
+            // Enter Vote mode to rank rightSwipedCards
+            setPlayState({ voteMode: true });
+        }
+
+        // Get new Card based on yes/leftSwiped Cards from the Database / Check if the game is over
+        const newCards = await gameService.newCard(gameId);
+        if (newCards.success) {
+            // Add the new Cards to the allCards bucket
+            // Update the current Card Number +1 and continue game
+            setPlayState({
+                allCards: [...allCards, ...newCards.data.newCard],
+                currentCard: currentCard + 1
+            });
+            return;
+        } else {
+            // Out of Cards for the Hashtag, Enter hashTagSwipeMode
+            setPlayState({
+                hashTagSwipeMode: true
+            });
+        }
+
+        // Last Card Vote
+        if (
+            allCards.length === currentCard &&
+            rightSwipedCards.length >= 2 &&
+            answer
+        ) {
+            // If the current Card is equal to number of Cards and answer is true
+            // Enter Vote mode to rank rightSwipedCards
+            setPlayState({ voteMode: true, lastCardVote: true });
+            return;
+        }
+
+        if (!finalHashTagSwipeMode) return;
+
+        // Call finish Game Function
+        finishGame();
+    };
+
+    const finishGame = async () => {
+        // Update Loading State
         setPlayState({
-          loading_show: false,
-          gameId: createGame.data._id,
-          // Cards
-          allCards: createGame.data.cards,
-          rightSwipedCards: createGame.data.rightSwipedCards,
-          leftSwipedCards: createGame.data.leftSwipedCards,
-          currentCard: createGame.data.cards.length,
-
-          hashTagSwipeMode: (createGame.data.cards.length > 0) ? false : true,
+            loading_show: true,
+            loading_text: "Generating result..."
         });
-      }
-    } else {
-      setPlayState({
-        loading_show: true,
-        loading_text: `Error: ${createGame.message}.`,
-        loading_description: "Redirecting..."
-      });
 
-      setTimeout(() => {
-        router.push("/user");
-      }, 2000);
-    }
-  }, []);
+        // Take a while before redirecting to result
+        // setTimeout(() => {
+        router.push(`/play/${gameId}`);
+        // }, 1500)
+    };
 
-  React.useEffect(async () => {
-    if (hashTagSwipeMode !== true) {
-      // Get new Card based on yes/leftSwiped Hashtags from the Database / Check if the game is over
-      const newCards = await gameService.newCard(gameId);
+    React.useEffect(async () => {
+        // Create a new Game
+        const createGame = await gameService.create();
 
-      if (newCards.success) {
-        // Add the new Cards to the allCards bucket
-        // Update the current Card Number +1 and continue game
-        setPlayState({
-          allCards: [...allCards, ...newCards.data.newCard],
-          currentCard: currentCard + 1,
-          loading_show: false,
-        });
-      } else {
-        // Out of Cards for the Hashtag, Enter hashTagSwipeMode
-        setPlayState({
-          loading_show: false,
-          hashTagSwipeMode: true,
-        });
-      }
-    }
-  }, [hashTagSwipeMode]);
+        if (createGame.success) {
+            // Check if we're continuing a game
+            if (!createGame.data.continue) {
+                // Set GameId and continue play flow
+                setPlayState({
+                    loading_show: false,
+                    gameId: createGame.data._id
+                });
+            } else {
+                setPlayState({
+                    loading_show: false,
+                    gameId: createGame.data._id,
+                    // Cards
+                    allCards: createGame.data.cards,
+                    rightSwipedCards: createGame.data.rightSwipedCards,
+                    leftSwipedCards: createGame.data.leftSwipedCards,
+                    currentCard: createGame.data.cards.length,
 
-  // Key Press Event Handlers
-  useKeyPressEvent("ArrowRight", () => {
-    if (voteMode || loading_show || hashTagSwipeMode) return;
-    handleAnswerClick(allCards[currentCard - 1]._id, true);
-  });
-  useKeyPressEvent("ArrowLeft", () => {
-    if (voteMode || loading_show || hashTagSwipeMode) return;
-    handleAnswerClick(allCards[currentCard - 1]._id, false);
-  });
+                    hashTagSwipeMode:
+                        createGame.data.cards.length > 0 ? false : true
+                });
+            }
+        } else {
+            setPlayState({
+                loading_show: true,
+                loading_text: `Error: ${createGame.message}.`,
+                loading_description: "Redirecting..."
+            });
 
-  // Swipe Event Handlers
-  const reactSwipeableHandler = useSwipeable({
-    onSwipedLeft: () => {
-      if (voteMode) return;
-      handleAnswerClick(allCards[currentCard - 1]._id, false);
-    },
-    onSwipedRight: () => {
-      if (voteMode) return;
-      handleAnswerClick(allCards[currentCard - 1]._id, true);
-    }
-  });
+            setTimeout(() => {
+                router.push("/user");
+            }, 2000);
+        }
+    }, []);
 
-  return (
-    <>
-      <Head>
-        <title>Play Cards - Haikoto</title>
-      </Head>
+    React.useEffect(async () => {
+        if (hashTagSwipeMode !== true) {
+            // Get new Card based on yes/leftSwiped Hashtags from the Database / Check if the game is over
+            const newCards = await gameService.newCard(gameId);
 
-      {!loading_show ? (
+            if (newCards.success) {
+                // Add the new Cards to the allCards bucket
+                // Update the current Card Number +1 and continue game
+                setPlayState({
+                    allCards: [...allCards, ...newCards.data.newCard],
+                    currentCard: currentCard + 1,
+                    loading_show: false
+                });
+            } else {
+                // Out of Cards for the Hashtag, Enter hashTagSwipeMode
+                setPlayState({
+                    loading_show: false,
+                    hashTagSwipeMode: true
+                });
+            }
+        }
+    }, [hashTagSwipeMode]);
+
+    // Key Press Event Handlers
+    useKeyPressEvent("ArrowRight", () => {
+        if (voteMode || loading_show || hashTagSwipeMode) return;
+        handleAnswerClick(allCards[currentCard - 1]._id, true);
+    });
+    useKeyPressEvent("ArrowLeft", () => {
+        if (voteMode || loading_show || hashTagSwipeMode) return;
+        handleAnswerClick(allCards[currentCard - 1]._id, false);
+    });
+
+    // Swipe Event Handlers
+    const reactSwipeableHandler = useSwipeable({
+        onSwipedLeft: () => {
+            if (voteMode) return;
+            handleAnswerClick(allCards[currentCard - 1]._id, false);
+        },
+        onSwipedRight: () => {
+            if (voteMode) return;
+            handleAnswerClick(allCards[currentCard - 1]._id, true);
+        }
+    });
+
+    return (
         <>
-          {hashTagSwipeMode && !voteMode ? (
-            <HashtagCard playState={playState} setPlayState={setPlayState} />
-          ) : (
-            <div
-              {...reactSwipeableHandler}
-              className="flex flex-col items-center mt-[10vh]"
-            >
-              {voteMode ? (
-                <VoteCard
-                  gameId={gameId}
-                  rightSwipedCards={rightSwipedCards}
-                  setPlayState={setPlayState}
-                />
-              ) : (
-                lastCardVote ? finishGame() : (
-                  <SingleCard
-                    card={allCards[currentCard - 1]}
-                    handleAnswerClick={handleAnswerClick}
-                  />
-                )
-              )}
+            <Head>
+                <title>Play Cards - Haikoto</title>
+            </Head>
 
-              <CardCancelButton />
-            </div>
-          )}
+            {!loading_show ? (
+                <>
+                    {hashTagSwipeMode && !voteMode ? (
+                        <HashtagCard
+                            playState={playState}
+                            setPlayState={setPlayState}
+                        />
+                    ) : (
+                        <div
+                            {...reactSwipeableHandler}
+                            className="flex flex-col items-center mt-[10vh]"
+                        >
+                            {voteMode ? (
+                                <VoteCard
+                                    gameId={gameId}
+                                    rightSwipedCards={rightSwipedCards}
+                                    setPlayState={setPlayState}
+                                />
+                            ) : lastCardVote ? (
+                                finishGame()
+                            ) : (
+                                <SingleCard
+                                    card={allCards[currentCard - 1]}
+                                    handleAnswerClick={handleAnswerClick}
+                                />
+                            )}
+
+                            <CardCancelButton />
+                        </div>
+                    )}
+                </>
+            ) : (
+                <LoadingComponent
+                    text={loading_text}
+                    description={loading_description}
+                />
+            )}
         </>
-      ) : (
-        <LoadingComponent text={loading_text} description={loading_description} />
-      )}
-    </>
-  );
+    );
 }
 
 export default withAuth(playCards);

@@ -3,7 +3,7 @@ import Image from "next/image";
 import { useKeyPressEvent } from "react-use";
 
 import { gameService } from "../../services";
-import { useMergeState, ArrayMethods, EloRatingAlgorithm } from "../../utils";
+import { useMergeState, ArrayMethods } from "../../utils";
 import { LoadingImagePlacepholder } from "../../assets";
 
 function VoteCard({ gameId, rightSwipedCards, setPlayState }) {
@@ -23,15 +23,21 @@ function VoteCard({ gameId, rightSwipedCards, setPlayState }) {
         voteRandomIndex: ArrayMethods.getRandomIndex(rightSwipedCards.slice(1))
     });
 
-    const { tempRightSwipedCards, newRightSwipedCard, voteRandomIndex } = voteCardState;
+    const { tempRightSwipedCards, newRightSwipedCard, voteRandomIndex } =
+        voteCardState;
 
     const handleCardClick = async (cardId) => {
         // If picked cardID is newRightSwipedCard, set tempRightSwipedCards to upper half of voteRandomIndex in rightSwipedCards
         let functionTempRightSwipedCards;
         if (cardId === newRightSwipedCard._id) {
-            functionTempRightSwipedCards = tempRightSwipedCards.slice(0, voteRandomIndex);
+            functionTempRightSwipedCards = tempRightSwipedCards.slice(
+                0,
+                voteRandomIndex
+            );
         } else {
-            functionTempRightSwipedCards = tempRightSwipedCards.slice(voteRandomIndex + 1);
+            functionTempRightSwipedCards = tempRightSwipedCards.slice(
+                voteRandomIndex + 1
+            );
         }
 
         // Set the new Card in appropriate order, if leftSwiped card is available in lower/higher of tempRightSwipedCards
@@ -42,7 +48,9 @@ function VoteCard({ gameId, rightSwipedCards, setPlayState }) {
 
         setVoteCardState({
             tempRightSwipedCards: functionTempRightSwipedCards,
-            voteRandomIndex: ArrayMethods.getRandomIndex(functionTempRightSwipedCards)
+            voteRandomIndex: ArrayMethods.getRandomIndex(
+                functionTempRightSwipedCards
+            )
         });
     };
 
@@ -74,10 +82,15 @@ function VoteCard({ gameId, rightSwipedCards, setPlayState }) {
 
         await gameService.updateRightSwipedCards(gameId, {
             cardIds: newlyGeneratedRightSwipedCards.map((card) => card._id),
-            eloScores: newlyGeneratedRightSwipedCards.map((card) => card.eloRating)
+            eloScores: newlyGeneratedRightSwipedCards.map(
+                (card) => card.eloRating
+            )
         });
 
-        setPlayState({ rightSwipedCards: newlyGeneratedRightSwipedCards, voteMode: false });
+        setPlayState({
+            rightSwipedCards: newlyGeneratedRightSwipedCards,
+            voteMode: false
+        });
     };
 
     useKeyPressEvent("ArrowRight", () => {
@@ -121,7 +134,9 @@ function VoteCard({ gameId, rightSwipedCards, setPlayState }) {
                 <div
                     className="cursor-pointer"
                     onClick={() =>
-                        handleCardClick(tempRightSwipedCards[voteRandomIndex]._id)
+                        handleCardClick(
+                            tempRightSwipedCards[voteRandomIndex]._id
+                        )
                     }
                 >
                     <div className="h-52 w-52 md:h-[30vw] md:w-[30vw] relative mx-auto">

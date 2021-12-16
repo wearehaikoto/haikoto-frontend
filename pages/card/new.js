@@ -4,13 +4,12 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 import CreatableSelect from "react-select/creatable";
 
-import { cardService } from "../../app/services";
-import { createCardUploadGreyImage } from "../../app/assets";
-import { currentUser, withAuth, uploadImage } from "../../app/utils";
-import { CardCancelButton, AlertComponent } from "../../app/components";
+import { cardService } from "../../services";
+import { withAuth, uploadImage } from "../../utils";
+import { createCardUploadGreyImage } from "../../assets";
+import { CardCancelButton, AlertComponent } from "../../components";
 
 function createCard() {
-    const user = currentUser().userData;
     const router = useRouter();
 
     const [previewImage, setPreviewImage] = React.useState(null);
