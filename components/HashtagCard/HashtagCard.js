@@ -2,6 +2,7 @@ import React from "react";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { useKeyPressEvent } from "react-use";
+import { useSwipeable } from "react-swipeable";
 
 import { gameService } from "../../services";
 import { LoadingImagePlacepholder } from "../../assets";
@@ -67,10 +68,20 @@ function HashtagCard({ playState, setPlayState }) {
         handleHashtagClick(false);
     });
 
+    // Swipe Event Handlers
+    const reactSwipeableHandler = useSwipeable({
+        onSwipedLeft: () => {
+            handleHashtagClick(false);
+        },
+        onSwipedRight: () => {
+            handleHashtagClick(true);
+        }
+    });
+
     return (
         <>
             {hashtag && (
-                <>
+                <div {...reactSwipeableHandler}>
                     {/* Potrait */}
                     <div className="mt-2 mb-5 p-4 hidden portrait:block">
                         <div className="h-52 w-52 lg:h-80 lg:w-80 relative mx-auto">
@@ -151,7 +162,7 @@ function HashtagCard({ playState, setPlayState }) {
                             )}
                         </div>
                     </div>
-                </>
+                </div>
             )}
         </>
     );
