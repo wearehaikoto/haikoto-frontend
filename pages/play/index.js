@@ -6,11 +6,10 @@ import {
     SingleCard,
     VoteCard,
     HashtagCard,
-    CardCancelButton,
     LoadingComponent
 } from "../../components";
 import { gameService } from "../../services";
-import { useMergeState, withAuth } from "../../utils";
+import { useMergeState, withAuth, ArrayMethods } from "../../utils";
 
 function playCards() {
     const router = useRouter();
@@ -93,9 +92,10 @@ function playCards() {
             if (newCards.success) {
                 // Add the new Cards to the allCards bucket
                 // Update the current Card Number +1 and continue game
+                const functionNewCards = ArrayMethods.getUnique([...allCards, ...newCards.data.newCard], "_id");
                 setPlayState({
-                    allCards: [...allCards, ...newCards.data.newCard],
-                    currentCard: currentCard + 1,
+                    allCards: functionNewCards,
+                    currentCard: functionNewCards.length,
                     loading_show: false
                 });
             } else {

@@ -61,6 +61,7 @@ function SingleCard({ card, playState, setPlayState }) {
         if (answer && playState.rightSwipedCards.length >= 2) {
             // Enter Vote mode to rank rightSwipedCards
             setPlayState({ gameMode: "vote" });
+            return;
         }
 
         // Get new Card based on yes/leftSwiped Cards from the Database / Check if the game is over

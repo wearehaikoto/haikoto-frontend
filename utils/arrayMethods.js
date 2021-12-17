@@ -11,6 +11,11 @@ Array.prototype.insert = function (index, item) {
     return this;
 };
 
+// Ref: https://stackoverflow.com/questions/2218999/how-to-remove-all-duplicates-from-an-array-of-objects
+Array.prototype.unique = function (key) {
+    return [...new Map(this.map((item) => [item[key], item])).values()];
+};
+
 module.exports = {
     swapArrayValues: function (array, indexA, indexB) {
         return array.swapItems(indexA, indexB);
@@ -20,5 +25,8 @@ module.exports = {
     },
     insertItem: function (array, index, value) {
         return array.insert(index, value);
+    },
+    getUnique: function (array, key) {
+        return array.unique(key);
     }
 };
