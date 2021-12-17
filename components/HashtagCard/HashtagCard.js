@@ -22,9 +22,9 @@ function HashtagCard({ playState, setPlayState }) {
                 loading_text: "Generating result..."
             });
 
-            // Take a while before redirecting to result
+            // Take a while before redirecting to about-me/result
             setTimeout(() => {
-                router.push(`/play/${playState.gameId}`);
+                router.push(`/user/about-me`);
             }, 1500);
         }
     }, []);
