@@ -9,6 +9,9 @@ import { CardYesButton, CardNoButton } from "../../components";
 
 function SingleCard({ card, playState, setPlayState }) {
     // If setPlayState, i.e Component is used from a Game, activate swipe and keyboard handlers
+
+    let reactSwipeableHandler = null;
+
     if (setPlayState) {
         // Key Press Event Handlers
         useKeyPressEvent("ArrowRight", () => {
@@ -19,7 +22,7 @@ function SingleCard({ card, playState, setPlayState }) {
         });
 
         // Swipe Event Handlers
-        const reactSwipeableHandler = useSwipeable({
+        reactSwipeableHandler = useSwipeable({
             onSwipedLeft: () => {
                 handleAnswerClick(card._id, false);
             },
@@ -92,7 +95,7 @@ function SingleCard({ card, playState, setPlayState }) {
     };
 
     return (
-        <div {...reactSwipeableHandler}>
+        <div {...(reactSwipeableHandler) ? reactSwipeableHandler : {}}>
             {/* Potrait */}
             <div className="mt-2 mb-5 p-4 hidden portrait:block">
                 <div className="h-52 w-52 lg:h-80 lg:w-80 relative mx-auto">
@@ -151,7 +154,7 @@ function SingleCard({ card, playState, setPlayState }) {
                     )}
                     <div
                         className={
-                            handleAnswerClick ? "col-span-2" : "col-span-full"
+                            setPlayState ? "col-span-2" : "col-span-full"
                         }
                     >
                         <div className="h-52 w-52 lg:h-80 lg:w-80 relative mx-auto">
