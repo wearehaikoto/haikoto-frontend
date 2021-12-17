@@ -7,7 +7,7 @@ import { gameService } from "../../services";
 import { currentUser, withAuth } from "../../utils";
 import { CardCancelButton, LoadingComponent } from "../../components";
 
-function createCard() {
+function AboutMe() {
     const user = currentUser().userData;
     const router = useRouter();
 
@@ -53,9 +53,12 @@ function createCard() {
                         </div>
 
                         {allGamesByMe.map((game) => {
-                            // Check if game was completed
+
+                            const allCards = game.rightSwipedCards.concat(game.leftSwipedCards);
+                            const allHashtags = game.rightSwipedHashtags.concat(game.leftSwipedHashtags);
+
                             return (
-                                <div key={game._id} className="mb-10 py-16">
+                                <div key={game._id}>
                                     <div className="p-4 overflow-x-auto">
                                         <h3 className="text-xl">
                                             Game ID: {game._id}
@@ -76,64 +79,42 @@ function createCard() {
                                                 </tr>
                                             </thead>
                                             <tbody className="text-sm">
-                                                {game.rightSwipedCards.map(
-                                                    (card, index) => {
+                                                {allHashtags.map(
+                                                    (hashtag) => {
                                                         return (
-                                                            <tr key={card._id}>
-                                                                <td className="border px-4 py-2 text-blue-600 border-blue-500 font-medium">
-                                                                    {index + 1}
-                                                                </td>
-                                                                <td className="border px-4 py-2 text-blue-600 border-blue-500 font-medium">
-                                                                    {card.title}
-                                                                </td>
-                                                                <td className="border px-4 py-2 border-blue-500 font-medium">
-                                                                    <span className="text-green-500">
-                                                                        {" "}
-                                                                        True{" "}
-                                                                    </span>
-                                                                </td>
-                                                                <td className="border px-4 py-2 text-yellow-600 border-blue-500 font-medium">
-                                                                    <Link
-                                                                        href={`/card/${card._id}`}
-                                                                    >
-                                                                        <a>
-                                                                            View
-                                                                            Card
-                                                                        </a>
-                                                                    </Link>
-                                                                </td>
-                                                            </tr>
-                                                        );
-                                                    }
-                                                )}
-                                                {game.leftSwipedCards.map(
-                                                    (card, index) => {
-                                                        return (
-                                                            <tr key={card._id}>
-                                                                <td className="border px-4 py-2 text-blue-600 border-blue-500 font-medium">
-                                                                    {/* {card._id} */}
-                                                                    {index + 1}
-                                                                </td>
-                                                                <td className="border px-4 py-2 text-blue-600 border-blue-500 font-medium">
-                                                                    {card.title}
-                                                                </td>
-                                                                <td className="border px-4 py-2 border-blue-500 font-medium">
-                                                                    <span className="text-red-500">
-                                                                        {" "}
-                                                                        False{" "}
-                                                                    </span>
-                                                                </td>
-                                                                <td className="border px-4 py-2 text-yellow-600 border-blue-500 font-medium">
-                                                                    <Link
-                                                                        href={`/card/${card._id}`}
-                                                                    >
-                                                                        <a>
-                                                                            View
-                                                                            Card
-                                                                        </a>
-                                                                    </Link>
-                                                                </td>
-                                                            </tr>
+                                                            <>
+                                                                <h1 className="text-2xl font-bold my-3">
+                                                                    {hashtag.title} - {
+                                                                        game.rightSwipedHashtags.map((hashtag) => hashtag._id).includes(hashtag._id) ? "✅" : "❌"
+                                                                    }
+                                                                </h1>
+
+                                                                {allCards.filter((card) => card.hashtags.includes(hashtag._id)).map((card, index) => {
+                                                                    return (
+                                                                        <tr key={card._id}>
+                                                                            <td className="border px-4 py-2 text-blue-600 border-blue-500 font-medium">
+                                                                                {index + 1}
+                                                                            </td>
+                                                                            <td className="border px-4 py-2 text-blue-600 border-blue-500 font-medium">
+                                                                                {card.title}
+                                                                            </td>
+                                                                            <td className="border px-4 py-2 border-blue-500 text-center font-medium">
+                                                                                {game.rightSwipedCards.map((card) => card._id).includes(card._id) ? "✅" : "❌"}
+                                                                            </td>
+                                                                            <td className="border px-4 py-2 text-yellow-600 border-blue-500 font-medium">
+                                                                                <Link
+                                                                                    href={`/card/${card._id}`}
+                                                                                >
+                                                                                    <a>
+                                                                                        View
+                                                                                        Card
+                                                                                    </a>
+                                                                                </Link>
+                                                                            </td>
+                                                                        </tr>
+                                                                    );
+                                                                })}
+                                                            </>
                                                         );
                                                     }
                                                 )}
@@ -154,4 +135,4 @@ function createCard() {
     );
 }
 
-export default withAuth(createCard);
+export default withAuth(AboutMe);
