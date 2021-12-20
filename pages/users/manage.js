@@ -2,12 +2,11 @@ import React from "react";
 import Head from "next/head";
 import { useRouter } from "next/router";
 
-import { userService } from "../../app/services";
-import { currentUser, withAuth } from "../../app/utils";
-import { LoadingComponent, CardCancelButton } from "../../app/components";
+import { userService } from "../../services";
+import { withAuth } from "../../utils";
+import { LoadingComponent, CardCancelButton } from "../../components";
 
 function manageUser() {
-    const user = currentUser().userData;
     const router = useRouter();
 
     const [loadingState, setLoadingState] = React.useState({
@@ -78,7 +77,6 @@ function manageUser() {
             {!loadingState.show ? (
                 <div className="items-center justify-center min-h-screen py-2">
                     <div className="m-10 md:mx-44">
-                        {/*  <div className="border-black border-2 border-dashed mb-10 py-16"> */}
                         <div className="mb-4">
                             <h1 className="text-center text-xl md:text-3xl">
                                 All Users

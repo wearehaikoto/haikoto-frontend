@@ -17,7 +17,9 @@ class authService {
                 response.data.success
             );
         } catch (error) {
-            return serviceResponse(error.response ? error.response.data.message : error.message);
+            return serviceResponse(
+                error.response ? error.response.data.message : error.message
+            );
         }
     }
 }

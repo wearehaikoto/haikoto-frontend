@@ -1,25 +1,44 @@
 import React from "react";
-import Lottie from "react-lottie-player";
+import Image from "next/image";
+import { useRouter } from "next/router";
+import { useKeyPressEvent } from "react-use";
+import { useSwipeable } from "react-swipeable";
 
 import { gameService } from "../../services";
-import { LottiePickHashtagAnimationData } from "../../assets";
+import { LoadingImagePlacepholder } from "../../assets";
 import { CardYesButton, CardNoButton } from "../../components";
 
 function HashtagCard({ playState, setPlayState }) {
+    const router = useRouter();
 
     const [hashtag, setHashtag] = React.useState(null);
 
+    React.useEffect(() => {
+        // All hashtags exhausted flag detected
+        if (playState.finalHashTagSwipeMode === true) {
+            // Update Loading State
+            setPlayState({
+                loading_show: true,
+                loading_text: "Generating result..."
+            });
+
+            // Take a while before redirecting to about-me/result
+            setTimeout(() => {
+                router.push(`/user/about-me`);
+            }, 1500);
+        }
+    }, []);
+
     React.useEffect(async () => {
-        if (!hashtag) {
+        if (!hashtag && !playState.finalHashTagSwipeMode) {
             const newHashtags = await gameService.newHashtag(playState.gameId);
 
             if (newHashtags.success) {
                 setHashtag(newHashtags.data.newHashtag);
             } else {
                 setPlayState({
-                    lastCardVote: true,
-                    hashTagSwipeMode: false,
-                    finalHashTagSwipeMode: true,
+                    gameMode: "swipe",
+                    finalHashTagSwipeMode: true
                 });
             }
         }
@@ -27,34 +46,57 @@ function HashtagCard({ playState, setPlayState }) {
 
     const handleHashtagClick = async (answer) => {
         if (answer) {
-            await gameService.addRightSwipedHashtag(playState.gameId, { hashtagId: hashtag._id });
-            setPlayState({ loading_show: true, hashTagSwipeMode: false });
+            await gameService.addRightSwipedHashtag(playState.gameId, {
+                hashtagId: hashtag._id
+            });
+            setPlayState({ loading_show: true, gameMode: "swipe" });
         }
 
         if (!answer) {
-            await gameService.addLeftSwipedHashtag(playState.gameId, { hashtagId: hashtag._id });
+            await gameService.addLeftSwipedHashtag(playState.gameId, {
+                hashtagId: hashtag._id
+            });
             setHashtag(null);
         }
-    }
+    };
+
+    // Key Press Event Handlers
+    useKeyPressEvent("ArrowRight", () => {
+        handleHashtagClick(true);
+    });
+    useKeyPressEvent("ArrowLeft", () => {
+        handleHashtagClick(false);
+    });
+
+    // Swipe Event Handlers
+    const reactSwipeableHandler = useSwipeable({
+        onSwipedLeft: () => {
+            handleHashtagClick(false);
+        },
+        onSwipedRight: () => {
+            handleHashtagClick(true);
+        }
+    });
 
     return (
         <>
             {hashtag && (
-                <>
+                <div {...reactSwipeableHandler}>
                     {/* Potrait */}
                     <div className="mt-2 mb-5 p-4 hidden portrait:block">
                         <div className="h-52 w-52 lg:h-80 lg:w-80 relative mx-auto">
-                            <Lottie
-                                className="w-full h-full md:block"
-                                animationData={LottiePickHashtagAnimationData}
-                                loop={true}
-                                play={true}
+                            <Image
+                                src={hashtag.image}
+                                layout="fill"
+                                objectFit="cover"
+                                placeholder="blur"
+                                blurDataURL={LoadingImagePlacepholder}
                             />
                         </div>
 
                         <div className="mt-4 mb-8">
                             <h1 className="font-bold md:max-w-xs text-[5vh] mx-auto text-center">
-                                {hashtag.name}
+                                {hashtag.title}
                             </h1>
                         </div>
 
@@ -88,21 +130,24 @@ function HashtagCard({ playState, setPlayState }) {
                             )}
                             <div
                                 className={
-                                    setPlayState ? "col-span-2" : "col-span-full"
+                                    setPlayState
+                                        ? "col-span-2"
+                                        : "col-span-full"
                                 }
                             >
                                 <div className="h-52 w-52 lg:h-80 lg:w-80 relative mx-auto">
-                                    <Lottie
-                                        className="w-full h-full md:block"
-                                        animationData={LottiePickHashtagAnimationData}
-                                        loop={true}
-                                        play={true}
+                                    <Image
+                                        src={hashtag.image}
+                                        layout="fill"
+                                        objectFit="cover"
+                                        placeholder="blur"
+                                        blurDataURL={LoadingImagePlacepholder}
                                     />
                                 </div>
 
                                 <div className="mt-4 w-full">
                                     <h1 className="font-bold md:max-w-xs text-[5vh] mx-auto text-center">
-                                        {hashtag.name}
+                                        {hashtag.title}
                                     </h1>
                                 </div>
                             </div>
@@ -117,7 +162,7 @@ function HashtagCard({ playState, setPlayState }) {
                             )}
                         </div>
                     </div>
-                </>
+                </div>
             )}
         </>
     );

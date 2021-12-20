@@ -11,7 +11,9 @@ class gameService {
                 response.data.success
             );
         } catch (error) {
-            return serviceResponse(error.response ? error.response.data.message : error.message);
+            return serviceResponse(
+                error.response ? error.response.data.message : error.message
+            );
         }
     }
 
@@ -25,7 +27,9 @@ class gameService {
                 response.data.success
             );
         } catch (error) {
-            return serviceResponse(error.response ? error.response.data.message : error.message);
+            return serviceResponse(
+                error.response ? error.response.data.message : error.message
+            );
         }
     }
 
@@ -39,7 +43,9 @@ class gameService {
                 response.data.success
             );
         } catch (error) {
-            return serviceResponse(error.response ? error.response.data.message : error.message);
+            return serviceResponse(
+                error.response ? error.response.data.message : error.message
+            );
         }
     }
 
@@ -53,7 +59,9 @@ class gameService {
                 response.data.success
             );
         } catch (error) {
-            return serviceResponse(error.response ? error.response.data.message : error.message);
+            return serviceResponse(
+                error.response ? error.response.data.message : error.message
+            );
         }
     }
 
@@ -67,7 +75,9 @@ class gameService {
                 response.data.success
             );
         } catch (error) {
-            return serviceResponse(error.response ? error.response.data.message : error.message);
+            return serviceResponse(
+                error.response ? error.response.data.message : error.message
+            );
         }
     }
 
@@ -81,13 +91,15 @@ class gameService {
                 response.data.success
             );
         } catch (error) {
-            return serviceResponse(error.response ? error.response.data.message : error.message);
+            return serviceResponse(
+                error.response ? error.response.data.message : error.message
+            );
         }
     }
 
-    async addLeftSwipedCard(gameId, data) {
+    async checkIfNewCardForGame() {
         try {
-            const response = await $http.put(`/api/game/${gameId}/addLeftSwipedCard`, data);
+            const response = await $http.get("/api/game/checkIfNewCardForGame");
 
             return serviceResponse(
                 response.data.message,
@@ -95,7 +107,28 @@ class gameService {
                 response.data.success
             );
         } catch (error) {
-            return serviceResponse(error.response ? error.response.data.message : error.message);
+            return serviceResponse(
+                error.response ? error.response.data.message : error.message
+            );
+        }
+    }
+
+    async addLeftSwipedCard(gameId, data) {
+        try {
+            const response = await $http.put(
+                `/api/game/${gameId}/addLeftSwipedCard`,
+                data
+            );
+
+            return serviceResponse(
+                response.data.message,
+                response.data.data,
+                response.data.success
+            );
+        } catch (error) {
+            return serviceResponse(
+                error.response ? error.response.data.message : error.message
+            );
         }
     }
 
@@ -112,13 +145,18 @@ class gameService {
                 response.data.success
             );
         } catch (error) {
-            return serviceResponse(error.response ? error.response.data.message : error.message);
+            return serviceResponse(
+                error.response ? error.response.data.message : error.message
+            );
         }
     }
 
     async addLeftSwipedHashtag(gameId, data) {
         try {
-            const response = await $http.put(`/api/game/${gameId}/addLeftSwipedHashtag`, data);
+            const response = await $http.put(
+                `/api/game/${gameId}/addLeftSwipedHashtag`,
+                data
+            );
 
             return serviceResponse(
                 response.data.message,
@@ -126,13 +164,18 @@ class gameService {
                 response.data.success
             );
         } catch (error) {
-            return serviceResponse(error.response ? error.response.data.message : error.message);
+            return serviceResponse(
+                error.response ? error.response.data.message : error.message
+            );
         }
     }
 
     async addRightSwipedHashtag(gameId, data) {
         try {
-            const response = await $http.put(`/api/game/${gameId}/addRightSwipedHashtag`, data);
+            const response = await $http.put(
+                `/api/game/${gameId}/addRightSwipedHashtag`,
+                data
+            );
 
             return serviceResponse(
                 response.data.message,
@@ -140,7 +183,9 @@ class gameService {
                 response.data.success
             );
         } catch (error) {
-            return serviceResponse(error.response ? error.response.data.message : error.message);
+            return serviceResponse(
+                error.response ? error.response.data.message : error.message
+            );
         }
     }
 
@@ -157,7 +202,9 @@ class gameService {
                 response.data.success
             );
         } catch (error) {
-            return serviceResponse(error.response ? error.response.data.message : error.message);
+            return serviceResponse(
+                error.response ? error.response.data.message : error.message
+            );
         }
     }
 }

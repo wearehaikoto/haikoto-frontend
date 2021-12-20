@@ -1,8 +1,8 @@
 import React from "react";
 import { useRouter } from "next/router";
 
-import { withAuth } from "../app/utils";
-import { LoadingComponent } from "../app/components";
+import { withAuth } from "../utils";
+import { LoadingComponent } from "../components";
 
 // Clear localstorage and show loading page
 function Logout() {

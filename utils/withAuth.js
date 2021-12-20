@@ -18,7 +18,7 @@ const withAuth = (WrappedComponent) => {
 
             // If there is no access token we redirect to "/" page.
             if (!accessToken) {
-                router.replace("/loginOrSignup");
+                return router.replace("/loginOrSignup");
             }
 
             // If there's an access token we decode it and check if it's a valid JWT.

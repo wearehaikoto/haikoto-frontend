@@ -36,13 +36,15 @@ class cardService {
                 response.data.success
             );
         } catch (error) {
-            return serviceResponse(error.response ? error.response.data.message : error.message);
+            return serviceResponse(
+                error.response ? error.response.data.message : error.message
+            );
         }
     }
 
-    async getAllHashtags() {
+    async getAllCardsAsHashtag() {
         try {
-            const response = await $http.get("/api/card/hashtags");
+            const response = await $http.get("/api/card/getAllCardsAsHashtag");
 
             return serviceResponse(
                 response.data.message,
@@ -50,7 +52,9 @@ class cardService {
                 response.data.success
             );
         } catch (error) {
-            return serviceResponse(error.response ? error.response.data.message : error.message);
+            return serviceResponse(
+                error.response ? error.response.data.message : error.message
+            );
         }
     }
 
@@ -64,7 +68,9 @@ class cardService {
                 response.data.success
             );
         } catch (error) {
-            return serviceResponse(error.response ? error.response.data.message : error.message);
+            return serviceResponse(
+                error.response ? error.response.data.message : error.message
+            );
         }
     }
 
@@ -78,7 +84,9 @@ class cardService {
                 response.data.success
             );
         } catch (error) {
-            return serviceResponse(error.response ? error.response.data.message : error.message);
+            return serviceResponse(
+                error.response ? error.response.data.message : error.message
+            );
         }
     }
 
@@ -95,7 +103,9 @@ class cardService {
                 response.data.success
             );
         } catch (error) {
-            return serviceResponse(error.response ? error.response.data.message : error.message);
+            return serviceResponse(
+                error.response ? error.response.data.message : error.message
+            );
         }
     }
 
@@ -109,7 +119,9 @@ class cardService {
                 response.data.success
             );
         } catch (error) {
-            return serviceResponse(error.response ? error.response.data.message : error.message);
+            return serviceResponse(
+                error.response ? error.response.data.message : error.message
+            );
         }
     }
 }

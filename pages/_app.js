@@ -2,13 +2,17 @@ import React from "react";
 import Head from "next/head";
 import Router from "next/router";
 import "tailwindcss/tailwind.css";
+import TagManager from "react-gtm-module";
 
-import { LoadingComponent } from "../app/components";
+import { LoadingComponent } from "../components";
 
 function MyApp({ Component, pageProps }) {
     const [isLoading, setIsLoading] = React.useState(false);
 
     React.useEffect(() => {
+        // Google Tag Manager Init
+        TagManager.initialize({ gtmId: "GTM-K376DMR" });
+
         //Binding router events
         Router.events.on("routeChangeStart", () => setIsLoading(true));
         Router.events.on("routeChangeComplete", () => setIsLoading(false));

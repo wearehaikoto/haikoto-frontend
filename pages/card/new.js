@@ -4,17 +4,16 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 import CreatableSelect from "react-select/creatable";
 
-import { cardService, hashtagService } from "../../app/services";
-import { createCardUploadGreyImage } from "../../app/assets";
-import { currentUser, withAuth, uploadImage } from "../../app/utils";
-import { CardCancelButton, AlertComponent } from "../../app/components";
+import { cardService } from "../../services";
+import { withAuth, uploadImage } from "../../utils";
+import { createCardUploadGreyImage } from "../../assets";
+import { CardCancelButton, AlertComponent } from "../../components";
 
 function createCard() {
-    const user = currentUser().userData;
     const router = useRouter();
 
     const [previewImage, setPreviewImage] = React.useState(null);
-    const [hashtags, setHashtags] = React.useState([]);
+    const [cardsAsHashtags, setCardsAsHashtags] = React.useState([]);
     const [alertState, setAlertState] = React.useState({
         show: false,
         message: "",
@@ -52,14 +51,6 @@ function createCard() {
             });
             return;
         }
-        if (!hashtags) {
-            setAlertState({
-                show: true,
-                message: "Please enter hashtags",
-                type: "error"
-            });
-            return;
-        }
 
         // Create card
         const createCard = await cardService.create(formInput);
@@ -87,8 +78,10 @@ function createCard() {
 
     React.useEffect(async () => {
         // Get pre existing card hashtags from DB
-        const hashtags = await hashtagService.getAll();
-        if (hashtags.success) setHashtags(hashtags.data);
+        const getAllCardsAsHashtag = await cardService.getAllCardsAsHashtag();
+        if (getAllCardsAsHashtag.success) {
+            setCardsAsHashtags(getAllCardsAsHashtag.data);
+        }
     }, []);
 
     return (
@@ -105,7 +98,7 @@ function createCard() {
                         </h1>
                     </div>
                     {alertState.show && <AlertComponent {...alertState} />}
-                    <div className="mt-2 p-4 md:py-16">
+                    <div className="mt-2 p-4 md:py-16 max-w-lg">
                         <form onSubmit={processCreateCard}>
                             <label htmlFor="upload-button">
                                 <div className="flex justify-center relative">
@@ -175,7 +168,7 @@ function createCard() {
                                     }}
                                 />
                                 <h1 className="font-bold text-xl md:text-3xl text-center mt-4 md:mt-10">
-                                    Hashtags
+                                    Hashtags (Parent Cards)
                                 </h1>
                                 <CreatableSelect
                                     className="border-black border-2 my-2 w-full"
@@ -183,13 +176,15 @@ function createCard() {
                                     onChange={(e) => {
                                         setFormInput({
                                             ...formInput,
-                                            hashtags: e.map((e) => e.value.toLowerCase().trim())
+                                            hashtags: e.map((e) =>
+                                                e.value.toLowerCase().trim()
+                                            )
                                         });
                                     }}
-                                    options={hashtags.map((hashtag) => {
+                                    options={cardsAsHashtags.map((hashtag) => {
                                         return {
-                                            value: hashtag.name,
-                                            label: hashtag.name
+                                            value: hashtag._id,
+                                            label: hashtag.title
                                         };
                                     })}
                                 />
