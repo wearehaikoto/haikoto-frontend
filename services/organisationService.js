@@ -1,16 +1,9 @@
 import { $http, serviceResponse } from "../utils";
 
-class authService {
-    async loginOrSignup(codeName, organisation) {
+class organisationService {
+    async getByUrlSlug(url_slug) {
         try {
-            const response = await $http.post("/api/auth/loginOrSignup", {
-                codeName,
-                organisation
-            });
-
-            if (response.data.success) {
-                localStorage.setItem("auth-token", response.data.data.token);
-            }
+            const response = await $http.get(`/api/organisation/${url_slug}/get`);
 
             return serviceResponse(
                 response.data.message,
@@ -24,5 +17,4 @@ class authService {
         }
     }
 }
-
-export default new authService();
+export default new organisationService();
