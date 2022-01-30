@@ -16,9 +16,9 @@ function VoteCard({ gameId, rightSwipedCards, setPlayState }) {
             card.hashtags
                 .map((h) => h._id)
                 .every((hId) => {
-                    return hId.includes(
-                        rightSwipedCards[0].hashtags.map((h) => h._id)
-                    );
+                    return rightSwipedCards[0].hashtags
+                        .map((h) => h._id)
+                        .includes(hId);
                 })
         );
 
@@ -33,7 +33,7 @@ function VoteCard({ gameId, rightSwipedCards, setPlayState }) {
 
     React.useEffect(() => {
         if (typeof tempRightSwipedCards[voteRandomIndex] === "undefined") {
-            setPlayState({ gameMode: "swipe" })
+            setPlayState({ gameMode: "swipe" });
         }
     });
 
@@ -109,7 +109,8 @@ function VoteCard({ gameId, rightSwipedCards, setPlayState }) {
     };
 
     useKeyPressEvent("ArrowRight", () => {
-        !isLoading && handleCardClick(tempRightSwipedCards[voteRandomIndex]._id);
+        !isLoading &&
+            handleCardClick(tempRightSwipedCards[voteRandomIndex]._id);
     });
 
     useKeyPressEvent("ArrowLeft", () => {
