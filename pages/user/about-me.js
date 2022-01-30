@@ -80,9 +80,9 @@ function AboutMe() {
                                             </thead>
                                             <tbody className="text-sm">
                                                 {allHashtags.map(
-                                                    (hashtag) => {
+                                                    (hashtag, id) => {
                                                         return (
-                                                            <>
+                                                            <React.Fragment key={id}>
                                                                 <h1 className="text-2xl font-bold my-3">
                                                                     {hashtag.title} - {
                                                                         game.rightSwipedHashtags.map((hashtag) => hashtag._id).includes(hashtag._id) ? "✅" : "❌"
@@ -114,7 +114,7 @@ function AboutMe() {
                                                                         </tr>
                                                                     );
                                                                 })}
-                                                            </>
+                                                            </React.Fragment>
                                                         );
                                                     }
                                                 )}

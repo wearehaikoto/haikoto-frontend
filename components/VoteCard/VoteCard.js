@@ -3,10 +3,13 @@ import Image from "next/image";
 import { useKeyPressEvent } from "react-use";
 
 import { gameService } from "../../services";
-import { useMergeState, ArrayMethods } from "../../utils";
+import { LoadingComponent } from "../../components";
 import { LoadingImagePlacepholder } from "../../assets";
+import { useMergeState, ArrayMethods } from "../../utils";
 
 function VoteCard({ gameId, rightSwipedCards, setPlayState }) {
+    const [isLoading, setIsLoading] = React.useState(false);
+
     const filteredCardsBySameHashtag = rightSwipedCards
         .slice(1)
         .filter((card) =>
@@ -28,12 +31,15 @@ function VoteCard({ gameId, rightSwipedCards, setPlayState }) {
     const { tempRightSwipedCards, newRightSwipedCard, voteRandomIndex } =
         voteCardState;
 
-    if (typeof tempRightSwipedCards[voteRandomIndex] === "undefined") {
-        setPlayState({ gameMode: "swipe" });
-        return null;
-    }
+    React.useEffect(() => {
+        if (typeof tempRightSwipedCards[voteRandomIndex] === "undefined") {
+            setPlayState({ gameMode: "swipe" })
+        }
+    });
 
     const handleCardClick = async (cardId) => {
+        setIsLoading(true);
+
         // If picked cardID is newRightSwipedCard, set tempRightSwipedCards to upper half of voteRandomIndex in rightSwipedCards
         let functionTempRightSwipedCards;
         if (cardId === newRightSwipedCard._id) {
@@ -49,7 +55,7 @@ function VoteCard({ gameId, rightSwipedCards, setPlayState }) {
 
         // Set the new Card in appropriate order, if leftSwiped card is available in lower/higher of tempRightSwipedCards
         if (functionTempRightSwipedCards.length <= 0) {
-            terminateVote(cardId);
+            await terminateVote(cardId);
             return;
         }
 
@@ -59,6 +65,8 @@ function VoteCard({ gameId, rightSwipedCards, setPlayState }) {
                 functionTempRightSwipedCards
             )
         });
+
+        setIsLoading(false);
     };
 
     const terminateVote = async (cardId) => {
@@ -101,16 +109,16 @@ function VoteCard({ gameId, rightSwipedCards, setPlayState }) {
     };
 
     useKeyPressEvent("ArrowRight", () => {
-        handleCardClick(tempRightSwipedCards[voteRandomIndex]._id);
+        !isLoading && handleCardClick(tempRightSwipedCards[voteRandomIndex]._id);
     });
 
     useKeyPressEvent("ArrowLeft", () => {
-        handleCardClick(newRightSwipedCard._id);
+        !isLoading && handleCardClick(newRightSwipedCard._id);
     });
 
     return (
         <>
-            {filteredCardsBySameHashtag.length > 0 && (
+            {!isLoading && filteredCardsBySameHashtag.length > 0 ? (
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 lg:gap-8">
                     <div
                         className="cursor-pointer"
@@ -139,6 +147,7 @@ function VoteCard({ gameId, rightSwipedCards, setPlayState }) {
                             ))}
                         </p>
                     </div>
+
                     <div
                         className="cursor-pointer"
                         onClick={() =>
@@ -175,6 +184,8 @@ function VoteCard({ gameId, rightSwipedCards, setPlayState }) {
                         </h1>
                     </div>
                 </div>
+            ) : (
+                <LoadingComponent />
             )}
         </>
     );
