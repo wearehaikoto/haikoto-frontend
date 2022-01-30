@@ -48,6 +48,8 @@ function SingleCard({ card, playState, setPlayState }) {
         // If answer is true add to rightSwipedCards bucket
         if (answer) {
             playState.rightSwipedCards.unshift(card);
+            // Add new No Card to DB
+            await gameService.addRightSwipedCard(playState.gameId, { cardId });
         } else {
             playState.leftSwipedCards.unshift(card);
             // Add new No Card to DB
