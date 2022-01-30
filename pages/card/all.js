@@ -72,6 +72,9 @@ function createCard() {
                                                 Card ID
                                             </th>
                                             <th className="px-4 py-2 text-xs text-white text-left">
+                                                Parent
+                                            </th>
+                                            <th className="px-4 py-2 text-xs text-white text-left">
                                                 Card Title
                                             </th>
                                             <th className="px-4 py-2 text-xs text-white text-left" />
@@ -85,6 +88,9 @@ function createCard() {
                                                         {card._id}
                                                     </td>
                                                     <td className="border px-4 py-2 text-blue-600 border-blue-500 font-medium">
+                                                        {card.hashtags.length === 0 ? "-----" : cards.find(c => card.hashtags.includes(c._id) ).title}
+                                                    </td>
+                                                    <td className="border px-4 py-2 text-blue-600 border-blue-500 font-medium">
                                                         {card.title}
                                                     </td>
                                                     <td className="border px-4 py-2 text-yellow-600 border-blue-500 font-medium">
@@ -92,12 +98,16 @@ function createCard() {
                                                             <Link
                                                                 href={`/card/${card._id}`}
                                                             >
-                                                                <a className="px-2">View</a>
+                                                                <a className="px-2">
+                                                                    View
+                                                                </a>
                                                             </Link>
                                                             <Link
                                                                 href={`/card/edit/${card._id}`}
                                                             >
-                                                                <a className="px-2">Edit</a>
+                                                                <a className="px-2">
+                                                                    Edit
+                                                                </a>
                                                             </Link>
                                                             <button
                                                                 onClick={() =>
