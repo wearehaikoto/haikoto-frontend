@@ -48,11 +48,13 @@ function Index() {
                                 No new Card
                             </a>
                         )}
-                        <Link href="/user/about-me">
-                            <a className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 my-2 min-w-max w-2/4 rounded-full">
-                                About Me
-                            </a>
-                        </Link>
+                        {!user.organisation && (
+                            <Link href="/user/about-me">
+                                <a className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 my-2 min-w-max w-2/4 rounded-full">
+                                    About Me
+                                </a>
+                            </Link>
+                        )}
                         {user.role === "admin" && (
                             <>
                                 <Link href="/card/new">
@@ -72,25 +74,29 @@ function Index() {
                                 </Link>
                             </>
                         )}
-                        <a
-                            href="https://hexa-mypd.herokuapp.com/app.html"
-                            className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 my-2 min-w-max w-2/4 rounded-full"
-                        >
-                            Use &mdash; Hexa
-                        </a>
                         {user.role === "admin" && (
-                            <a
-                                href="https://hexa-mypd.herokuapp.com/train.html"
-                                className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 my-2 min-w-max w-2/4 rounded-full"
-                            >
-                                Train &mdash; Hexa
-                            </a>
+                            <>
+                                <a
+                                    href="https://hexa-mypd.herokuapp.com/app.html"
+                                    className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 my-2 min-w-max w-2/4 rounded-full"
+                                >
+                                    Use &mdash; Hexa
+                                </a>
+                                <a
+                                    href="https://hexa-mypd.herokuapp.com/train.html"
+                                    className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 my-2 min-w-max w-2/4 rounded-full"
+                                >
+                                    Train &mdash; Hexa
+                                </a>
+                            </>
                         )}
-                        <Link href="/logout">
-                            <a className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 my-2 min-w-max w-2/4 rounded-full">
-                                Logout
-                            </a>
-                        </Link>
+                        {!user.organisation && (
+                            <Link href="/logout">
+                                <a className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 my-2 min-w-max w-2/4 rounded-full">
+                                    Logout
+                                </a>
+                            </Link>
+                        )}
                     </div>
                 </main>
             </div>
