@@ -2,7 +2,6 @@
     "name": "haikoto",
     "version": "1.0.0",
     "description": "Creating a unique workplace culture",
-    "main": "index.js",
     "repository": "https://github.com/MYPD/haikoto-frontend",
     "author": "Eniola Osabiya <eosabiya@gmail.com>",
     "license": "MIT",

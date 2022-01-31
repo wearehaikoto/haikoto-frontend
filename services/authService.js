@@ -1,10 +1,11 @@
 import { $http, serviceResponse } from "../utils";
 
 class authService {
-    async loginOrSignup(codeName) {
+    async loginOrSignup(codeName, organisation) {
         try {
             const response = await $http.post("/api/auth/loginOrSignup", {
-                codeName
+                codeName,
+                organisation
             });
 
             if (response.data.success) {

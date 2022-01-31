@@ -5,10 +5,16 @@ import { useSwipeable } from "react-swipeable";
 
 import { gameService } from "../../services";
 import { LoadingImagePlacepholder } from "../../assets";
-import { CardYesButton, CardNoButton } from "../../components";
+import {
+    CardYesButton,
+    CardNoButton,
+    LoadingComponent
+} from "../../components";
 
 function SingleCard({ card, playState, setPlayState }) {
     // If setPlayState, i.e Component is used from a Game, activate swipe and keyboard handlers
+
+    const [isLoading, setIsLoading] = React.useState(false);
 
     let reactSwipeableHandler = null;
 
@@ -23,18 +29,18 @@ function SingleCard({ card, playState, setPlayState }) {
 
         // Swipe Event Handlers
         reactSwipeableHandler = useSwipeable({
-            onSwipedLeft: () => {
-                handleAnswerClick(card._id, false);
-            },
             onSwipedRight: () => {
                 handleAnswerClick(card._id, true);
+            },
+            onSwipedLeft: () => {
+                handleAnswerClick(card._id, false);
             }
         });
     }
 
     const handleAnswerClick = async (cardId, answer) => {
         // Show loading screen for api callss to process
-        setPlayState({ loading_show: true });
+        setIsLoading(true);
 
         // Get the Card Data
         const card = playState.allCards.find((card) => card._id === cardId);
@@ -42,6 +48,8 @@ function SingleCard({ card, playState, setPlayState }) {
         // If answer is true add to rightSwipedCards bucket
         if (answer) {
             playState.rightSwipedCards.unshift(card);
+            // Add new No Card to DB
+            await gameService.addRightSwipedCard(playState.gameId, { cardId });
         } else {
             playState.leftSwipedCards.unshift(card);
             // Add new No Card to DB
@@ -49,10 +57,6 @@ function SingleCard({ card, playState, setPlayState }) {
         }
 
         setPlayState({
-            // Close the loading screen, api calls would be done now
-            loading_show: false,
-
-            // Cards
             rightSwipedCards: playState.rightSwipedCards,
             leftSwipedCards: playState.leftSwipedCards
         });
@@ -67,6 +71,9 @@ function SingleCard({ card, playState, setPlayState }) {
         // Get new Card based on yes/leftSwiped Cards from the Database / Check if the game is over
         const newCards = await gameService.newCard(playState.gameId);
         if (newCards.success) {
+            // Close the loading screen, api calls would be done now
+            setIsLoading(false);
+
             // Add the new Cards to the allCards bucket
             // Update the current Card Number +1 and continue game
             setPlayState({
@@ -75,6 +82,9 @@ function SingleCard({ card, playState, setPlayState }) {
             });
             return;
         }
+
+        // Close the loading screen, api calls would be done now
+        setIsLoading(false);
 
         // Last Card Vote
         if (
@@ -96,68 +106,11 @@ function SingleCard({ card, playState, setPlayState }) {
     };
 
     return (
-        <div {...(reactSwipeableHandler) ? reactSwipeableHandler : {}}>
-            {/* Potrait */}
-            <div className="mt-2 mb-5 p-4 hidden portrait:block">
-                <div className="h-52 w-52 lg:h-80 lg:w-80 relative mx-auto">
-                    <Image
-                        src={card.image}
-                        layout="fill"
-                        objectFit="cover"
-                        placeholder="blur"
-                        blurDataURL={LoadingImagePlacepholder}
-                    />
-                </div>
-
-                <div className="mt-4 mb-8">
-                    <h1 className="font-bold md:max-w-xs text-[5vh] mx-auto text-center">
-                        {card.title}
-                    </h1>
-                    <p className="text-center text-[4vh]">
-                        {card.hashtags.map((hashtag) => (
-                            <span
-                                key={hashtag._id}
-                                className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2"
-                            >
-                                #{hashtag.title}
-                            </span>
-                        ))}
-                    </p>
-                </div>
-
-                {setPlayState && (
-                    <div className="flex justify-center mb-4">
-                        <CardNoButton
-                            onClickHandler={() =>
-                                handleAnswerClick(card._id, false)
-                            }
-                        />
-                        <CardYesButton
-                            onClickHandler={(e) =>
-                                handleAnswerClick(card._id, true)
-                            }
-                        />
-                    </div>
-                )}
-            </div>
-
-            {/* Landscape View */}
-            <div className="p-4 hidden landscape:block">
-                <div className="grid grid-cols-4">
-                    {setPlayState && (
-                        <div className="flex justify-center my-auto">
-                            <CardNoButton
-                                onClickHandler={() =>
-                                    handleAnswerClick(card._id, false)
-                                }
-                            />
-                        </div>
-                    )}
-                    <div
-                        className={
-                            setPlayState ? "col-span-2" : "col-span-full"
-                        }
-                    >
+        <>
+            {!isLoading ? (
+                <div {...(reactSwipeableHandler ? reactSwipeableHandler : {})}>
+                    {/* Potrait */}
+                    <div className="mt-2 mb-5 p-4 hidden portrait:block">
                         <div className="h-52 w-52 lg:h-80 lg:w-80 relative mx-auto">
                             <Image
                                 src={card.image}
@@ -168,7 +121,7 @@ function SingleCard({ card, playState, setPlayState }) {
                             />
                         </div>
 
-                        <div className="mt-4 w-full">
+                        <div className="mt-4 mb-8">
                             <h1 className="font-bold md:max-w-xs text-[5vh] mx-auto text-center">
                                 {card.title}
                             </h1>
@@ -183,19 +136,84 @@ function SingleCard({ card, playState, setPlayState }) {
                                 ))}
                             </p>
                         </div>
+
+                        {setPlayState && (
+                            <div className="flex justify-center mb-4">
+                                <CardNoButton
+                                    onClickHandler={() =>
+                                        handleAnswerClick(card._id, false)
+                                    }
+                                />
+                                <CardYesButton
+                                    onClickHandler={(e) =>
+                                        handleAnswerClick(card._id, true)
+                                    }
+                                />
+                            </div>
+                        )}
                     </div>
-                    {setPlayState && (
-                        <div className="flex justify-center my-auto">
-                            <CardYesButton
-                                onClickHandler={(e) =>
-                                    handleAnswerClick(card._id, true)
+
+                    {/* Landscape View */}
+                    <div className="p-4 hidden landscape:block">
+                        <div className="grid grid-cols-4">
+                            {setPlayState && (
+                                <div className="flex justify-center my-auto">
+                                    <CardNoButton
+                                        onClickHandler={() =>
+                                            handleAnswerClick(card._id, false)
+                                        }
+                                    />
+                                </div>
+                            )}
+                            <div
+                                className={
+                                    setPlayState
+                                        ? "col-span-2"
+                                        : "col-span-full"
                                 }
-                            />
+                            >
+                                <div className="h-52 w-52 lg:h-80 lg:w-80 relative mx-auto">
+                                    <Image
+                                        src={card.image}
+                                        layout="fill"
+                                        objectFit="cover"
+                                        placeholder="blur"
+                                        blurDataURL={LoadingImagePlacepholder}
+                                    />
+                                </div>
+
+                                <div className="mt-4 w-full">
+                                    <h1 className="font-bold md:max-w-xs text-[5vh] mx-auto text-center">
+                                        {card.title}
+                                    </h1>
+                                    <p className="text-center text-[4vh]">
+                                        {card.hashtags.map((hashtag) => (
+                                            <span
+                                                key={hashtag._id}
+                                                className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2"
+                                            >
+                                                #{hashtag.title}
+                                            </span>
+                                        ))}
+                                    </p>
+                                </div>
+                            </div>
+                            {setPlayState && (
+                                <div className="flex justify-center my-auto">
+                                    <CardYesButton
+                                        onClickHandler={(e) =>
+                                            handleAnswerClick(card._id, true)
+                                        }
+                                    />
+                                </div>
+                            )}
                         </div>
-                    )}
+                    </div>
                 </div>
-            </div>
-        </div>
+            ) : (
+                <LoadingComponent text={"New Card Loading"} />
+            )}
+        </>
     );
 }
 

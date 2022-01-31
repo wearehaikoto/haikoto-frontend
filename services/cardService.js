@@ -90,6 +90,22 @@ class cardService {
         }
     }
 
+    async update(cardId, data) {
+        try {
+            const response = await $http.put(`/api/card/${cardId}`, data);
+
+            return serviceResponse(
+                response.data.message,
+                response.data.data,
+                response.data.success
+            );
+        } catch (error) {
+            return serviceResponse(
+                error.response ? error.response.data.message : error.message
+            );
+        }
+    }
+
     async updateEloRating(data) {
         try {
             const response = await $http.put(

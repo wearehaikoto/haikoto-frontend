@@ -72,9 +72,11 @@ function createCard() {
                                                 Card ID
                                             </th>
                                             <th className="px-4 py-2 text-xs text-white text-left">
+                                                Parent
+                                            </th>
+                                            <th className="px-4 py-2 text-xs text-white text-left">
                                                 Card Title
                                             </th>
-                                            <th className="px-4 py-2 text-xs text-white text-left" />
                                             <th className="px-4 py-2 text-xs text-white text-left" />
                                         </tr>
                                     </thead>
@@ -86,27 +88,40 @@ function createCard() {
                                                         {card._id}
                                                     </td>
                                                     <td className="border px-4 py-2 text-blue-600 border-blue-500 font-medium">
+                                                        {card.hashtags.length === 0 ? "-----" : cards.find(c => card.hashtags.includes(c._id) ).title}
+                                                    </td>
+                                                    <td className="border px-4 py-2 text-blue-600 border-blue-500 font-medium">
                                                         {card.title}
                                                     </td>
                                                     <td className="border px-4 py-2 text-yellow-600 border-blue-500 font-medium">
-                                                        <Link
-                                                            href={`/card/${card._id}`}
-                                                        >
-                                                            <a>View Card</a>
-                                                        </Link>
-                                                    </td>
-                                                    <td className="border px-4 py-2 text-yellow-600 border-blue-500 font-medium">
-                                                        <button
-                                                            onClick={() =>
-                                                                handleDeleteCard(
-                                                                    card._id
-                                                                )
-                                                            }
-                                                        >
-                                                            <a className="text-red-600">
-                                                                Delete
-                                                            </a>
-                                                        </button>
+                                                        <div className="divide-x-2 divide-neutral-900 divide-double">
+                                                            <Link
+                                                                href={`/card/${card._id}`}
+                                                            >
+                                                                <a className="px-2">
+                                                                    View
+                                                                </a>
+                                                            </Link>
+                                                            <Link
+                                                                href={`/card/edit/${card._id}`}
+                                                            >
+                                                                <a className="px-2">
+                                                                    Edit
+                                                                </a>
+                                                            </Link>
+                                                            <button
+                                                                onClick={() =>
+                                                                    handleDeleteCard(
+                                                                        card._id
+                                                                    )
+                                                                }
+                                                                className="px-2"
+                                                            >
+                                                                <a className="text-red-600">
+                                                                    Delete
+                                                                </a>
+                                                            </button>
+                                                        </div>
                                                     </td>
                                                 </tr>
                                             );

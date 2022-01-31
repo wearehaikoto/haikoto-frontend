@@ -6,12 +6,17 @@ import { useSwipeable } from "react-swipeable";
 
 import { gameService } from "../../services";
 import { LoadingImagePlacepholder } from "../../assets";
-import { CardYesButton, CardNoButton } from "../../components";
+import {
+    CardYesButton,
+    CardNoButton,
+    LoadingComponent
+} from "../../components";
 
 function HashtagCard({ playState, setPlayState }) {
     const router = useRouter();
 
     const [hashtag, setHashtag] = React.useState(null);
+    const [isLoading, setIsLoading] = React.useState(false);
 
     React.useEffect(() => {
         // All hashtags exhausted flag detected
@@ -45,6 +50,8 @@ function HashtagCard({ playState, setPlayState }) {
     }, [hashtag]);
 
     const handleHashtagClick = async (answer) => {
+        setIsLoading(true);
+
         if (answer) {
             await gameService.addRightSwipedHashtag(playState.gameId, {
                 hashtagId: hashtag._id
@@ -58,6 +65,8 @@ function HashtagCard({ playState, setPlayState }) {
             });
             setHashtag(null);
         }
+
+        setIsLoading(false);
     };
 
     // Key Press Event Handlers
@@ -80,7 +89,7 @@ function HashtagCard({ playState, setPlayState }) {
 
     return (
         <>
-            {hashtag && (
+            {!isLoading && hashtag ? (
                 <div {...reactSwipeableHandler}>
                     {/* Potrait */}
                     <div className="mt-2 mb-5 p-4 hidden portrait:block">
@@ -163,6 +172,8 @@ function HashtagCard({ playState, setPlayState }) {
                         </div>
                     </div>
                 </div>
+            ) : (
+                <LoadingComponent />
             )}
         </>
     );
