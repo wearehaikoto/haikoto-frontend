@@ -15,7 +15,7 @@ function Logout() {
         // Redirect to login page
         setTimeout(() => {
             router.push("/loginOrSignup");
-        }, 3000);
+        }, 1500);
     }, []);
 
     return (
