@@ -67,11 +67,11 @@ function manageOrganisation() {
                             <div className="p-4 overflow-x-auto">
                                 {/* Add New Button */}
                                 <div className="flex flex-row text-center justify-center">
-                                    {/* <Link href="/organisations/new"> */}
+                                    <Link href="/organisations/new">
                                         <a className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 my-2 min-w-max w-2/4 rounded-full">
                                             + Add New Organisation
                                         </a>
-                                    {/* </Link> */}
+                                    </Link>
                                 </div>
 
                                 <table className="table-auto w-full">

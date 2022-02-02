@@ -4,12 +4,12 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 import CreatableSelect from "react-select/creatable";
 
-import { cardService } from "../../services";
 import { uploadGreyImage } from "../../assets";
 import { withAuth, uploadImage } from "../../utils";
+import { cardService, organisationService } from "../../services";
 import { CardCancelButton, AlertComponent } from "../../components";
 
-function createCard() {
+function createOrganisation() {
     const router = useRouter();
 
     const [previewImage, setPreviewImage] = React.useState(null);
@@ -20,12 +20,13 @@ function createCard() {
         type: ""
     });
     const [formInput, setFormInput] = React.useState({
-        image: "",
-        title: "",
+        logo: "https://www.google.com/images/branding/googlelogo/2x/googlelogo_light_color_92x30dp.png",
+        name: "",
+        url_slug: "",
         hashtags: ""
     });
 
-    async function processCreateCard(e) {
+    async function processCreateOrganisation(e) {
         e.preventDefault();
         window.scrollTo(0, 0);
 
@@ -33,33 +34,41 @@ function createCard() {
         setAlertState({ show: false, message: "", type: "" });
 
         // Extract formData from formInput state
-        const { image, title, hashtags } = formInput;
+        const { logo, name, url_slug } = formInput;
 
-        if (!image) {
+        if (!logo) {
             setAlertState({
                 show: true,
-                message: "Please upload a card image",
+                message: "Please upload an organisation logo",
                 type: "error"
             });
             return;
         }
-        if (!title) {
+        if (!name) {
             setAlertState({
                 show: true,
-                message: "Please enter a title",
+                message: "Please enter a name",
+                type: "error"
+            });
+            return;
+        }
+        if (!url_slug) {
+            setAlertState({
+                show: true,
+                message: `Please enter a url slug`,
                 type: "error"
             });
             return;
         }
 
-        // Create card
-        const createCard = await cardService.create(formInput);
+        // Create organisation
+        const createOrganisation = await organisationService.create(formInput);
 
         // Handle response
-        if (createCard.success) {
+        if (createOrganisation.success) {
             setAlertState({
                 show: true,
-                message: createCard.message,
+                message: createOrganisation.message,
                 type: "success"
             });
 
@@ -70,14 +79,14 @@ function createCard() {
         } else {
             setAlertState({
                 show: true,
-                message: createCard.message,
+                message: createOrganisation.message,
                 type: "error"
             });
         }
     }
 
     React.useEffect(async () => {
-        // Get pre existing card hashtags from DB
+        // Get pre existing organisation hashtags from DB
         const getAllCardsAsHashtag = await cardService.getAllCardsAsHashtag();
         if (getAllCardsAsHashtag.success) {
             setCardsAsHashtags(getAllCardsAsHashtag.data);
@@ -87,26 +96,23 @@ function createCard() {
     return (
         <>
             <Head>
-                <title>Create Card - Haikoto</title>
+                <title>Create Organisation - Haikoto</title>
             </Head>
 
             <div className="flex flex-col items-center justify-center min-h-screen">
                 <div className="m-7 md:mx-44">
                     <div className="mb-2">
                         <h1 className="text-center text-xl md:text-3xl">
-                            Create a Card
+                            Create an Organisation
                         </h1>
                     </div>
                     {alertState.show && <AlertComponent {...alertState} />}
                     <div className="mt-2 p-4 md:py-16 max-w-lg">
-                        <form onSubmit={processCreateCard}>
+                        <form onSubmit={processCreateOrganisation}>
                             <label htmlFor="upload-button">
                                 <div className="flex justify-center relative">
                                     <Image
-                                        src={
-                                            previewImage ||
-                                            uploadGreyImage
-                                        }
+                                        src={previewImage || uploadGreyImage}
                                         width={500}
                                         height={500}
                                     />
@@ -130,12 +136,12 @@ function createCard() {
                                     };
                                     reader.readAsDataURL(file);
 
-                                    const image = await uploadImage(file);
-                                    if (image.success) {
+                                    const logo = await uploadImage(file);
+                                    if (logo.success) {
                                         // Set the Form Input State
                                         setFormInput({
                                             ...formInput,
-                                            image: image.url
+                                            logo: logo.url
                                         });
                                     } else {
                                         window.scrollTo(0, 0);
@@ -152,10 +158,10 @@ function createCard() {
 
                             <div className="mt-4 mb-8">
                                 <h1 className="md:text-3xl text-center">
-                                    Choose an Image
+                                    Choose Company Logo
                                 </h1>
                                 <h1 className="font-bold text-xl md:text-3xl text-center mt-4 md:mt-10">
-                                    Title
+                                    Organisation Name
                                 </h1>
                                 <input
                                     className="border-black border-2 my-2 w-full p-2"
@@ -163,7 +169,23 @@ function createCard() {
                                     onChange={(e) => {
                                         setFormInput({
                                             ...formInput,
-                                            title: e.target.value
+                                            name: e.target.value
+                                        });
+                                    }}
+                                />
+                                <h1 className="font-bold text-xl md:text-3xl text-center mt-4 md:mt-10">
+                                    Organisation Url Slug
+                                </h1>
+                                <input
+                                    className="border-black border-2 my-2 w-full p-2"
+                                    type="text"
+                                    placeholder={
+                                        window.location.origin + "/:url_slug:"
+                                    }
+                                    onChange={(e) => {
+                                        setFormInput({
+                                            ...formInput,
+                                            url_slug: e.target.value
                                         });
                                     }}
                                 />
@@ -194,7 +216,7 @@ function createCard() {
                                         className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
                                         type="submit"
                                     >
-                                        Publish
+                                        Create
                                     </button>
                                 </div>
                             </div>
@@ -208,4 +230,4 @@ function createCard() {
     );
 }
 
-export default withAuth(createCard);
+export default withAuth(createOrganisation);
