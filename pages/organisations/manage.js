@@ -38,10 +38,13 @@ function manageOrganisation() {
 
     async function handleDeleteOrganisation(organisationId) {
         if (confirm("Are you sure you want to delete this organisation?")) {
-            const deleteOrganisation = await organisationService.deleteOrganisation(organisationId);
+            const deleteOrganisation =
+                await organisationService.deleteOrganisation(organisationId);
 
             if (deleteOrganisation.success) {
-                setOrganisations(organisations.filter((c) => c._id !== organisationId));
+                setOrganisations(
+                    organisations.filter((c) => c._id !== organisationId)
+                );
             } else {
                 alert(deleteOrganisation.message);
             }
@@ -88,11 +91,17 @@ function manageOrganisation() {
                                     </thead>
                                     <tbody className="text-sm">
                                         {organisations.map((organisation) => {
-                                            const url = window.location.origin + "/" + organisation.url_slug;
+                                            const url =
+                                                window.location.origin +
+                                                "/" +
+                                                organisation.url_slug;
                                             return (
                                                 <tr key={organisation._id}>
                                                     <td className="border px-4 py-2 text-blue-600 border-blue-500 font-medium">
-                                                        <a target="_blank" href={url}>
+                                                        <a
+                                                            target="_blank"
+                                                            href={url}
+                                                        >
                                                             {url}
                                                         </a>
                                                     </td>
@@ -100,17 +109,34 @@ function manageOrganisation() {
                                                         {organisation.name}
                                                     </td>
                                                     <td className="border px-4 py-2 text-yellow-600 border-blue-500 font-medium">
-                                                        <button
-                                                            onClick={() =>
-                                                                handleDeleteOrganisation(
-                                                                    organisation._id
-                                                                )
-                                                            }
-                                                        >
-                                                            <a className="text-red-600">
-                                                                Delete
-                                                            </a>
-                                                        </button>
+                                                        <div className="divide-x-2 divide-neutral-900 divide-double">
+                                                            {/* <Link
+                                                                href={`/organisations/${organisation._id}`}
+                                                            >
+                                                                <a className="px-2">
+                                                                    View
+                                                                </a>
+                                                            </Link> */}
+                                                            <Link
+                                                                href={`/organisations/edit/${organisation._id}`}
+                                                            >
+                                                                <a className="px-2">
+                                                                    Edit
+                                                                </a>
+                                                            </Link>
+                                                            <button
+                                                                onClick={() =>
+                                                                    handleDeleteOrganisation(
+                                                                        organisation._id
+                                                                    )
+                                                                }
+                                                                className="px-2"
+                                                            >
+                                                                <a className="text-red-600">
+                                                                    Delete
+                                                                </a>
+                                                            </button>
+                                                        </div>
                                                     </td>
                                                 </tr>
                                             );

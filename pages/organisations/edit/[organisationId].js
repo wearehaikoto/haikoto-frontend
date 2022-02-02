@@ -5,24 +5,24 @@ import { useRouter } from "next/router";
 import CreatableSelect from "react-select/creatable";
 
 import { withAuth, uploadImage } from "../../../utils";
-import { cardService } from "../../../services";
+import { cardService, organisationService } from "../../../services";
 import {
     LoadingComponent,
     CardCancelButton,
     AlertComponent
 } from "../../../components";
 
-function editCard() {
+function editOrganisation() {
     const router = useRouter();
 
-    const { cardId } = router.query;
+    const { organisationId } = router.query;
 
     const [loadingState, setLoadingState] = React.useState({
         show: true,
         text: "Loading...",
         description: ""
     });
-    const [card, setCard] = React.useState(null);
+    const [organisation, setOrganisation] = React.useState(null);
 
     const [previewImage, setPreviewImage] = React.useState(null);
     const [cardsAsHashtags, setCardsAsHashtags] = React.useState([]);
@@ -32,31 +32,35 @@ function editCard() {
         type: ""
     });
     const [formInput, setFormInput] = React.useState({
-        image: "",
-        title: "",
+        logo: "https://www.google.com/images/branding/googlelogo/2x/googlelogo_light_color_92x30dp.png",
+        name: "",
+        url_slug: "",
         hashtags: ""
     });
 
     React.useEffect(async () => {
-        if (cardId) {
-            const getCard = await cardService.getCard(cardId);
+        if (organisationId) {
+            const getOrganisation = await organisationService.getOrganisation(
+                organisationId
+            );
             const getAllCardsAsHashtag =
                 await cardService.getAllCardsAsHashtag();
 
-            if (getCard.success && getAllCardsAsHashtag.success) {
-                setCard(getCard.data);
+            if (getOrganisation.success && getAllCardsAsHashtag.success) {
+                setOrganisation(getOrganisation.data);
                 setCardsAsHashtags(getAllCardsAsHashtag.data);
                 setFormInput({
-                    image: getCard.data.image,
-                    title: getCard.data.title,
-                    hashtags: getCard.data.hashtags.map((h) => h._id)
+                    logo: getOrganisation.data.logo,
+                    name: getOrganisation.data.name,
+                    url_slug: getOrganisation.data.url_slug,
+                    hashtags: getOrganisation.data.hashtags.map((h) => h._id)
                 });
                 setLoadingState({ show: false, text: "" });
             } else {
                 setLoadingState({
                     show: true,
                     text: `Error: ${
-                        getCard.message || getAllCardsAsHashtag.message
+                        getOrganisation.message || getAllCardsAsHashtag.message
                     }.`,
                     description: "Redirecting..."
                 });
@@ -66,9 +70,9 @@ function editCard() {
                 }, 2000);
             }
         }
-    }, [cardId]);
+    }, [organisationId]);
 
-    async function processUpdateCard(e) {
+    async function processUpdateOrganisation(e) {
         e.preventDefault();
         window.scrollTo(0, 0);
 
@@ -76,44 +80,52 @@ function editCard() {
         setAlertState({ show: false, message: "", type: "" });
 
         // Extract formData from formInput state
-        const { image, title, hashtags } = formInput;
+        const { logo, name, url_slug } = formInput;
 
-        if (!image) {
+        if (!logo) {
             setAlertState({
                 show: true,
-                message: "Please upload a card image",
+                message: "Please upload an organisation logo",
                 type: "error"
             });
             return;
         }
-        if (!title) {
+        if (!name) {
             setAlertState({
                 show: true,
-                message: "Please enter a title",
+                message: "Please enter a name",
+                type: "error"
+            });
+            return;
+        }
+        if (!url_slug) {
+            setAlertState({
+                show: true,
+                message: `Please enter a url slug`,
                 type: "error"
             });
             return;
         }
 
-        // Edit card
-        const updateCard = await cardService.update(cardId, formInput);
+        // Edit organisation
+        const updateOrganisation = await organisationService.update(organisationId, formInput);
 
         // Handle response
-        if (updateCard.success) {
+        if (updateOrganisation.success) {
             setAlertState({
                 show: true,
-                message: updateCard.message,
+                message: updateOrganisation.message,
                 type: "success"
             });
 
             // Redirect to the user page
             setTimeout(() => {
-                router.push(`/card/${cardId}`);
+                router.push(`/organisations/manage`);
             }, 2000);
         } else {
             setAlertState({
                 show: true,
-                message: updateCard.message,
+                message: updateOrganisation.message,
                 type: "error"
             });
         }
@@ -122,7 +134,7 @@ function editCard() {
     return (
         <>
             <Head>
-                <title>Edit Card - Haikoto</title>
+                <title>Edit Organisation - Haikoto</title>
             </Head>
 
             {!loadingState.show ? (
@@ -130,16 +142,19 @@ function editCard() {
                     <div className="m-7 md:mx-44">
                         <div className="mb-2">
                             <h1 className="text-center text-xl md:text-3xl">
-                                Edit Card
+                                Edit Organisation
                             </h1>
                         </div>
                         {alertState.show && <AlertComponent {...alertState} />}
                         <div className="mt-2 p-4 md:py-16 max-w-lg">
-                            <form onSubmit={processUpdateCard}>
+                            <form onSubmit={processUpdateOrganisation}>
                                 <label htmlFor="upload-button">
                                     <div className="flex justify-center relative">
-                                        <Image
-                                            src={previewImage || card.image}
+                                        <img
+                                            src={
+                                                previewImage ||
+                                                organisation.logo
+                                            }
                                             width={500}
                                             height={500}
                                         />
@@ -163,12 +178,12 @@ function editCard() {
                                         };
                                         reader.readAsDataURL(file);
 
-                                        const image = await uploadImage(file);
-                                        if (image.success) {
+                                        const logo = await uploadImage(file);
+                                        if (logo.success) {
                                             // Set the Form Input State
                                             setFormInput({
                                                 ...formInput,
-                                                image: image.url
+                                                logo: logo.url
                                             });
                                         } else {
                                             window.scrollTo(0, 0);
@@ -185,19 +200,37 @@ function editCard() {
 
                                 <div className="mt-4 mb-8">
                                     <h1 className="md:text-3xl text-center">
-                                        Edit Image
+                                        Edit Logo
                                     </h1>
                                     <h1 className="font-bold text-xl md:text-3xl text-center mt-4 md:mt-10">
-                                        Title
+                                        Organisation Name
                                     </h1>
                                     <input
                                         className="border-black border-2 my-2 w-full p-2"
                                         type="text"
-                                        defaultValue={card.title}
+                                        defaultValue={organisation.name}
                                         onChange={(e) => {
                                             setFormInput({
                                                 ...formInput,
-                                                title: e.target.value
+                                                name: e.target.value
+                                            });
+                                        }}
+                                    />
+                                    <h1 className="font-bold text-xl md:text-3xl text-center mt-4 md:mt-10">
+                                        Organisation Url Slug
+                                    </h1>
+                                    <input
+                                        className="border-black border-2 my-2 w-full p-2"
+                                        type="text"
+                                        defaultValue={organisation.url_slug}
+                                        placeholder={
+                                            window.location.origin +
+                                            "/:url_slug:"
+                                        }
+                                        onChange={(e) => {
+                                            setFormInput({
+                                                ...formInput,
+                                                url_slug: e.target.value
                                             });
                                         }}
                                     />
@@ -207,7 +240,7 @@ function editCard() {
                                     <CreatableSelect
                                         className="border-black border-2 my-2 w-full"
                                         isMulti
-                                        defaultValue={card.hashtags.map(
+                                        defaultValue={organisation.hashtags.map(
                                             (h) => ({
                                                 value: h._id,
                                                 label: h.title
@@ -253,4 +286,4 @@ function editCard() {
     );
 }
 
-export default withAuth(editCard);
+export default withAuth(editOrganisation);
