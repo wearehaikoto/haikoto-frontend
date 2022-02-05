@@ -125,16 +125,18 @@ function SingleCard({ card, playState, setPlayState }) {
                             <h1 className="font-bold md:max-w-xs text-[5vh] mx-auto text-center">
                                 {card.title}
                             </h1>
-                            <p className="text-center text-[4vh]">
-                                {card.hashtags.map((hashtag) => (
-                                    <span
-                                        key={hashtag._id}
-                                        className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2"
-                                    >
-                                        #{hashtag.title}
-                                    </span>
-                                ))}
-                            </p>
+                            {!setPlayState && (
+                                <p className="text-center text-[4vh]">
+                                    {card.hashtags.map((hashtag) => (
+                                        <span
+                                            key={hashtag._id}
+                                            className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2"
+                                        >
+                                            #{hashtag.title}
+                                        </span>
+                                    ))}
+                                </p>
+                            )}
                         </div>
 
                         {setPlayState && (
@@ -186,18 +188,21 @@ function SingleCard({ card, playState, setPlayState }) {
                                     <h1 className="font-bold md:max-w-xs text-[5vh] mx-auto text-center">
                                         {card.title}
                                     </h1>
-                                    <p className="text-center text-[4vh]">
-                                        {card.hashtags.map((hashtag) => (
-                                            <span
-                                                key={hashtag._id}
-                                                className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2"
-                                            >
-                                                #{hashtag.title}
-                                            </span>
-                                        ))}
-                                    </p>
+                                    {!setPlayState && (
+                                        <p className="text-center text-[4vh]">
+                                            {card.hashtags.map((hashtag) => (
+                                                <span
+                                                    key={hashtag._id}
+                                                    className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2"
+                                                >
+                                                    #{hashtag.title}
+                                                </span>
+                                            ))}
+                                        </p>
+                                    )}
                                 </div>
                             </div>
+
                             {setPlayState && (
                                 <div className="flex justify-center my-auto">
                                     <CardYesButton
