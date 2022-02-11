@@ -47,7 +47,7 @@ function companyLoginOrSignup() {
             });
 
             // Redirect to the user page
-            router.push("/user");
+            router.push("/dashboard");
 
             setTimeout(() => {
                 router.reload();

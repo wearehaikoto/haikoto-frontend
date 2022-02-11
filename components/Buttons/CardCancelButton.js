@@ -2,7 +2,7 @@ import Link from "next/link";
 
 export default function CardCancelButton({ redirect_url }) {
     return (
-        <Link href={redirect_url ? redirect_url : "/user"}>
+        <Link href={redirect_url ? redirect_url : "/dashboard"}>
             <a>
                 <div className="flex justify-around">
                     <div className="fixed top-2 right-2 md:right-10 h-16 w-16">

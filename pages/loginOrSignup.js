@@ -45,7 +45,7 @@ function loginOrSignup() {
 
             // Redirect to the user page
             setTimeout(() => {
-                router.push("/user");
+                router.push("/dashboard");
                 router.reload();
             }, 2000);
         } else {

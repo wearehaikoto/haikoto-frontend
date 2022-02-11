@@ -74,7 +74,7 @@ function createOrganisation() {
 
             // Redirect to the user page
             setTimeout(() => {
-                router.push("/user");
+                router.push("/dashboard");
             }, 2000);
         } else {
             setAlertState({

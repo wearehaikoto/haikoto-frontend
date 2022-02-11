@@ -31,7 +31,7 @@ function createCard() {
             });
 
             setTimeout(() => {
-                router.push("/user");
+                router.push("/dashboard");
             }, 2000);
         }
     }, []);

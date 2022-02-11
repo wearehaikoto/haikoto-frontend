@@ -3,7 +3,7 @@ import { $http, serviceResponse } from "../utils";
 class userService {
     async getAll() {
         try {
-            const response = await $http.get("/api/user");
+            const response = await $http.get("/api/dashboard");
 
             return serviceResponse(
                 response.data.message,

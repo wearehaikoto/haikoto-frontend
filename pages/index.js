@@ -155,7 +155,7 @@ export default function Home() {
                             </p>
                             <div className="border-l border-gray-800 pl-2 ml-2">
                                 <p className="text-base leading-4 text-gray-800">
-                                    All righys reserved
+                                    All rights reserved
                                 </p>
                             </div>
                         </div>
