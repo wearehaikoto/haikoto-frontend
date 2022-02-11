@@ -53,7 +53,7 @@ const AboutMe = () => {
                     )}
 
                     {!loadingState.show && (
-                        <div className="items-center justify-center min-h-screen py-2">
+                        <div className="items-center justify-center py-2">
                             <section className="my-4 w-full p-5 rounded bg-gray-200 bg-opacity-90">
                                 About Me
                             </section>
