@@ -2,6 +2,7 @@
 
 export { default as AlertComponent } from "./Alert/Alert";
 export { default as LoadingComponent } from "./Loading/Loading";
+export { default as NavigationBarComponent } from "./NavigationBar/NavigationBar";
 
 export { default as CardNoButton } from "./Buttons/CardNoButton";
 export { default as CardYesButton } from "./Buttons/CardYesButton";
