@@ -26,7 +26,7 @@ export default function Alert({ message, type }) {
         <>
             {showAlert && (
                 <div
-                    className={`${bgColor} border text-white px-4 py-3 rounded relative`}
+                    className={`${bgColor} border text-white px-4 py-3 rounded relative w-full max-w-lg`}
                     role="alert"
                 >
                     <span className="block sm:inline">{message}</span>
