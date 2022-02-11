@@ -118,6 +118,12 @@ const NavigationBar = () => {
                                 </a>
                             </Link>
 
+                            <Link href="/organisations/new">
+                                <a className="block py-2.5 px-4 rounded transition duration-200 hover:bg-gray-700 hover:text-white">
+                                    Add Organisation
+                                </a>
+                            </Link>
+
                             <Link href="/organisations/manage">
                                 <a className="block py-2.5 px-4 rounded transition duration-200 hover:bg-gray-700 hover:text-white">
                                     Manage Organisations
