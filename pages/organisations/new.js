@@ -108,7 +108,7 @@ function createOrganisation() {
 
                 <div className="flex-1 p-10 text-2xl font-bold max-h-screen overflow-y-auto">
                     <section className="my-4 w-full p-5 rounded bg-gray-200 bg-opacity-90">
-                        Create a Card
+                        Create an Organisation
                     </section>
 
                     <div className="flex flex-col items-center justify-center">
