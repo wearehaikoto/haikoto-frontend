@@ -7,7 +7,8 @@ import { withAuth } from "../../utils";
 import {
     SingleCard,
     LoadingComponent,
-    CardCancelButton
+    CardCancelButton,
+    NavigationBarComponent
 } from "../../components";
 
 function getCard() {
@@ -49,23 +50,27 @@ function getCard() {
                 <title>Single Card - Haikoto</title>
             </Head>
 
-            {!loadingState.show ? (
-                <div className="items-center justify-center min-h-screen py-2">
-                    <div className="m-10 md:mx-44">
-                        <div className="mb-4">
-                            <h1 className="text-center text-xl md:text-3xl">
-                                {card.title}
-                            </h1>
+            <div className="relative min-h-screen md:flex">
+                <NavigationBarComponent />
+
+                <div className="flex-1 p-10 text-2xl font-bold max-h-screen overflow-y-auto">
+                    {loadingState.show && (
+                        <LoadingComponent {...loadingState} />
+                    )}
+
+                    {!loadingState.show && (
+                        <div className="items-center justify-center py-2">
+                            <div className="mb-4">
+                                <h1 className="text-center text-xl md:text-3xl">
+                                    {card.title}
+                                </h1>
+                            </div>
+
+                            <SingleCard card={card} />
                         </div>
-
-                        <SingleCard card={card} />
-
-                        <CardCancelButton />
-                    </div>
+                    )}
                 </div>
-            ) : (
-                <LoadingComponent {...loadingState} />
-            )}
+            </div>
         </>
     );
 }

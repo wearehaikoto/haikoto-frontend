@@ -107,9 +107,11 @@ function SingleCard({ card, playState, setPlayState }) {
 
     return (
         <>
-            {!isLoading ? (
+            {isLoading && <LoadingComponent text={"New Card Loading"} />}
+
+            {!isLoading && (
                 <div {...(reactSwipeableHandler ? reactSwipeableHandler : {})}>
-                    {/* Potrait */}
+                    {/* Potrait View */}
                     <div className="mt-2 mb-5 p-4 hidden portrait:block">
                         <div className="h-52 w-52 lg:h-80 lg:w-80 relative mx-auto">
                             <Image
@@ -122,7 +124,7 @@ function SingleCard({ card, playState, setPlayState }) {
                         </div>
 
                         <div className="mt-4 mb-8">
-                            <h1 className="font-bold md:max-w-xs text-[5vh] mx-auto text-center">
+                            <h1 className="font-bold md:max-w-xs text-[4vh] mx-auto text-center">
                                 {card.title}
                             </h1>
                             {!setPlayState && (
@@ -185,7 +187,7 @@ function SingleCard({ card, playState, setPlayState }) {
                                 </div>
 
                                 <div className="mt-4 w-full">
-                                    <h1 className="font-bold md:max-w-xs text-[5vh] mx-auto text-center">
+                                    <h1 className="font-bold md:max-w-xs text-[4vh] mx-auto text-center">
                                         {card.title}
                                     </h1>
                                     {!setPlayState && (
@@ -215,8 +217,6 @@ function SingleCard({ card, playState, setPlayState }) {
                         </div>
                     </div>
                 </div>
-            ) : (
-                <LoadingComponent text={"New Card Loading"} />
             )}
         </>
     );
