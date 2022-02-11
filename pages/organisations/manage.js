@@ -5,7 +5,11 @@ import { useRouter } from "next/router";
 
 import { withAuth } from "../../utils";
 import { organisationService } from "../../services";
-import { LoadingComponent, CardCancelButton } from "../../components";
+import {
+    LoadingComponent,
+    CardCancelButton,
+    NavigationBarComponent
+} from "../../components";
 
 function manageOrganisation() {
     const router = useRouter();
@@ -31,7 +35,7 @@ function manageOrganisation() {
             });
 
             setTimeout(() => {
-                router.push("/user");
+                router.push("/dashboard");
             }, 2000);
         }
     }, []);
@@ -57,101 +61,102 @@ function manageOrganisation() {
                 <title>All Organisations - Haikoto</title>
             </Head>
 
-            {!loadingState.show ? (
-                <div className="items-center justify-center min-h-screen py-2">
-                    <div className="m-10 md:mx-44">
-                        <div className="mb-4">
-                            <h1 className="text-center text-xl md:text-3xl">
+            <div className="relative min-h-screen md:flex">
+                <NavigationBarComponent />
+
+                <div className="flex-1 p-10 text-2xl font-bold max-h-screen overflow-y-auto">
+                    {loadingState.show && (
+                        <LoadingComponent {...loadingState} />
+                    )}
+
+                    {!loadingState.show && (
+                        <div className="items-center justify-center py-2">
+                            <section className="my-4 w-full p-5 rounded bg-gray-200 bg-opacity-90">
                                 All Organisations
-                            </h1>
-                        </div>
+                            </section>
 
-                        <div className="mb-10">
-                            <div className="p-4 overflow-x-auto">
-                                {/* Add New Button */}
-                                <div className="flex flex-row text-center justify-center">
-                                    <Link href="/organisations/new">
-                                        <a className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 my-2 min-w-max w-2/4 rounded-full">
-                                            + Add New Organisation
-                                        </a>
-                                    </Link>
-                                </div>
-
-                                <table className="table-auto w-full">
-                                    <thead className="bg-blue-600">
-                                        <tr>
-                                            <th className="px-4 py-2 text-xs text-white text-left">
-                                                URL
-                                            </th>
-                                            <th className="px-4 py-2 text-xs text-white text-left">
-                                                ORG Name
-                                            </th>
-                                            <th className="px-4 py-2 text-xs text-white text-left" />
-                                        </tr>
-                                    </thead>
-                                    <tbody className="text-sm">
-                                        {organisations.map((organisation) => {
-                                            const url =
-                                                window.location.origin +
-                                                "/" +
-                                                organisation.url_slug;
-                                            return (
-                                                <tr key={organisation._id}>
-                                                    <td className="border px-4 py-2 text-blue-600 border-blue-500 font-medium">
-                                                        <a
-                                                            target="_blank"
-                                                            href={url}
+                            <div className="mb-10">
+                                <div className="overflow-x-auto">
+                                    <table className="table-auto w-full">
+                                        <thead className="bg-blue-600">
+                                            <tr>
+                                                <th className="px-4 py-2 text-xs text-white text-left">
+                                                    URL
+                                                </th>
+                                                <th className="px-4 py-2 text-xs text-white text-left">
+                                                    ORG Name
+                                                </th>
+                                                <th className="px-4 py-2 text-xs text-white text-left" />
+                                            </tr>
+                                        </thead>
+                                        <tbody className="text-sm">
+                                            {organisations.map(
+                                                (organisation) => {
+                                                    const url =
+                                                        window.location.origin +
+                                                        "/" +
+                                                        organisation.url_slug;
+                                                    return (
+                                                        <tr
+                                                            key={
+                                                                organisation._id
+                                                            }
                                                         >
-                                                            {url}
-                                                        </a>
-                                                    </td>
-                                                    <td className="border px-4 py-2 text-blue-600 border-blue-500 font-medium">
-                                                        {organisation.name}
-                                                    </td>
-                                                    <td className="border px-4 py-2 text-yellow-600 border-blue-500 font-medium">
-                                                        <div className="divide-x-2 divide-neutral-900 divide-double">
-                                                            {/* <Link
+                                                            <td className="border px-4 py-2 text-blue-600 border-blue-500 font-medium">
+                                                                <a
+                                                                    target="_blank"
+                                                                    href={url}
+                                                                >
+                                                                    {url}
+                                                                </a>
+                                                            </td>
+                                                            <td className="border px-4 py-2 text-blue-600 border-blue-500 font-medium">
+                                                                {
+                                                                    organisation.name
+                                                                }
+                                                            </td>
+                                                            <td className="border px-4 py-2 text-yellow-600 border-blue-500 font-medium">
+                                                                <div className="divide-x-2 divide-neutral-900 divide-double">
+                                                                    {/* <Link
                                                                 href={`/organisations/${organisation._id}`}
                                                             >
                                                                 <a className="px-2">
                                                                     View
                                                                 </a>
                                                             </Link> */}
-                                                            <Link
-                                                                href={`/organisations/edit/${organisation._id}`}
-                                                            >
-                                                                <a className="px-2">
-                                                                    Edit
-                                                                </a>
-                                                            </Link>
-                                                            <button
-                                                                onClick={() =>
-                                                                    handleDeleteOrganisation(
-                                                                        organisation._id
-                                                                    )
-                                                                }
-                                                                className="px-2"
-                                                            >
-                                                                <a className="text-red-600">
-                                                                    Delete
-                                                                </a>
-                                                            </button>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                            );
-                                        })}
-                                    </tbody>
-                                </table>
+                                                                    <Link
+                                                                        href={`/organisations/edit/${organisation._id}`}
+                                                                    >
+                                                                        <a className="px-2">
+                                                                            Edit
+                                                                        </a>
+                                                                    </Link>
+                                                                    <button
+                                                                        onClick={() =>
+                                                                            handleDeleteOrganisation(
+                                                                                organisation._id
+                                                                            )
+                                                                        }
+                                                                        className="px-2"
+                                                                    >
+                                                                        <a className="text-red-600">
+                                                                            Delete
+                                                                        </a>
+                                                                    </button>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                    );
+                                                }
+                                            )}
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
-
-                        <CardCancelButton />
-                    </div>
+                    )}
                 </div>
-            ) : (
-                <LoadingComponent {...loadingState} />
-            )}
+            </div>
         </>
     );
 }

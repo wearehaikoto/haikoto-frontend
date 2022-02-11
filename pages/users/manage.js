@@ -4,7 +4,11 @@ import { useRouter } from "next/router";
 
 import { userService } from "../../services";
 import { withAuth } from "../../utils";
-import { LoadingComponent, CardCancelButton } from "../../components";
+import {
+    LoadingComponent,
+    CardCancelButton,
+    NavigationBarComponent
+} from "../../components";
 
 function manageUser() {
     const router = useRouter();
@@ -30,7 +34,7 @@ function manageUser() {
             });
 
             setTimeout(() => {
-                router.push("/user");
+                router.push("/dashboard");
             }, 2000);
         }
     }, []);
@@ -74,80 +78,83 @@ function manageUser() {
                 <title>All Users - Haikoto</title>
             </Head>
 
-            {!loadingState.show ? (
-                <div className="items-center justify-center min-h-screen py-2">
-                    <div className="m-10 md:mx-44">
-                        <div className="mb-4">
-                            <h1 className="text-center text-xl md:text-3xl">
-                                All Users
-                            </h1>
-                        </div>
+            <div className="relative min-h-screen md:flex">
+                <NavigationBarComponent />
 
-                        <div className="mb-10">
-                            <div className="p-4 overflow-x-auto">
-                                <table className="table-auto w-full">
-                                    <thead className="bg-blue-600">
-                                        <tr>
-                                            <th className="px-4 py-2 text-xs text-white text-left">
-                                                User ID - Role
-                                            </th>
-                                            <th className="px-4 py-2 text-xs text-white text-left">
-                                                CodeName
-                                            </th>
-                                            <th className="px-4 py-2 text-xs text-white text-left" />
-                                            <th className="px-4 py-2 text-xs text-white text-left" />
-                                        </tr>
-                                    </thead>
-                                    <tbody className="text-sm">
-                                        {users.map((user) => {
-                                            return (
-                                                <tr key={user._id}>
-                                                    <td className="border px-4 py-2 text-blue-600 border-blue-500 font-medium">
-                                                        {user._id} - {user.role}
-                                                    </td>
-                                                    <td className="border px-4 py-2 text-blue-600 border-blue-500 font-medium">
-                                                        {user.codeName}
-                                                    </td>
-                                                    <td className="border px-4 py-2 text-yellow-600 border-blue-500 font-medium">
-                                                        <button
-                                                            onClick={() =>
-                                                                handleUpgradeUser(
-                                                                    user._id
-                                                                )
-                                                            }
-                                                        >
-                                                            <a className="text-yellow-600">
-                                                                Promote
-                                                            </a>
-                                                        </button>
-                                                    </td>
-                                                    <td className="border px-4 py-2 text-yellow-600 border-blue-500 font-medium">
-                                                        <button
-                                                            onClick={() =>
-                                                                handleDeleteUser(
-                                                                    user._id
-                                                                )
-                                                            }
-                                                        >
-                                                            <a className="text-red-600">
-                                                                Delete
-                                                            </a>
-                                                        </button>
-                                                    </td>
-                                                </tr>
-                                            );
-                                        })}
-                                    </tbody>
-                                </table>
+                <div className="flex-1 p-10 text-2xl font-bold max-h-screen overflow-y-auto">
+                    {loadingState.show && (
+                        <LoadingComponent {...loadingState} />
+                    )}
+
+                    {!loadingState.show && (
+                        <div className="items-center justify-center py-2">
+                            <section className="my-4 w-full p-5 rounded bg-gray-200 bg-opacity-90">
+                                All Users
+                            </section>
+
+                            <div className="mb-10">
+                                <div className="overflow-x-auto">
+                                    <table className="table-auto w-full">
+                                        <thead className="bg-blue-600">
+                                            <tr>
+                                                <th className="px-4 py-2 text-xs text-white text-left">
+                                                    User ID - Role
+                                                </th>
+                                                <th className="px-4 py-2 text-xs text-white text-left">
+                                                    CodeName
+                                                </th>
+                                                <th className="px-4 py-2 text-xs text-white text-left" />
+                                                <th className="px-4 py-2 text-xs text-white text-left" />
+                                            </tr>
+                                        </thead>
+                                        <tbody className="text-sm">
+                                            {users.map((user) => {
+                                                return (
+                                                    <tr key={user._id}>
+                                                        <td className="border px-4 py-2 text-blue-600 border-blue-500 font-medium">
+                                                            {user._id} -{" "}
+                                                            {user.role}
+                                                        </td>
+                                                        <td className="border px-4 py-2 text-blue-600 border-blue-500 font-medium">
+                                                            {user.codeName}
+                                                        </td>
+                                                        <td className="border px-4 py-2 text-yellow-600 border-blue-500 font-medium">
+                                                            <button
+                                                                onClick={() =>
+                                                                    handleUpgradeUser(
+                                                                        user._id
+                                                                    )
+                                                                }
+                                                            >
+                                                                <a className="text-yellow-600">
+                                                                    Promote
+                                                                </a>
+                                                            </button>
+                                                        </td>
+                                                        <td className="border px-4 py-2 text-yellow-600 border-blue-500 font-medium">
+                                                            <button
+                                                                onClick={() =>
+                                                                    handleDeleteUser(
+                                                                        user._id
+                                                                    )
+                                                                }
+                                                            >
+                                                                <a className="text-red-600">
+                                                                    Delete
+                                                                </a>
+                                                            </button>
+                                                        </td>
+                                                    </tr>
+                                                );
+                                            })}
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
-
-                        <CardCancelButton />
-                    </div>
+                    )}
                 </div>
-            ) : (
-                <LoadingComponent {...loadingState} />
-            )}
+            </div>
         </>
     );
 }

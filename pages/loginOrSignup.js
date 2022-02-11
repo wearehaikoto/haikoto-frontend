@@ -7,7 +7,7 @@ import Lottie from "react-lottie-player";
 import { withoutAuth } from "../utils";
 import { authService } from "../services";
 import { AlertComponent } from "../components";
-import { LottieLoginAnimationData } from "../assets";
+import { loginOrSignupBanner } from "../assets";
 
 function loginOrSignup() {
     const router = useRouter();
@@ -45,7 +45,7 @@ function loginOrSignup() {
 
             // Redirect to the user page
             setTimeout(() => {
-                router.push("/user");
+                router.push("/dashboard");
                 router.reload();
             }, 2000);
         } else {
@@ -64,7 +64,13 @@ function loginOrSignup() {
             </Head>
 
             <div className="w-full flex flex-wrap">
-                {/* Signup Section */}
+                <div className="w-1/2 hidden md:block">
+                    <img
+                        src="/assets/loginOrSignupBanner.png"
+                        className="object-cover w-full h-screen"
+                    />
+                </div>
+
                 <div className="w-full md:w-1/2 flex flex-col">
                     <div className="flex justify-center md:justify-start pt-12 md:pl-12 md:-mb-24">
                         <Link href="/">
@@ -74,7 +80,7 @@ function loginOrSignup() {
                         </Link>
                     </div>
                     <div className="flex flex-col justify-center md:justify-start my-auto pt-8 md:pt-0 px-8 md:px-24 lg:px-32">
-                        <p className="text-center text-3xl">Login | Signup</p>
+                        <p className="text-center text-3xl">Get Started</p>
                         <form
                             className="flex flex-col pt-3 md:pt-8"
                             onSubmit={processLoginOrSignup}
@@ -102,15 +108,6 @@ function loginOrSignup() {
                             </button>
                         </form>
                     </div>
-                </div>
-
-                <div className="w-1/2 shadow-2xl">
-                    <Lottie
-                        className="object-cover w-full h-screen hidden md:block"
-                        animationData={LottieLoginAnimationData}
-                        loop={true}
-                        play={true}
-                    />
                 </div>
             </div>
         </>

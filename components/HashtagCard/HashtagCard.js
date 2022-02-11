@@ -29,7 +29,7 @@ function HashtagCard({ playState, setPlayState }) {
 
             // Take a while before redirecting to about-me/result
             setTimeout(() => {
-                router.push(`/user/about-me`);
+                router.push(`/dashboard/about-me`);
             }, 1500);
         }
     }, []);
