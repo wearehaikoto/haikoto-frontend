@@ -20,7 +20,7 @@ const NavigationBar = () => {
 
     return (
         <>
-            <div className="bg-gray-800 text-white flex justify-between md:hidden">
+            <div className="sticky w-full bg-blue-800 text-white flex justify-between md:hidden">
                 <img
                     src="/assets/images/logo-icon.svg"
                     className="w-8 h-8 m-3"
@@ -30,7 +30,7 @@ const NavigationBar = () => {
                     <a className="block p-4 text-white font-bold">Haikoto</a>
                 </Link>
                 <button
-                    className="mobile-menu-button p-4 focus:outline-none focus:bg-gray-700"
+                    className="mobile-menu-button p-4 focus:outline-none focus:bg-blue-700"
                     onClick={() => setIsMobileNavExpanded(!isMobileNavExpanded)}
                 >
                     <svg
@@ -52,7 +52,7 @@ const NavigationBar = () => {
 
             <div
                 className={[
-                    "sidebar bg-gray-800 text-white w-64 space-y-6 py-7 px-2 absolute inset-y-0 left-0 transform md:relative md:translate-x-0 transition duration-200 ease-in-out max-h-screen overflow-y-auto",
+                    "bg-blue-800 text-white w-64 space-y-6 py-7 px-2 absolute inset-y-0 left-0 transform md:relative md:translate-x-0 transition duration-200 ease-in-out max-h-screen overflow-y-auto z-50",
                     !isMobileNavExpanded && "-translate-x-full"
                 ].join(" ")}
             >
@@ -69,14 +69,14 @@ const NavigationBar = () => {
 
                 <nav>
                     <Link href="/dashboard">
-                        <a className="block py-2.5 px-4 rounded transition duration-200 hover:bg-gray-700 hover:text-white">
+                        <a className="block py-2.5 px-4 rounded transition duration-200 hover:bg-blue-700 hover:text-white">
                             Dashboard
                         </a>
                     </Link>
 
                     {showPlayButton ? (
                         <Link href="/play">
-                            <a className="block py-2.5 px-4 rounded transition duration-200 hover:bg-gray-700 hover:text-white">
+                            <a className="block py-2.5 px-4 rounded transition duration-200 hover:bg-blue-700 hover:text-white">
                                 Play Cards
                             </a>
                         </Link>
@@ -88,7 +88,7 @@ const NavigationBar = () => {
 
                     {!user.organisation && (
                         <Link href="/dashboard/about-me">
-                            <a className="block py-2.5 px-4 rounded transition duration-200 hover:bg-gray-700 hover:text-white">
+                            <a className="block py-2.5 px-4 rounded transition duration-200 hover:bg-blue-700 hover:text-white">
                                 About Me
                             </a>
                         </Link>
@@ -101,31 +101,31 @@ const NavigationBar = () => {
                             </span>
 
                             <Link href="/card/new">
-                                <a className="block py-2.5 px-4 rounded transition duration-200 hover:bg-gray-700 hover:text-white">
+                                <a className="block py-2.5 px-4 rounded transition duration-200 hover:bg-blue-700 hover:text-white">
                                     Add Card
                                 </a>
                             </Link>
 
                             <Link href="/card/all">
-                                <a className="block py-2.5 px-4 rounded transition duration-200 hover:bg-gray-700 hover:text-white">
+                                <a className="block py-2.5 px-4 rounded transition duration-200 hover:bg-blue-700 hover:text-white">
                                     Manage Cards
                                 </a>
                             </Link>
 
                             <Link href="/users/manage">
-                                <a className="block py-2.5 px-4 rounded transition duration-200 hover:bg-gray-700 hover:text-white">
+                                <a className="block py-2.5 px-4 rounded transition duration-200 hover:bg-blue-700 hover:text-white">
                                     Manage Users
                                 </a>
                             </Link>
 
                             <Link href="/organisations/new">
-                                <a className="block py-2.5 px-4 rounded transition duration-200 hover:bg-gray-700 hover:text-white">
+                                <a className="block py-2.5 px-4 rounded transition duration-200 hover:bg-blue-700 hover:text-white">
                                     Add Organisation
                                 </a>
                             </Link>
 
                             <Link href="/organisations/manage">
-                                <a className="block py-2.5 px-4 rounded transition duration-200 hover:bg-gray-700 hover:text-white">
+                                <a className="block py-2.5 px-4 rounded transition duration-200 hover:bg-blue-700 hover:text-white">
                                     Manage Organisations
                                 </a>
                             </Link>
@@ -136,14 +136,14 @@ const NavigationBar = () => {
 
                             <a
                                 href="https://hexa-mypd.herokuapp.com/app.html"
-                                className="block py-2.5 px-4 rounded transition duration-200 hover:bg-gray-700 hover:text-white"
+                                className="block py-2.5 px-4 rounded transition duration-200 hover:bg-blue-700 hover:text-white"
                             >
                                 Use Hexa
                             </a>
 
                             <a
                                 href="https://hexa-mypd.herokuapp.com/train.html"
-                                className="block py-2.5 px-4 rounded transition duration-200 hover:bg-gray-700 hover:text-white"
+                                className="block py-2.5 px-4 rounded transition duration-200 hover:bg-blue-700 hover:text-white"
                             >
                                 Train Hexa
                             </a>
@@ -153,7 +153,7 @@ const NavigationBar = () => {
                     <span className="block py-2.5 px-4 text-xs opacity-40 uppercase border-y-[0.5px] my-2" />
 
                     <Link href="/logout">
-                        <a className="block py-2.5 px-4 rounded transition duration-200 hover:bg-gray-700 hover:text-white">
+                        <a className="block py-2.5 px-4 rounded transition duration-200 hover:bg-blue-700 hover:text-white">
                             Logout
                         </a>
                     </Link>
