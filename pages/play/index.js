@@ -6,7 +6,8 @@ import {
     SingleCard,
     VoteCard,
     HashtagCard,
-    LoadingComponent
+    LoadingComponent,
+    NavigationBarComponent
 } from "../../components";
 import { gameService } from "../../services";
 import { useMergeState, withAuth, ArrayMethods } from "../../utils";
@@ -92,7 +93,10 @@ function playCards() {
             if (newCards.success) {
                 // Add the new Cards to the allCards bucket
                 // Update the current Card Number +1 and continue game
-                const functionNewCards = ArrayMethods.getUnique([...allCards, ...newCards.data.newCard], "_id");
+                const functionNewCards = ArrayMethods.getUnique(
+                    [...allCards, ...newCards.data.newCard],
+                    "_id"
+                );
                 setPlayState({
                     allCards: functionNewCards,
                     currentCard: functionNewCards.length,
@@ -114,36 +118,49 @@ function playCards() {
                 <title>Play Cards - Haikoto</title>
             </Head>
 
-            {!loading_show ? (
-                <>
-                    {gameMode === "swipe" &&
-                        typeof allCards[currentCard - 1] !== "undefined" && (
-                            <SingleCard
-                                card={allCards[currentCard - 1]}
-                                playState={playState}
-                                setPlayState={setPlayState}
-                            />
-                        )}
-                    {gameMode === "vote" && (
-                        <VoteCard
-                            gameId={gameId}
-                            setPlayState={setPlayState}
-                            rightSwipedCards={rightSwipedCards}
+            <div className="relative min-h-screen md:flex">
+                <NavigationBarComponent />
+
+                <div className="flex-1 p-10 text-2xl font-bold max-h-screen overflow-y-auto">
+                    {loading_show && (
+                        <LoadingComponent
+                            text={loading_text}
+                            description={loading_description}
                         />
                     )}
-                    {gameMode === "hashtag" && (
-                        <HashtagCard
-                            playState={playState}
-                            setPlayState={setPlayState}
-                        />
+
+                    {!loading_show && (
+                        <>
+                            <section className="my-4 w-full p-5 rounded bg-gray-200 bg-opacity-90">
+                                Play Cards
+                            </section>
+
+                            {gameMode === "swipe" &&
+                                typeof allCards[currentCard - 1] !==
+                                    "undefined" && (
+                                    <SingleCard
+                                        card={allCards[currentCard - 1]}
+                                        playState={playState}
+                                        setPlayState={setPlayState}
+                                    />
+                                )}
+                            {gameMode === "vote" && (
+                                <VoteCard
+                                    gameId={gameId}
+                                    setPlayState={setPlayState}
+                                    rightSwipedCards={rightSwipedCards}
+                                />
+                            )}
+                            {gameMode === "hashtag" && (
+                                <HashtagCard
+                                    playState={playState}
+                                    setPlayState={setPlayState}
+                                />
+                            )}
+                        </>
                     )}
-                </>
-            ) : (
-                <LoadingComponent
-                    text={loading_text}
-                    description={loading_description}
-                />
-            )}
+                </div>
+            </div>
         </>
     );
 }
