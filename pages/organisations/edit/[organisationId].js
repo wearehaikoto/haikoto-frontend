@@ -1,6 +1,5 @@
 import React from "react";
 import Head from "next/head";
-import Image from "next/image";
 import { useRouter } from "next/router";
 import CreatableSelect from "react-select/creatable";
 
@@ -9,7 +8,8 @@ import { cardService, organisationService } from "../../../services";
 import {
     LoadingComponent,
     CardCancelButton,
-    AlertComponent
+    AlertComponent,
+    NavigationBarComponent
 } from "../../../components";
 
 function editOrganisation() {
@@ -108,7 +108,10 @@ function editOrganisation() {
         }
 
         // Edit organisation
-        const updateOrganisation = await organisationService.update(organisationId, formInput);
+        const updateOrganisation = await organisationService.update(
+            organisationId,
+            formInput
+        );
 
         // Handle response
         if (updateOrganisation.success) {
@@ -136,152 +139,162 @@ function editOrganisation() {
             <Head>
                 <title>Edit Organisation - Haikoto</title>
             </Head>
+            <div className="relative min-h-screen md:flex">
+                <NavigationBarComponent />
 
-            {!loadingState.show ? (
-                <div className="flex flex-col items-center justify-center min-h-screen">
-                    <div className="m-7 md:mx-44">
-                        <div className="mb-2">
-                            <h1 className="text-center text-xl md:text-3xl">
+                <div className="flex-1 p-10 text-2xl font-bold max-h-screen overflow-y-auto">
+                    {loadingState.show && (
+                        <LoadingComponent {...loadingState} />
+                    )}
+
+                    {!loadingState.show && (
+                        <div className="flex flex-col items-center justify-center">
+                            <section className="my-4 w-full p-5 rounded bg-gray-200 bg-opacity-90">
                                 Edit Organisation
-                            </h1>
-                        </div>
-                        {alertState.show && <AlertComponent {...alertState} />}
-                        <div className="mt-2 p-4 md:py-16 max-w-lg">
-                            <form onSubmit={processUpdateOrganisation}>
-                                <label htmlFor="upload-button">
-                                    <div className="flex justify-center relative">
-                                        <img
-                                            src={
-                                                previewImage ||
-                                                organisation.logo
+                            </section>
+
+                            {alertState.show && (
+                                <AlertComponent {...alertState} />
+                            )}
+
+                            <div className="mt-2 md:py-10 max-w-lg">
+                                <form onSubmit={processUpdateOrganisation}>
+                                    <label htmlFor="upload-button">
+                                        <div className="flex justify-center relative">
+                                            <img
+                                                src={
+                                                    previewImage ||
+                                                    organisation.logo
+                                                }
+                                                width={500}
+                                                height={500}
+                                            />
+                                            {!previewImage && (
+                                                <div className="absolute w-full py-2.5 bottom-1/3 bg-blue-600 opacity-0 text-white text-xs text-center leading-4 hover:opacity-70">
+                                                    Click to upload new
+                                                </div>
+                                            )}
+                                        </div>
+                                    </label>
+                                    <input
+                                        type="file"
+                                        id="upload-button"
+                                        style={{ display: "none" }}
+                                        onChange={async (e) => {
+                                            // Set the Preview Image
+                                            const file = e.target.files[0];
+                                            const reader = new FileReader();
+                                            reader.onload = (e) => {
+                                                setPreviewImage(
+                                                    e.target.result
+                                                );
+                                            };
+                                            reader.readAsDataURL(file);
+
+                                            const logo = await uploadImage(
+                                                file
+                                            );
+                                            if (logo.success) {
+                                                // Set the Form Input State
+                                                setFormInput({
+                                                    ...formInput,
+                                                    logo: logo.url
+                                                });
+                                            } else {
+                                                window.scrollTo(0, 0);
+                                                setAlertState({
+                                                    show: true,
+                                                    message:
+                                                        "Image Upload Failed. Please try again.",
+                                                    type: "error"
+                                                });
+                                                setPreviewImage(null);
                                             }
-                                            width={500}
-                                            height={500}
+                                        }}
+                                    />
+
+                                    <div className="mt-4 mb-8">
+                                        <h1 className="md:text-3xl text-center">
+                                            Edit Logo
+                                        </h1>
+                                        <h1 className="font-bold text-xl md:text-3xl text-center mt-4 md:mt-10">
+                                            Organisation Name
+                                        </h1>
+                                        <input
+                                            className="border-black border-2 my-2 w-full p-2"
+                                            type="text"
+                                            defaultValue={organisation.name}
+                                            onChange={(e) => {
+                                                setFormInput({
+                                                    ...formInput,
+                                                    name: e.target.value
+                                                });
+                                            }}
                                         />
-                                        {!previewImage && (
-                                            <div className="absolute w-full py-2.5 bottom-1/3 bg-blue-600 opacity-0 text-white text-xs text-center leading-4 hover:opacity-70">
-                                                Click to upload new
-                                            </div>
-                                        )}
-                                    </div>
-                                </label>
-                                <input
-                                    type="file"
-                                    id="upload-button"
-                                    style={{ display: "none" }}
-                                    onChange={async (e) => {
-                                        // Set the Preview Image
-                                        const file = e.target.files[0];
-                                        const reader = new FileReader();
-                                        reader.onload = (e) => {
-                                            setPreviewImage(e.target.result);
-                                        };
-                                        reader.readAsDataURL(file);
-
-                                        const logo = await uploadImage(file);
-                                        if (logo.success) {
-                                            // Set the Form Input State
-                                            setFormInput({
-                                                ...formInput,
-                                                logo: logo.url
-                                            });
-                                        } else {
-                                            window.scrollTo(0, 0);
-                                            setAlertState({
-                                                show: true,
-                                                message:
-                                                    "Image Upload Failed. Please try again.",
-                                                type: "error"
-                                            });
-                                            setPreviewImage(null);
-                                        }
-                                    }}
-                                />
-
-                                <div className="mt-4 mb-8">
-                                    <h1 className="md:text-3xl text-center">
-                                        Edit Logo
-                                    </h1>
-                                    <h1 className="font-bold text-xl md:text-3xl text-center mt-4 md:mt-10">
-                                        Organisation Name
-                                    </h1>
-                                    <input
-                                        className="border-black border-2 my-2 w-full p-2"
-                                        type="text"
-                                        defaultValue={organisation.name}
-                                        onChange={(e) => {
-                                            setFormInput({
-                                                ...formInput,
-                                                name: e.target.value
-                                            });
-                                        }}
-                                    />
-                                    <h1 className="font-bold text-xl md:text-3xl text-center mt-4 md:mt-10">
-                                        Organisation Url Slug
-                                    </h1>
-                                    <input
-                                        className="border-black border-2 my-2 w-full p-2"
-                                        type="text"
-                                        defaultValue={organisation.url_slug}
-                                        placeholder={
-                                            window.location.origin +
-                                            "/:url_slug:"
-                                        }
-                                        onChange={(e) => {
-                                            setFormInput({
-                                                ...formInput,
-                                                url_slug: e.target.value
-                                            });
-                                        }}
-                                    />
-                                    <h1 className="font-bold text-xl md:text-3xl text-center mt-4 md:mt-10">
-                                        Hashtags (Parent Cards)
-                                    </h1>
-                                    <CreatableSelect
-                                        className="border-black border-2 my-2 w-full"
-                                        isMulti
-                                        defaultValue={organisation.hashtags.map(
-                                            (h) => ({
-                                                value: h._id,
-                                                label: h.title
-                                            })
-                                        )}
-                                        onChange={(e) => {
-                                            setFormInput({
-                                                ...formInput,
-                                                hashtags: e.map((e) =>
-                                                    e.value.toLowerCase().trim()
-                                                )
-                                            });
-                                        }}
-                                        options={cardsAsHashtags.map(
-                                            (hashtag) => {
-                                                return {
-                                                    value: hashtag._id,
-                                                    label: hashtag.title
-                                                };
+                                        <h1 className="font-bold text-xl md:text-3xl text-center mt-4 md:mt-10">
+                                            Organisation Url Slug
+                                        </h1>
+                                        <input
+                                            className="border-black border-2 my-2 w-full p-2"
+                                            type="text"
+                                            defaultValue={organisation.url_slug}
+                                            placeholder={
+                                                window.location.origin +
+                                                "/:url_slug:"
                                             }
-                                        )}
-                                    />
-                                    {/* Submit Button */}
-                                    <div className="flex justify-center mt-8">
-                                        <button
-                                            className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                                            type="submit"
-                                        >
-                                            Update
-                                        </button>
+                                            onChange={(e) => {
+                                                setFormInput({
+                                                    ...formInput,
+                                                    url_slug: e.target.value
+                                                });
+                                            }}
+                                        />
+                                        <h1 className="font-bold text-xl md:text-3xl text-center mt-4 md:mt-10">
+                                            Hashtags (Parent Cards)
+                                        </h1>
+                                        <CreatableSelect
+                                            className="border-black border-2 my-2 w-full"
+                                            isMulti
+                                            defaultValue={organisation.hashtags.map(
+                                                (h) => ({
+                                                    value: h._id,
+                                                    label: h.title
+                                                })
+                                            )}
+                                            onChange={(e) => {
+                                                setFormInput({
+                                                    ...formInput,
+                                                    hashtags: e.map((e) =>
+                                                        e.value
+                                                            .toLowerCase()
+                                                            .trim()
+                                                    )
+                                                });
+                                            }}
+                                            options={cardsAsHashtags.map(
+                                                (hashtag) => {
+                                                    return {
+                                                        value: hashtag._id,
+                                                        label: hashtag.title
+                                                    };
+                                                }
+                                            )}
+                                        />
+                                        <div className="flex justify-center mt-8">
+                                            <button
+                                                className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                                                type="submit"
+                                            >
+                                                Update
+                                            </button>
+                                        </div>
                                     </div>
-                                </div>
-                            </form>
+                                </form>
+                            </div>
                         </div>
-
-                        <CardCancelButton />
-                    </div>
+                    )}
                 </div>
-            ) : (
-                <LoadingComponent {...loadingState} />
-            )}
+            </div>
         </>
     );
 }
