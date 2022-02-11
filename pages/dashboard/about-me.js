@@ -37,7 +37,6 @@ const AboutMe = () => {
         }
     }, []);
 
-    console.log(myGame);
     return (
         <>
             <Head>
@@ -60,11 +59,11 @@ const AboutMe = () => {
 
                             {(() => {
                                 const allCards = myGame.rightSwipedCards.concat(
-                                    myGame?.leftSwipedCards
+                                    myGame.leftSwipedCards
                                 );
                                 const allHashtags =
                                     myGame.rightSwipedHashtags.concat(
-                                        myGame?.leftSwipedHashtags
+                                        myGame.leftSwipedHashtags
                                     );
 
                                 if (
