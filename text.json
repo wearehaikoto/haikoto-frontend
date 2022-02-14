@@ -1,12 +1,12 @@
 {
     "APP_NAME": "Haikoto",
-    "email": "z@mypd.io",
+    "email": "hello@haikoto.com",
     "header": [
-        "SWIPE",
-        "to find the right person for the",
+        "KNOW MORE",
+        "about your soft skills and get ready for your next",
         "JOB"
     ],
-    "sub_header": "We are creating a unique workspace culture! We help you to find the perfect job! The only thing You have to do is SWIPE!",
+    "sub_header": "We are creating a unique workspace culture! We help you to build your SKILL MAP! Choose the cards that best suit you!",
     "CTA_button_text": "Get Started",
 
     "section_1_header": "How It Works!",
