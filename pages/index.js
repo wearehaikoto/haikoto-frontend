@@ -1,3 +1,4 @@
+import TextContent from "../text.json";
 import React from "react";
 import Link from "next/link";
 
@@ -12,7 +13,7 @@ export default function Home() {
                         <div>
                             <Link href="/">
                                 <a className="text-2xl font-black text-blue-600 lg:text-3xl">
-                                    Haikoto
+                                    {TextContent.APP_NAME}
                                 </a>
                             </Link>
                         </div>
@@ -51,7 +52,7 @@ export default function Home() {
                         </Link>
                         <a
                             className="text-black hover:text-blue-600"
-                            href="mailto:z@mypd.io"
+                            href={`mailto:${TextContent.email}`}
                         >
                             Contact us
                         </a>
@@ -73,20 +74,33 @@ export default function Home() {
                     <div className="container mx-auto flex flex-col items-center py-12 sm:py-24">
                         <div className="w-11/12 sm:w-2/3 lg:flex justify-center items-center flex-col  mb-5 sm:mb-10">
                             <h1 className="lg:text-6xl text-4xl font-black leading-10 text-center text-gray-800">
-                                <span className="text-blue-600">SWIPE</span> to
-                                find the right person for the{" "}
-                                <span className="text-blue-600">JOB</span>
+                                {TextContent.header.map((text, index) => {
+                                    if (index % 2 === 0) {
+                                        return (
+                                            <span
+                                                key={index}
+                                                className="text-blue-600"
+                                            >
+                                                {text}
+                                            </span>
+                                        );
+                                    }
+
+                                    return (
+                                        <React.Fragment key={index}>
+                                            &nbsp;{text}&nbsp;
+                                        </React.Fragment>
+                                    );
+                                })}
                             </h1>
-                            <p className="mt-5 sm:mt-10 lg:w-10/12 text-gray-400 font-normal text-center text-sm sm:text-lg">
-                                We are creating a unique workspace culture! We
-                                help you to find the perfect job! The only thing
-                                You have to do is <b>SWIPE</b>!
+                            <p className="mt-5 sm:mt-10 lg:w-10/12 text-gray-500 font-normal text-center text-sm sm:text-lg">
+                                {TextContent.sub_header}
                             </p>
                         </div>
                         <div className="flex justify-center items-center">
                             <Link href="/loginOrSignup">
                                 <a className="focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-600 bg-blue-600 transition duration-150 ease-in-out hover:bg-blue-500 lg:text-xl lg:font-bold  rounded text-white px-4 sm:px-10 border border-blue-600 py-2 sm:py-4 text-sm">
-                                    Get Started
+                                    {TextContent.CTA_button_text}
                                 </a>
                             </Link>
                         </div>
@@ -96,50 +110,24 @@ export default function Home() {
                 <section className="mx-auto container py-20" id="#howitworks">
                     <div className="flex justify-center items-center flex-col">
                         <div className="lg:text-6xl text-4xl font-black leading-10 text-center text-gray-800">
-                            <h1>How it Works</h1>
+                            <h1>{TextContent.section_1_header}</h1>
                         </div>
                         <div className="pt-24 grid lg:grid-cols-3 md:grid-cols-2 justify-center items-center xl:gap-y-16 gap-y-20 gap-x-16 lg:gap-x-20 lg:px-10 xl:px-0">
-                            <div className="cursor-pointer shadow-lg py-6 xl:px-4 rounded xl:w-96 w-60 flex justify-center items-center flex-col p-2">
-                                <div className="text-gray-800 text-2xl font-semibold text-center">
-                                    <h2>Create an Account</h2>
-                                </div>
-                                <div className="text-gray-600 mt-2 text-lg text-center ">
-                                    <p>
-                                        Click{" "}
-                                        <Link href="/loginOrSignup">
-                                            <a className="text-blue-600">
-                                                get started
-                                            </a>
-                                        </Link>{" "}
-                                        to create an account by simply choosing
-                                        a codeName
-                                    </p>
-                                </div>
-                            </div>
-                            <div className="cursor-pointer shadow-lg py-6 xl:px-4 rounded xl:w-96 w-60 flex justify-center items-center flex-col p-2">
-                                <div className="text-gray-800 text-2xl font-semibold text-center">
-                                    <h2>Play Cards</h2>
-                                </div>
-                                <div className="text-gray-600 mt-2 text-lg text-center">
-                                    <p>
-                                        After you get logged in, you can play
-                                        cards. Simply Swipe left or right
-                                        according to your preference.
-                                    </p>
-                                </div>
-                            </div>
-                            <div className="cursor-pointer shadow-lg py-6 xl:px-4 rounded xl:w-96 w-60 flex justify-center items-center flex-col p-2">
-                                <div className="text-gray-800 text-2xl font-semibold text-center">
-                                    <h2>View Results</h2>
-                                </div>
-                                <div className="text-gray-600 mt-2 text-lg text-center">
-                                    <p>
-                                        View Results after you have played
-                                        cards, using a complex algorithm we rank
-                                        your matches.
-                                    </p>
-                                </div>
-                            </div>
+                            {TextContent.section_1_cards.map(
+                                (content, index) => (
+                                    <div
+                                        key={index}
+                                        className="cursor-pointer shadow-lg py-6 xl:px-4 rounded xl:w-96 w-60 flex justify-center items-center flex-col p-2"
+                                    >
+                                        <div className="text-gray-800 text-2xl font-semibold text-center">
+                                            <h2>{content.heading}</h2>
+                                        </div>
+                                        <div className="text-gray-600 mt-2 text-lg text-center ">
+                                            <p>{content.body}</p>
+                                        </div>
+                                    </div>
+                                )
+                            )}
                         </div>
                     </div>
                 </section>
@@ -150,12 +138,12 @@ export default function Home() {
                             <p className="text-base leading-4 text-gray-800">
                                 {new Date().getFullYear()} &copy;{" "}
                                 <span className="font-semibold text-blue-600">
-                                    Haikoto
+                                    {TextContent.APP_NAME}
                                 </span>
                             </p>
                             <div className="border-l border-gray-800 pl-2 ml-2">
                                 <p className="text-base leading-4 text-gray-800">
-                                    All rights reserved
+                                    {TextContent.footer_extra_text}
                                 </p>
                             </div>
                         </div>
