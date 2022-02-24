@@ -52,24 +52,15 @@ const AboutMe = () => {
                     )}
 
                     {!loadingState.show && (
-                        <div className="items-center justify-center py-2">
+                        <div className="items-center justify-center">
                             <section className="my-4 w-full p-5 rounded bg-gray-200 bg-opacity-90">
                                 About Me
                             </section>
 
-                            {(() => {
-                                const allCards = myGame.rightSwipedCards.concat(
-                                    myGame.leftSwipedCards
-                                );
-                                const allHashtags =
-                                    myGame.rightSwipedHashtags.concat(
-                                        myGame.leftSwipedHashtags
-                                    );
+                            {}
 
-                                if (
-                                    allCards.length == 0 &&
-                                    allHashtags.length == 0
-                                ) {
+                            {(() => {
+                                if (!myGame) {
                                     return (
                                         <section className="my-4 w-full p-5 rounded bg-gray-200 bg-opacity-90">
                                             <h2 className="text-2xl font-bold">
@@ -82,6 +73,14 @@ const AboutMe = () => {
                                         </section>
                                     );
                                 }
+
+                                const allCards = myGame.rightSwipedCards.concat(
+                                    myGame.leftSwipedCards
+                                );
+                                const allHashtags =
+                                    myGame.rightSwipedHashtags.concat(
+                                        myGame.leftSwipedHashtags
+                                    );
 
                                 return (
                                     <div className="overflow-x-auto">

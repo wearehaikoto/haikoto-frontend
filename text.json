@@ -1,0 +1,29 @@
+{
+    "APP_NAME": "Haikoto",
+    "email": "hello@haikoto.com",
+    "header": [
+        "KNOW MORE",
+        "about your soft skills and get ready for your next",
+        "JOB"
+    ],
+    "sub_header": "We are creating a unique workspace culture! We help you to build your SKILL MAP! Choose the cards that best suit you!",
+    "CTA_button_text": "Get Started",
+
+    "section_1_header": "How It Works!",
+    "section_1_cards": [
+        {
+            "heading": "Create an Account",
+            "body": "Click get started to create an account by simply choosing a codeName"
+        },
+        {
+            "heading": "Play Cards",
+            "body": "After you get logged in, you can play cards. Simply Swipe left or right according to your preference"
+        },
+        {
+            "heading": "View Results",
+            "body": "View Results after you have played cards, using a complex algorithm we rank your matches."
+        }
+    ],
+
+    "footer_extra_text": "All rights reserved."
+}

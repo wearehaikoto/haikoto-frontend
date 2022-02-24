@@ -137,7 +137,7 @@ function VoteCard({ gameId, rightSwipedCards, setPlayState }) {
                         <h1 className="font-bold max-w-xs text-[4vh] mx-auto text-center mt-3">
                             {newRightSwipedCard.title}
                         </h1>
-                        <p className="text-center text-[4vh]">
+                        {/* <p className="text-center text-[4vh]">
                             {newRightSwipedCard.hashtags.map((hashtag) => (
                                 <span
                                     key={hashtag._id}
@@ -146,7 +146,7 @@ function VoteCard({ gameId, rightSwipedCards, setPlayState }) {
                                     #{hashtag.title}
                                 </span>
                             ))}
-                        </p>
+                        </p> */}
                     </div>
 
                     <div
@@ -170,7 +170,7 @@ function VoteCard({ gameId, rightSwipedCards, setPlayState }) {
                         </div>
                         <h1 className="font-bold max-w-xs text-[4vh] mx-auto text-center mt-3">
                             {tempRightSwipedCards[voteRandomIndex].title}
-                            <p className="text-center text-[4vh]">
+                            {/* <p className="text-center text-[4vh]">
                                 {tempRightSwipedCards[
                                     voteRandomIndex
                                 ].hashtags.map((hashtag) => (
@@ -181,7 +181,7 @@ function VoteCard({ gameId, rightSwipedCards, setPlayState }) {
                                         #{hashtag.title}
                                     </span>
                                 ))}
-                            </p>
+                            </p> */}
                         </h1>
                     </div>
                 </div>
